@@ -1,0 +1,8 @@
+
+
+flutter build apk --obfuscate --split-debug-info=/AddressBook/E:\git_project\AD_book2\Mobile\ad_book_2\ad_book_2  --target-platform android-arm64
+flutter build apk --obfuscate --split-debug-info=/AddressBook/E:\git_project\AD_book2\Mobile\ad_book_2\ad_book_2 --split-per-abi
+
+
+flutter clean
+flutter build apk --split-per-abi

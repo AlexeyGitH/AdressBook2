@@ -1,6 +1,9 @@
-class PostContact {
+class ContactItem {
+  final int id;
   final String status;
-  final String contact;
+  final String firstname;
+  final String middlename;
+  final String lastname;
   final String image;
   final String department;
   final String corporation;
@@ -9,9 +12,13 @@ class PostContact {
   final String mobilephone;
   final String birthdate;
   final String mail;
-  PostContact(
-      {this.status,
-      this.contact,
+
+  ContactItem(
+      {this.id,
+      this.status,
+      this.firstname,
+      this.middlename,
+      this.lastname,
       this.image,
       this.department,
       this.corporation,
@@ -20,18 +27,37 @@ class PostContact {
       this.mobilephone,
       this.birthdate,
       this.mail});
-  factory PostContact.fromJson(Map<String, dynamic> json) {
-    return new PostContact(
-      status: json['STATUS'],
-      contact: json['CONTACT'],
-      image: json['IMAGE'],
-      department: json['DEPARTMENT'],
-      corporation: json['CORPORATION'],
-      position: json['POSITION'],
-      workphone: json['WORKPHONE'],
-      mobilephone: json['MOBILEPHONE'],
-      birthdate: json['BIRTHDATE'],
-      mail: json['MAIL'],
+
+  factory ContactItem.fromJson(Map<String, dynamic> parsedJson) {
+    return new ContactItem(
+      id: parsedJson['Id'],
+      status: parsedJson['Status'],
+      firstname: parsedJson['FirstName'],
+      middlename: parsedJson['MiddleName'],
+      lastname: parsedJson['LastName'],
+      image: parsedJson['LastName'],
+      department: parsedJson['Department'],
+      corporation: parsedJson['Corporation'],
+      position: parsedJson['Position'],
+      workphone: parsedJson['WorkPhone'],
+      mobilephone: parsedJson['MobilePhone'],
+      birthdate: parsedJson['BirthDate'],
+      mail: parsedJson['Mail'],
+    );
+  }
+}
+
+class ContactServer {
+  final int countlist;
+  final List<ContactItem> contacts;
+  ContactServer({this.countlist, this.contacts});
+
+  factory ContactServer.fromJson(Map<String, dynamic> parsedJson) {
+    var list = parsedJson['ContactList'] as List;
+
+    return new ContactServer(
+      countlist: parsedJson['Count'],
+      contacts: list.map((i) => ContactItem.fromJson(i)).toList(),
     );
   }
 }
