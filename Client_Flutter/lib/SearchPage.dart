@@ -96,6 +96,7 @@ class _SearchPage extends State<SearchPage> {
                     PopupMenuButton(
                       icon: Icon(Icons.arrow_drop_down),
                       itemBuilder: (BuildContext context) {
+/*
                         new FutureBuilder(
                           future: _getData(),
                           builder:
@@ -108,31 +109,32 @@ class _SearchPage extends State<SearchPage> {
                                 if (snapshot.hasError)
                                   return new Text('Error: ${snapshot.error}');
                                 else
-                                  return [
+                                  /*return [
                                     PopupMenuItem(
                                       value: 1,
                                       child: Text('Two'),
                                     )
-                                  ];
-                              /*
-                                  print('222');
+                                  ];*/
+
+                                print('222');
                                 return snapshot.data
                                     .map((ind) => PopupMenuItem(
                                           child: Text(ind),
                                           value: ind,
                                         ))
-                                    .toList();*/
+                                    .toList();
                               //return createListView(context, snapshot);
                             }
                           },
                         );
+*/
 
-                        /*  return _currencies
+                        return _currencies
                             .map((day) => PopupMenuItem(
                                   child: Text(day),
                                   value: day,
                                 ))
-                            .toList();*/
+                            .toList();
                       },
                       onSelected: (value) {
                         setState(() {
