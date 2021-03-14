@@ -13,26 +13,6 @@ class _SearchPage extends State<SearchPage> {
 
   final _controllerFIO = TextEditingController();
 
-  var _currencies = [
-    "Food",
-    "Transport",
-    "Personal",
-    "Shopping",
-    "Medical",
-    "Rent",
-    "Movie",
-    "Salary",
-    "Salary1",
-    "Salary2",
-    "Salary3",
-    "Salary4",
-    "Salary5",
-    "Salary6",
-    "Salary7",
-    "Salary8",
-    "Salary9",
-    "Salary10"
-  ];
   String _currentSelectedValue;
   List _currentSelectedList;
 /*
@@ -43,14 +23,107 @@ class _SearchPage extends State<SearchPage> {
     _controller.addListener(_controller);
   }
 */
+
+  String dropdownValue = 'All';
+  var dropDownItemsMap = new Map();
+  List<String> listtt = [];
+  //listtt.insert(0, 'fff');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: new Column(children: [
-          /*
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body:
+/*      
+      new FutureBuilder(
+        // future: _getData(),
+
+        future: CorporationList().getCorporation,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return new Text('loading...');
+            default:
+              if (snapshot.hasError)
+                return new Text('Error: ${snapshot.error}');
+              else
+                return createListView(context, snapshot);
+          }
+        },
+      ),
+*/
+
+          new FutureBuilder(
+        // future: _getData(),
+
+        future: CorporationList().getCorporation,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return new Text('loading...');
+            default:
+              if (snapshot.hasError)
+                return new Text('Error: ${snapshot.error}');
+              else
+                //return createListView(context, snapshot);
+                listtt = new List();
+
+              snapshot.data.forEach((branchItem) {
+                //listItemNames.add(branchItem.itemName);
+                int index = snapshot.data.indexOf(branchItem);
+                dropDownItemsMap[index] = branchItem;
+
+                //print("listtt " + branchItem.toString());
+                //print("index " + index.toString());
+
+                listtt.insert(index, branchItem.toString());
+                //listtt.insert(0, 'fff');
+              });
+
+              return DropdownButton<String>(
+                value: dropdownValue,
+                icon: Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    dropdownValue = newValue;
+                  });
+                },
+                /*
+                items: <String>['All', 'One', 'Two', 'Free', 'Four']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                */
+
+                items: listtt.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              );
+          }
+        },
+      ),
+
+/*
+            new Column(children: [
+/*
+
           Padding(
               padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 0),
               child: FormField<String>(
@@ -84,7 +157,7 @@ class _SearchPage extends State<SearchPage> {
                   );
                 },
               )),
-              */
+*/
           new Container(
               margin: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
@@ -96,9 +169,9 @@ class _SearchPage extends State<SearchPage> {
                     PopupMenuButton(
                       icon: Icon(Icons.arrow_drop_down),
                       itemBuilder: (BuildContext context) {
-/*
+                        /*
                         new FutureBuilder(
-                          future: _getData(),
+                          future: CorporationList().getCorporation,
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot) {
                             switch (snapshot.connectionState) {
@@ -109,21 +182,7 @@ class _SearchPage extends State<SearchPage> {
                                 if (snapshot.hasError)
                                   return new Text('Error: ${snapshot.error}');
                                 else
-                                  /*return [
-                                    PopupMenuItem(
-                                      value: 1,
-                                      child: Text('Two'),
-                                    )
-                                  ];*/
-
-                                print('222');
-                                return snapshot.data
-                                    .map((ind) => PopupMenuItem(
-                                          child: Text(ind),
-                                          value: ind,
-                                        ))
-                                    .toList();
-                              //return createListView(context, snapshot);
+                                  return createListView(context, snapshot);
                             }
                           },
                         );
@@ -168,25 +227,10 @@ class _SearchPage extends State<SearchPage> {
                       },
                     )),
                   ]))),
-        ]
-/*
-            new FutureBuilder(
-          future: _getData(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return new Text('loading...');
-              default:
-                if (snapshot.hasError)
-                  return new Text('Error: ${snapshot.error}');
-                else
-                  return createListView(context, snapshot);
-            }
-          },
-        )*/
 
-            ));
+          //]
+        ])*/
+    );
   }
 }
 
@@ -228,23 +272,53 @@ Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
   return new ListView.builder(
     itemCount: values.length,
     itemBuilder: (BuildContext context, int index) {
-      print('223f');
+      print(index);
+
+      return new Text(values[index]);
+/*      
       return PopupMenuItem(
         child: Text(values[index]),
         value: values[index],
       );
-
-      //return new Text('12345');
-      // return new Row(
-      // children: <Widget>[
-      // new ListTile(
-      // title: new Text(values[index]),
-      //),
-      //new Divider(
-      //  height: 2.0,
-      //),
-      // ],
-      // );
+*/
+      // return Flexible(child: new Text('12345'));
+/*
+      return new Row(
+        children: <Widget>[
+          new ListTile(
+            title: new Text(values[index]),
+          ),
+          new Divider(
+            height: 2.0,
+          ),
+        ],
+      );
+      */
     },
   );
 }
+
+///https://www.russianfood.com/recipes/recipe.php?rid=125019
+
+/*
+        
+        new FutureBuilder(
+          // future: _getData(),
+
+          future: CorporationList().getCorporation,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return new Text('loading...');
+              default:
+                if (snapshot.hasError)
+                  return new Text('Error: ${snapshot.error}');
+                else
+                  return createListView(context, snapshot);
+            }
+          },
+        )
+
+
+        */

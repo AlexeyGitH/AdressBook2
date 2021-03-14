@@ -176,7 +176,7 @@ class CorporationList {
       corporationlist = [];
     }
     // notifyListeners();
-    return corporationlist;
+    return corporationlist.map((s) => s as String).toList();
     //notifyListeners();
   }
 }

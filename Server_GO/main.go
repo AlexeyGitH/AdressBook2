@@ -201,7 +201,7 @@ func getCorporations(w http.ResponseWriter, r *http.Request) {
 	var Corporation string
 	var Corporations []string
 
-	selection_corporation := fmt.Sprintf("SELECT corporation FROM Contacts GROUP BY corporation ORDER BY corporation")
+	selectionCorporation := fmt.Sprintf("SELECT 'All' UNION SELECT corporation FROM Contacts GROUP BY corporation ORDER BY corporation")
 
 	db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
 	if err != nil {
@@ -209,7 +209,7 @@ func getCorporations(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	rows, err := db.Query(selection_corporation)
+	rows, err := db.Query(selectionCorporation)
 	if err != nil {
 		fmt.Println(err)
 	}
