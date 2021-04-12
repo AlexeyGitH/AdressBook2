@@ -56,51 +56,87 @@ class _SearchPage extends State<SearchPage> {
       ),
 */
 
-            new Column(children: [
-          new FutureBuilder(
-            // future: _getData(),
+            new Row(children: [
+          Container(
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.cyan,
+                  border: Border.all()),
+              child: Row(children: [
+                PopupMenuButton(
+                  icon: Icon(Icons.arrow_drop_down),
+                  itemBuilder: (BuildContext context) {
+                    return <String>['All', 'One', 'Two', 'Free', 'Four']
+                        .map((day) => PopupMenuItem(
+                              child: Text(day),
+                              value: day,
+                            ))
+                        .toList();
+                  },
+                  onSelected: (value) {
+                    setState(() {
+                      _currentSelectedValue = value;
+                      /*var _curr = new CorporationList();
+                          var _currentSelectedListf = _curr.getCorporation;
+                          */
+                    });
+                    _controllerFIO.text = value;
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.volume_up),
+                  tooltip: 'Increase volume by 10',
+                  onPressed: () {
+                    setState(() {
+                      dropdownValue = 'All';
+                    });
+                  },
+                ),
+                new FutureBuilder(
+                  // future: _getData(),
 
-            future: CorporationList().getCorporation,
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                  return new Text('loading...');
-                default:
-                  if (snapshot.hasError)
-                    return new Text('Error: ${snapshot.error}');
-                  else
-                    //return createListView(context, snapshot);
-                    listtt = new List();
+                  future: CorporationList().getCorporation,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                        return new Text('loading...');
+                      default:
+                        if (snapshot.hasError)
+                          return new Text('Error: ${snapshot.error}');
+                        else
+                          //return createListView(context, snapshot);
+                          listtt = new List();
 
-                  snapshot.data.forEach((branchItem) {
-                    //listItemNames.add(branchItem.itemName);
-                    int index = snapshot.data.indexOf(branchItem);
-                    dropDownItemsMap[index] = branchItem;
+                        snapshot.data.forEach((branchItem) {
+                          //listItemNames.add(branchItem.itemName);
+                          int index = snapshot.data.indexOf(branchItem);
+                          dropDownItemsMap[index] = branchItem;
 
-                    //print("listtt " + branchItem.toString());
-                    //print("index " + index.toString());
+                          //print("listtt " + branchItem.toString());
+                          //print("index " + index.toString());
 
-                    listtt.insert(index, branchItem.toString());
-                    //listtt.insert(0, 'fff');
-                  });
+                          listtt.insert(index, branchItem.toString());
+                          //listtt.insert(0, 'fff');
+                        });
 
-                  return DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    elevation: 16,
-                    style: TextStyle(color: Colors.deepPurple),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.deepPurpleAccent,
-                    ),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        dropdownValue = newValue;
-                      });
-                    },
-                    /*
+                        return DropdownButton<String>(
+                          icon: Icon(Icons.arrow_downward),
+                          value: dropdownValue,
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dropdownValue = newValue;
+                            });
+                          },
+                          /*
                 items: <String>['All', 'One', 'Two', 'Free', 'Four']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -110,16 +146,19 @@ class _SearchPage extends State<SearchPage> {
                 }).toList(),
                 */
 
-                    items: listtt.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  );
-              }
-            },
-          ),
+                          items: listtt
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        );
+                    }
+                  },
+                ),
+              ]))
+
 /*
           Padding(
               padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 0),
@@ -154,7 +193,9 @@ class _SearchPage extends State<SearchPage> {
                   );
                 },
               )),
+*/
 
+/*
           new Container(
               margin: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
@@ -166,26 +207,7 @@ class _SearchPage extends State<SearchPage> {
                     PopupMenuButton(
                       icon: Icon(Icons.arrow_drop_down),
                       itemBuilder: (BuildContext context) {
-                        /*
-                        new FutureBuilder(
-                          future: CorporationList().getCorporation,
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.none:
-                              case ConnectionState.waiting:
-                                return new Text('loading...');
-                              default:
-                                if (snapshot.hasError)
-                                  return new Text('Error: ${snapshot.error}');
-                                else
-                                  return createListView(context, snapshot);
-                            }
-                          },
-                        );
-*/
-
-                        return _currencies
+                        return <String>['All', 'One', 'Two', 'Free', 'Four']
                             .map((day) => PopupMenuItem(
                                   child: Text(day),
                                   value: day,
@@ -195,8 +217,9 @@ class _SearchPage extends State<SearchPage> {
                       onSelected: (value) {
                         setState(() {
                           _currentSelectedValue = value;
-                          var _curr = new CorporationList();
+                          /*var _curr = new CorporationList();
                           var _currentSelectedListf = _curr.getCorporation;
+                          */
                         });
                         _controllerFIO.text = value;
                       },
