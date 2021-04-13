@@ -64,24 +64,56 @@ class _SearchPage extends State<SearchPage> {
                   color: Colors.cyan,
                   border: Border.all()),
               child: Row(children: [
-                PopupMenuButton(
-                  icon: Icon(Icons.arrow_drop_down),
-                  itemBuilder: (BuildContext context) {
-                    return <String>['All', 'One', 'Two', 'Free', 'Four']
-                        .map((day) => PopupMenuItem(
-                              child: Text(day),
-                              value: day,
-                            ))
-                        .toList();
-                  },
-                  onSelected: (value) {
-                    setState(() {
-                      _currentSelectedValue = value;
-                      /*var _curr = new CorporationList();
+                new FutureBuilder(
+                  // future: _getData(),
+
+                  future: CorporationList().getCorporation,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                        return new Text('loading...');
+                      default:
+                        if (snapshot.hasError)
+                          return new Text('Error: ${snapshot.error}');
+                        else
+                          //return createListView(context, snapshot);
+                          listtt = new List();
+
+                        snapshot.data.forEach((branchItem) {
+                          //listItemNames.add(branchItem.itemName);
+                          int index = snapshot.data.indexOf(branchItem);
+                          dropDownItemsMap[index] = branchItem;
+
+                          //print("listtt " + branchItem.toString());
+                          //print("index " + index.toString());
+
+                          listtt.insert(index, branchItem.toString());
+                          //listtt.insert(0, 'fff');
+                        });
+
+                        return PopupMenuButton(
+                          icon: Icon(Icons.arrow_downward),
+                          itemBuilder: (BuildContext context) {
+                            return listtt
+                                .map((day) => PopupMenuItem(
+                                      child: Text(day),
+                                      value: day,
+                                    ))
+                                .toList();
+                          },
+                          onSelected: (value) {
+                            setState(() {
+                              _currentSelectedValue = value;
+                              dropdownValue = value;
+                              /*var _curr = new CorporationList();
                           var _currentSelectedListf = _curr.getCorporation;
                           */
-                    });
-                    _controllerFIO.text = value;
+                            });
+                            _controllerFIO.text = value;
+                          },
+                        );
+                    }
                   },
                 ),
                 IconButton(
