@@ -12,20 +12,10 @@ class _SearchPage extends State<SearchPage> {
   final String title = 'Поиск контакта';
 
   final _controllerFIO = TextEditingController();
+  final _controllerPhone = TextEditingController();
 
-  String _currentSelectedValue;
-  List _currentSelectedList;
-/*
-  void initState() {
-    super.initState();
-
-    // Start listening to changes.
-    _controller.addListener(_controller);
-  }
-*/
-
-  String dropdownValue = 'All';
-  var dropDownItemsMap = new Map();
+  //String dropdownValue = 'All';
+  //var dropDownItemsMap = new Map();
   List<String> listtt = [];
   //listtt.insert(0, 'fff');
 
@@ -35,185 +25,330 @@ class _SearchPage extends State<SearchPage> {
         appBar: AppBar(
           title: Text(title),
         ),
-        body:
-/*      
-      new FutureBuilder(
-        // future: _getData(),
+        body: SingleChildScrollView(
+            child: ConstrainedBox(
+                constraints: BoxConstraints(),
+                child: new Column(children: [
+                  new Container(
+                      margin: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5.0)),
+                      child: new Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(children: [
+                            Flexible(
+                                child: TextFormField(
+                              controller: _controllerFIO,
+                              decoration: new InputDecoration(
+                                //icon: Icon(Icons.arrow_drop_down),
+                                //
+                                //
+                                //
+                                //
+                                labelText: 'ФИО',
+                                fillColor: Colors.white,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 0.0, color: Colors.white),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      _controllerFIO.text = '';
+                                    });
+                                  },
+                                ),
+                              ),
+                              onSaved: (String value) {
+                                // This optional block of code can be used to run
+                                // code when the user saves the form.
+                              },
+                              validator: (String value) {
+                                return value.contains('@')
+                                    ? 'Do not use the @ char.'
+                                    : null;
+                              },
+                            )),
+                          ]))),
+                  new Container(
+                      margin: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5.0)),
+                      child: new Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(children: [
+                            Flexible(
+                                child: TextFormField(
+                              controller: _controllerFIO,
+                              decoration: new InputDecoration(
+                                //icon: Icon(Icons.arrow_drop_down),
+                                //
+                                icon: new FutureBuilder(
+                                  // future: _getData(),
 
-        future: CorporationList().getCorporation,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return new Text('loading...');
-            default:
-              if (snapshot.hasError)
-                return new Text('Error: ${snapshot.error}');
-              else
-                return createListView(context, snapshot);
-          }
-        },
-      ),
-*/
-            new Container(
-                margin: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: new Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(children: [
-                      Flexible(
-                          child: TextFormField(
-                        controller: _controllerFIO,
-                        decoration: new InputDecoration(
-                          //icon: Icon(Icons.arrow_drop_down),
-                          //
-                          icon: new FutureBuilder(
-                            // future: _getData(),
+                                  future: CorporationList().getCorporation,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.none:
+                                      case ConnectionState.waiting:
+                                        return new Text('loading...');
+                                      default:
+                                        if (snapshot.hasError)
+                                          return new Text(
+                                              'Error: ${snapshot.error}');
+                                        else
+                                          listtt = new List();
 
-                            future: CorporationList().getCorporation,
-                            builder:
-                                (BuildContext context, AsyncSnapshot snapshot) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.none:
-                                case ConnectionState.waiting:
-                                  return new Text('loading...');
-                                default:
-                                  if (snapshot.hasError)
-                                    return new Text('Error: ${snapshot.error}');
-                                  else
-                                    //return createListView(context, snapshot);
-                                    listtt = new List();
+                                        snapshot.data.forEach((branchItem) {
+                                          //listItemNames.add(branchItem.itemName);
+                                          int index =
+                                              snapshot.data.indexOf(branchItem);
+                                          // dropDownItemsMap[index] = branchItem;
 
-                                  snapshot.data.forEach((branchItem) {
-                                    //listItemNames.add(branchItem.itemName);
-                                    int index =
-                                        snapshot.data.indexOf(branchItem);
-                                    dropDownItemsMap[index] = branchItem;
+                                          listtt.insert(
+                                              index, branchItem.toString());
+                                          //listtt.insert(0, 'fff');
+                                        });
 
-                                    //print("listtt " + branchItem.toString());
-                                    //print("index " + index.toString());
+                                        return PopupMenuButton(
+                                          captureInheritedThemes: false,
+                                          icon: Icon(Icons.filter_list),
+                                          itemBuilder: (BuildContext context) {
+                                            return listtt
+                                                .map((day) => PopupMenuItem(
+                                                      child: Text(day),
+                                                      value: day,
+                                                    ))
+                                                .toList();
+                                          },
+                                          onSelected: (value) {
+                                            setState(() {
+                                              _controllerFIO.text = value;
+                                            });
+                                          },
+                                        );
+                                    }
+                                  },
+                                ), //
+                                //
+                                //
+                                labelText: 'Организация',
+                                fillColor: Colors.white,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 0.0, color: Colors.white),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      _controllerFIO.text = '';
+                                    });
+                                  },
+                                ),
+                              ),
+                              onSaved: (String value) {
+                                // This optional block of code can be used to run
+                                // code when the user saves the form.
+                              },
+                              validator: (String value) {
+                                return value.contains('@')
+                                    ? 'Do not use the @ char.'
+                                    : null;
+                              },
+                            )),
+                          ]))),
+                  new Container(
+                      margin: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5.0)),
+                      child: new Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(children: [
+                            Flexible(
+                                child: TextFormField(
+                              controller: _controllerFIO,
+                              decoration: new InputDecoration(
+                                //icon: Icon(Icons.arrow_drop_down),
+                                //
+                                icon: new FutureBuilder(
+                                  // future: _getData(),
 
-                                    listtt.insert(index, branchItem.toString());
-                                    //listtt.insert(0, 'fff');
-                                  });
+                                  future: CorporationList().getCorporation,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.none:
+                                      case ConnectionState.waiting:
+                                        return new Text('loading...');
+                                      default:
+                                        if (snapshot.hasError)
+                                          return new Text(
+                                              'Error: ${snapshot.error}');
+                                        else
+                                          listtt = new List();
 
-                                  return PopupMenuButton(
-                                    icon: Icon(Icons.arrow_downward),
-                                    itemBuilder: (BuildContext context) {
-                                      return listtt
-                                          .map((day) => PopupMenuItem(
-                                                child: Text(day),
-                                                value: day,
-                                              ))
-                                          .toList();
-                                    },
-                                    onSelected: (value) {
-                                      setState(() {
-                                        _currentSelectedValue = value;
-                                        dropdownValue = value;
-                                        /*var _curr = new CorporationList();
-                          var _currentSelectedListf = _curr.getCorporation;
-                          */
-                                      });
-                                      _controllerFIO.text = value;
-                                    },
-                                  );
-                              }
-                            },
-                          ), //
-                          //
-                          //
-                          labelText: 'ФИО',
-                          fillColor: Colors.white,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 0.0, color: Colors.white),
-                          ),
-                        ),
-                        onSaved: (String value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                        validator: (String value) {
-                          return value.contains('@')
-                              ? 'Do not use the @ char.'
-                              : null;
-                        },
-                      )),
+                                        snapshot.data.forEach((branchItem) {
+                                          //listItemNames.add(branchItem.itemName);
+                                          int index =
+                                              snapshot.data.indexOf(branchItem);
+                                          // dropDownItemsMap[index] = branchItem;
 
-/*
-                new FutureBuilder(
-                  // future: _getData(),
+                                          listtt.insert(
+                                              index, branchItem.toString());
+                                          //listtt.insert(0, 'fff');
+                                        });
 
-                  future: CorporationList().getCorporation,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.waiting:
-                        return new Text('loading...');
-                      default:
-                        if (snapshot.hasError)
-                          return new Text('Error: ${snapshot.error}');
-                        else
-                          //return createListView(context, snapshot);
-                          listtt = new List();
+                                        return PopupMenuButton(
+                                          captureInheritedThemes: false,
+                                          icon: Icon(Icons.filter_list),
+                                          itemBuilder: (BuildContext context) {
+                                            return listtt
+                                                .map((day) => PopupMenuItem(
+                                                      child: Text(day),
+                                                      value: day,
+                                                    ))
+                                                .toList();
+                                          },
+                                          onSelected: (value) {
+                                            setState(() {
+                                              _controllerFIO.text = value;
+                                            });
+                                          },
+                                        );
+                                    }
+                                  },
+                                ), //
+                                //
+                                //
+                                labelText: 'Подразделение',
+                                fillColor: Colors.white,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 0.0, color: Colors.white),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      _controllerFIO.text = '';
+                                    });
+                                  },
+                                ),
+                              ),
+                              onSaved: (String value) {
+                                // This optional block of code can be used to run
+                                // code when the user saves the form.
+                              },
+                              validator: (String value) {
+                                return value.contains('@')
+                                    ? 'Do not use the @ char.'
+                                    : null;
+                              },
+                            )),
+                          ]))),
+                  new Container(
+                      margin: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5.0)),
+                      child: new Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(children: [
+                            Flexible(
+                              child: Row(children: [
+                                Icon(Icons.clear),
+                                TextFormField(
+                                  controller: _controllerPhone,
+                                  decoration: new InputDecoration(
+                                    //icon: Icon(Icons.arrow_drop_down),
+                                    //
+                                    icon: new FutureBuilder(
+                                      // future: _getData(),
 
-                        snapshot.data.forEach((branchItem) {
-                          //listItemNames.add(branchItem.itemName);
-                          int index = snapshot.data.indexOf(branchItem);
-                          dropDownItemsMap[index] = branchItem;
+                                      future: CorporationList().getCorporation,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        switch (snapshot.connectionState) {
+                                          case ConnectionState.none:
+                                          case ConnectionState.waiting:
+                                            return new Text('loading...');
+                                          default:
+                                            if (snapshot.hasError)
+                                              return new Text(
+                                                  'Error: ${snapshot.error}');
+                                            else
+                                              listtt = new List();
 
-                          //print("listtt " + branchItem.toString());
-                          //print("index " + index.toString());
+                                            snapshot.data.forEach((branchItem) {
+                                              //listItemNames.add(branchItem.itemName);
+                                              int index = snapshot.data
+                                                  .indexOf(branchItem);
+                                              // dropDownItemsMap[index] = branchItem;
 
-                          listtt.insert(index, branchItem.toString());
-                          //listtt.insert(0, 'fff');
-                        });
+                                              listtt.insert(
+                                                  index, branchItem.toString());
+                                              //listtt.insert(0, 'fff');
+                                            });
 
-                        return DropdownButton<String>(
-                          icon: Icon(Icons.arrow_downward),
-                          value: dropdownValue,
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              dropdownValue = newValue;
-                            });
-                          },
-                          items: listtt
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        );
-                    }
-                  },
-                ),
-*/
-                    ]))));
+                                            return PopupMenuButton(
+                                              captureInheritedThemes: false,
+                                              icon: Icon(Icons.filter_list),
+                                              itemBuilder:
+                                                  (BuildContext context) {
+                                                return listtt
+                                                    .map((day) => PopupMenuItem(
+                                                          child: Text(day),
+                                                          value: day,
+                                                        ))
+                                                    .toList();
+                                              },
+                                              onSelected: (value) {
+                                                setState(() {
+                                                  _controllerPhone.text = value;
+                                                });
+                                              },
+                                            );
+                                        }
+                                      },
+                                    ), //
+                                    //
+                                    //
+                                    labelText: 'Телефон',
+                                    fillColor: Colors.white,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 0.0, color: Colors.white),
+                                    ),
+                                    suffixIcon: IconButton(
+                                      icon: const Icon(Icons.clear),
+                                      onPressed: () {
+                                        setState(() {
+                                          _controllerPhone.text = '';
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  onSaved: (String value) {
+                                    // This optional block of code can be used to run
+                                    // code when the user saves the form.
+                                  },
+                                  validator: (String value) {
+                                    return value.contains('@')
+                                        ? 'Do not use the @ char.'
+                                        : null;
+                                  },
+                                )
+                              ]),
+                            ),
+                          ]))),
+                ]))));
   }
-}
-
-Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
-  List<String> values = snapshot.data;
-
-  return new ListView.builder(
-    itemCount: values.length,
-    itemBuilder: (BuildContext context, int index) {
-      print(index);
-
-      return new Text(values[index]);
-    },
-  );
 }
 
 ///https://www.russianfood.com/recipes/recipe.php?rid=125019
