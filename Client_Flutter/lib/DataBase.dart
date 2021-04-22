@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ad_book_2/ConstSystemAD.dart';
-import 'package:ad_book_2/PostContact.dart';
+import 'ConstSystemAD.dart';
+import 'PostContact.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -86,7 +86,7 @@ class DataBase extends ChangeNotifier {
     };
 
     //print('queryParameters $queryParameters');
-    var uri = Uri.http('192.168.88.234:8000', '/contacts_2/', queryParameters);
+    var uri = Uri.http('192.168.1.69:8000', '/contacts_2/', queryParameters);
 
     final response = await http.get(uri);
 
@@ -161,7 +161,7 @@ class CorporationList {
   Future<void> get getCorporation async {
     List corporationlist;
     //print('queryParameters $queryParameters');
-    var uri = Uri.http('192.168.88.234:8000', '/corporation/');
+    var uri = Uri.http('192.168.1.69:8000', '/corporation/');
 
     final response = await http.get(uri);
 

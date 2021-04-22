@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ad_book_2/DataBase.dart';
+import 'DataBase.dart';
 import 'package:provider/provider.dart';
-import 'package:ad_book_2/SearchPage.dart';
+import 'SearchPage.dart';
 
 void main() {
   runApp(MyApp());

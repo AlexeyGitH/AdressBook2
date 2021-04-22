@@ -13,6 +13,7 @@ class _SearchPage extends State<SearchPage> {
 
   final _controllerFIO = TextEditingController();
   final _controllerPhone = TextEditingController();
+  final _controllerTypePhone = TextEditingController();
 
   //String dropdownValue = 'All';
   //var dropDownItemsMap = new Map();
@@ -253,100 +254,133 @@ class _SearchPage extends State<SearchPage> {
                             )),
                           ]))),
                   new Container(
-                      margin: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(5.0)),
-                      child: new Container(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(children: [
-                            Flexible(
-                              child: Row(children: [
-                                Icon(Icons.clear),
-                                TextFormField(
-                                  controller: _controllerPhone,
-                                  decoration: new InputDecoration(
+                    margin: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: new Container(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(children: [
+                          Flexible(
+                              flex: 1,
+                              child: TextFormField(
+                                controller: _controllerTypePhone,
+                                decoration: new InputDecoration(
                                     //icon: Icon(Icons.arrow_drop_down),
                                     //
-                                    icon: new FutureBuilder(
-                                      // future: _getData(),
-
-                                      future: CorporationList().getCorporation,
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot snapshot) {
-                                        switch (snapshot.connectionState) {
-                                          case ConnectionState.none:
-                                          case ConnectionState.waiting:
-                                            return new Text('loading...');
-                                          default:
-                                            if (snapshot.hasError)
-                                              return new Text(
-                                                  'Error: ${snapshot.error}');
-                                            else
-                                              listtt = new List();
-
-                                            snapshot.data.forEach((branchItem) {
-                                              //listItemNames.add(branchItem.itemName);
-                                              int index = snapshot.data
-                                                  .indexOf(branchItem);
-                                              // dropDownItemsMap[index] = branchItem;
-
-                                              listtt.insert(
-                                                  index, branchItem.toString());
-                                              //listtt.insert(0, 'fff');
-                                            });
-
-                                            return PopupMenuButton(
-                                              captureInheritedThemes: false,
-                                              icon: Icon(Icons.filter_list),
-                                              itemBuilder:
-                                                  (BuildContext context) {
-                                                return listtt
-                                                    .map((day) => PopupMenuItem(
-                                                          child: Text(day),
-                                                          value: day,
-                                                        ))
-                                                    .toList();
-                                              },
-                                              onSelected: (value) {
-                                                setState(() {
-                                                  _controllerPhone.text = value;
-                                                });
-                                              },
-                                            );
-                                        }
-                                      },
-                                    ), //
-                                    //
-                                    //
-                                    labelText: 'Телефон',
-                                    fillColor: Colors.white,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 0.0, color: Colors.white),
+                                    icon: new PopupMenuButton(
+                                  itemBuilder: (context) => [
+                                    PopupMenuItem(
+                                      value: Text("First"),
+                                      child: Text("First"),
                                     ),
-                                    suffixIcon: IconButton(
-                                      icon: const Icon(Icons.clear),
-                                      onPressed: () {
-                                        setState(() {
-                                          _controllerPhone.text = '';
-                                        });
-                                      },
+                                    PopupMenuItem(
+                                      value: Text("Second"),
+                                      child: Text("Second"),
                                     ),
+                                  ],
+                                  onSelected: (value) {
+                                    _controllerTypePhone.text = value;
+                                    print('value-value-value' + value);
+                                  },
+                                  icon: Icon(Icons.list),
+                                )),
+                                onSaved: (String value) {
+                                  // This optional block of code can be used to run
+                                  // code when the user saves the form.
+                                },
+                              )),
+
+                          /*
+                          Flexible(
+                              flex: 10,
+                              child: TextFormField(
+                                controller: _controllerPhone,
+                                decoration: new InputDecoration(
+                                  //icon: Icon(Icons.arrow_drop_down),
+                                  //
+                                  icon: new FutureBuilder(
+                                    // future: _getData(),
+
+                                    future: CorporationList().getCorporation,
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot snapshot) {
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.none:
+                                        case ConnectionState.waiting:
+                                          return new Text('loading...');
+                                        default:
+                                          if (snapshot.hasError)
+                                            return new Text(
+                                                'Error: ${snapshot.error}');
+                                          else
+                                            listtt = new List();
+
+                                          snapshot.data.forEach((branchItem) {
+                                            //listItemNames.add(branchItem.itemName);
+                                            int index = snapshot.data
+                                                .indexOf(branchItem);
+                                            // dropDownItemsMap[index] = branchItem;
+
+                                            listtt.insert(
+                                                index, branchItem.toString());
+                                            //listtt.insert(0, 'fff');
+                                          });
+
+                                          return PopupMenuButton(
+                                            captureInheritedThemes: false,
+                                            icon: Icon(Icons.filter_list),
+                                            itemBuilder:
+                                                (BuildContext context) {
+                                              return listtt
+                                                  .map((day) => PopupMenuItem(
+                                                        child: Text(day),
+                                                        value: day,
+                                                      ))
+                                                  .toList();
+                                            },
+                                            onSelected: (value) {
+                                              setState(() {
+                                                _controllerPhone.text = value;
+                                              });
+                                            },
+                                          );
+                                      }
+                                    },
+                                  ), //
+                                  //
+                                  //
+                                  labelText: 'Телефон',
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 0.0, color: Colors.white),
                                   ),
-                                  onSaved: (String value) {
-                                    // This optional block of code can be used to run
-                                    // code when the user saves the form.
-                                  },
-                                  validator: (String value) {
-                                    return value.contains('@')
-                                        ? 'Do not use the @ char.'
-                                        : null;
-                                  },
-                                )
-                              ]),
-                            ),
-                          ]))),
+                                ),
+                                onSaved: (String value) {
+                                  // This optional block of code can be used to run
+                                  // code when the user saves the form.
+                                },
+                                validator: (String value) {
+                                  return value.contains('@')
+                                      ? 'Do not use the @ char.'
+                                      : null;
+                                },
+                              )),
+                          Flexible(
+                              flex: 1,
+                              child: new IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  setState(() {
+                                    _controllerPhone.text = '';
+                                  });
+                                },
+                              )),
+
+                              */
+                        ])),
+                  ),
                 ]))));
   }
 }
