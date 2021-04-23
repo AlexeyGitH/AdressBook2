@@ -261,30 +261,28 @@ class _SearchPage extends State<SearchPage> {
                     child: new Container(
                         padding: const EdgeInsets.all(10.0),
                         child: Row(children: [
+                          new PopupMenuButton(
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                value: "First",
+                                child: Text("First"),
+                              ),
+                              PopupMenuItem(
+                                value: "Second",
+                                child: Text("Second"),
+                              ),
+                            ],
+                            onSelected: (value) {
+                              _controllerTypePhone.text = value;
+                              print('value-value-value' + value);
+                            },
+                            icon: Icon(Icons.list),
+                          ),
                           Flexible(
                               flex: 1,
                               child: TextFormField(
+                                enabled: false,
                                 controller: _controllerTypePhone,
-                                decoration: new InputDecoration(
-                                    //icon: Icon(Icons.arrow_drop_down),
-                                    //
-                                    icon: new PopupMenuButton(
-                                  itemBuilder: (context) => [
-                                    PopupMenuItem(
-                                      value: Text("First"),
-                                      child: Text("First"),
-                                    ),
-                                    PopupMenuItem(
-                                      value: Text("Second"),
-                                      child: Text("Second"),
-                                    ),
-                                  ],
-                                  onSelected: (value) {
-                                    _controllerTypePhone.text = value;
-                                    print('value-value-value' + value);
-                                  },
-                                  icon: Icon(Icons.list),
-                                )),
                                 onSaved: (String value) {
                                   // This optional block of code can be used to run
                                   // code when the user saves the form.
