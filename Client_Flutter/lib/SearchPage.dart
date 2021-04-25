@@ -12,12 +12,15 @@ class _SearchPage extends State<SearchPage> {
   final String title = 'Поиск контакта';
 
   final _controllerFIO = TextEditingController();
+  final _controllerCorporation = TextEditingController();
+  final _controllerDepartament = TextEditingController();
   final _controllerPhone = TextEditingController();
-  final _controllerTypePhone = TextEditingController();
+  final _controllerTypePhone = TextEditingController(text: "Все");
 
   //String dropdownValue = 'All';
   //var dropDownItemsMap = new Map();
-  List<String> listtt = [];
+  List<String> lisCorp = [];
+  List<String> lisDep = [];
   //listtt.insert(0, 'fff');
 
   @override
@@ -30,6 +33,18 @@ class _SearchPage extends State<SearchPage> {
             child: ConstrainedBox(
                 constraints: BoxConstraints(),
                 child: new Column(children: [
+                  RaisedButton.icon(
+                    onPressed: () async {
+                      print('fffff-222');
+                      List _d =
+                          await SearchContacts().postContacts('fffff-222');
+                      print(_d);
+                    },
+                    color: Colors.blue,
+                    textColor: Colors.white,
+                    icon: Icon(Icons.search),
+                    label: Text('Найти'),
+                  ),
                   new Container(
                       margin: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
@@ -83,7 +98,7 @@ class _SearchPage extends State<SearchPage> {
                           child: Row(children: [
                             Flexible(
                                 child: TextFormField(
-                              controller: _controllerFIO,
+                              controller: _controllerCorporation,
                               decoration: new InputDecoration(
                                 //icon: Icon(Icons.arrow_drop_down),
                                 //
@@ -96,13 +111,14 @@ class _SearchPage extends State<SearchPage> {
                                     switch (snapshot.connectionState) {
                                       case ConnectionState.none:
                                       case ConnectionState.waiting:
-                                        return new Text('loading...');
+                                        //return new Text('loading...');
+                                        return CircularProgressIndicator();
                                       default:
                                         if (snapshot.hasError)
                                           return new Text(
                                               'Error: ${snapshot.error}');
                                         else
-                                          listtt = new List();
+                                          lisCorp = new List();
 
                                         snapshot.data.forEach((branchItem) {
                                           //listItemNames.add(branchItem.itemName);
@@ -110,7 +126,7 @@ class _SearchPage extends State<SearchPage> {
                                               snapshot.data.indexOf(branchItem);
                                           // dropDownItemsMap[index] = branchItem;
 
-                                          listtt.insert(
+                                          lisCorp.insert(
                                               index, branchItem.toString());
                                           //listtt.insert(0, 'fff');
                                         });
@@ -119,7 +135,7 @@ class _SearchPage extends State<SearchPage> {
                                           captureInheritedThemes: false,
                                           icon: Icon(Icons.filter_list),
                                           itemBuilder: (BuildContext context) {
-                                            return listtt
+                                            return lisCorp
                                                 .map((day) => PopupMenuItem(
                                                       child: Text(day),
                                                       value: day,
@@ -128,7 +144,8 @@ class _SearchPage extends State<SearchPage> {
                                           },
                                           onSelected: (value) {
                                             setState(() {
-                                              _controllerFIO.text = value;
+                                              _controllerCorporation.text =
+                                                  value;
                                             });
                                           },
                                         );
@@ -147,7 +164,7 @@ class _SearchPage extends State<SearchPage> {
                                   icon: const Icon(Icons.clear),
                                   onPressed: () {
                                     setState(() {
-                                      _controllerFIO.text = '';
+                                      _controllerCorporation.text = '';
                                     });
                                   },
                                 ),
@@ -173,26 +190,27 @@ class _SearchPage extends State<SearchPage> {
                           child: Row(children: [
                             Flexible(
                                 child: TextFormField(
-                              controller: _controllerFIO,
+                              controller: _controllerDepartament,
                               decoration: new InputDecoration(
                                 //icon: Icon(Icons.arrow_drop_down),
                                 //
                                 icon: new FutureBuilder(
                                   // future: _getData(),
 
-                                  future: CorporationList().getCorporation,
+                                  future: DepartmentList().getDepartment,
                                   builder: (BuildContext context,
                                       AsyncSnapshot snapshot) {
                                     switch (snapshot.connectionState) {
                                       case ConnectionState.none:
                                       case ConnectionState.waiting:
-                                        return new Text('loading...');
+                                        //return new Text('loading...');
+                                        return CircularProgressIndicator();
                                       default:
                                         if (snapshot.hasError)
                                           return new Text(
                                               'Error: ${snapshot.error}');
                                         else
-                                          listtt = new List();
+                                          lisDep = new List();
 
                                         snapshot.data.forEach((branchItem) {
                                           //listItemNames.add(branchItem.itemName);
@@ -200,7 +218,7 @@ class _SearchPage extends State<SearchPage> {
                                               snapshot.data.indexOf(branchItem);
                                           // dropDownItemsMap[index] = branchItem;
 
-                                          listtt.insert(
+                                          lisDep.insert(
                                               index, branchItem.toString());
                                           //listtt.insert(0, 'fff');
                                         });
@@ -209,7 +227,7 @@ class _SearchPage extends State<SearchPage> {
                                           captureInheritedThemes: false,
                                           icon: Icon(Icons.filter_list),
                                           itemBuilder: (BuildContext context) {
-                                            return listtt
+                                            return lisDep
                                                 .map((day) => PopupMenuItem(
                                                       child: Text(day),
                                                       value: day,
@@ -218,7 +236,8 @@ class _SearchPage extends State<SearchPage> {
                                           },
                                           onSelected: (value) {
                                             setState(() {
-                                              _controllerFIO.text = value;
+                                              _controllerDepartament.text =
+                                                  value;
                                             });
                                           },
                                         );
@@ -237,7 +256,7 @@ class _SearchPage extends State<SearchPage> {
                                   icon: const Icon(Icons.clear),
                                   onPressed: () {
                                     setState(() {
-                                      _controllerFIO.text = '';
+                                      _controllerDepartament.text = '';
                                     });
                                   },
                                 ),
@@ -261,91 +280,60 @@ class _SearchPage extends State<SearchPage> {
                     child: new Container(
                         padding: const EdgeInsets.all(10.0),
                         child: Row(children: [
-                          new PopupMenuButton(
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                value: "First",
-                                child: Text("First"),
-                              ),
-                              PopupMenuItem(
-                                value: "Second",
-                                child: Text("Second"),
-                              ),
-                            ],
-                            onSelected: (value) {
-                              _controllerTypePhone.text = value;
-                              print('value-value-value' + value);
-                            },
-                            icon: Icon(Icons.list),
-                          ),
-                          Flexible(
+                          Expanded(
                               flex: 1,
-                              child: TextFormField(
-                                enabled: false,
-                                controller: _controllerTypePhone,
-                                onSaved: (String value) {
-                                  // This optional block of code can be used to run
-                                  // code when the user saves the form.
-                                },
-                              )),
-
-                          /*
-                          Flexible(
-                              flex: 10,
+                              child: Container(
+                                  margin: EdgeInsets.only(right: 10.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(color: Colors.grey),
+                                    color: Color.fromRGBO(100, 100, 150, 0.11),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      new PopupMenuButton(
+                                        itemBuilder: (context) => [
+                                          PopupMenuItem(
+                                            value: "Все",
+                                            child: Text("Все"),
+                                          ),
+                                          PopupMenuItem(
+                                            value: "Доб",
+                                            child: Text("Добавочный"),
+                                          ),
+                                          PopupMenuItem(
+                                            value: "Раб",
+                                            child: Text("Рабочий"),
+                                          ),
+                                          PopupMenuItem(
+                                            value: "Моб",
+                                            child: Text("Мобильный"),
+                                          ),
+                                        ],
+                                        onSelected: (value) {
+                                          _controllerTypePhone.text = value;
+                                          // print('value-value-value' + value);
+                                        },
+                                        icon: Icon(Icons.filter_list),
+                                      ),
+                                      Expanded(
+                                          child: TextFormField(
+                                        enabled: false,
+                                        controller: _controllerTypePhone,
+                                        //initialValue: 'Все',
+                                        onSaved: (String value) {
+                                          // This optional block of code can be used to run
+                                          // code when the user saves the form.
+                                        },
+                                      )),
+                                    ],
+                                  ))),
+                          Expanded(
+                              flex: 2,
                               child: TextFormField(
                                 controller: _controllerPhone,
                                 decoration: new InputDecoration(
-                                  //icon: Icon(Icons.arrow_drop_down),
-                                  //
-                                  icon: new FutureBuilder(
-                                    // future: _getData(),
-
-                                    future: CorporationList().getCorporation,
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot snapshot) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.none:
-                                        case ConnectionState.waiting:
-                                          return new Text('loading...');
-                                        default:
-                                          if (snapshot.hasError)
-                                            return new Text(
-                                                'Error: ${snapshot.error}');
-                                          else
-                                            listtt = new List();
-
-                                          snapshot.data.forEach((branchItem) {
-                                            //listItemNames.add(branchItem.itemName);
-                                            int index = snapshot.data
-                                                .indexOf(branchItem);
-                                            // dropDownItemsMap[index] = branchItem;
-
-                                            listtt.insert(
-                                                index, branchItem.toString());
-                                            //listtt.insert(0, 'fff');
-                                          });
-
-                                          return PopupMenuButton(
-                                            captureInheritedThemes: false,
-                                            icon: Icon(Icons.filter_list),
-                                            itemBuilder:
-                                                (BuildContext context) {
-                                              return listtt
-                                                  .map((day) => PopupMenuItem(
-                                                        child: Text(day),
-                                                        value: day,
-                                                      ))
-                                                  .toList();
-                                            },
-                                            onSelected: (value) {
-                                              setState(() {
-                                                _controllerPhone.text = value;
-                                              });
-                                            },
-                                          );
-                                      }
-                                    },
-                                  ), //
+//
                                   //
                                   //
                                   labelText: 'Телефон',
@@ -353,6 +341,14 @@ class _SearchPage extends State<SearchPage> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 0.0, color: Colors.white),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(Icons.clear),
+                                    onPressed: () {
+                                      setState(() {
+                                        _controllerPhone.text = '';
+                                      });
+                                    },
                                   ),
                                 ),
                                 onSaved: (String value) {
@@ -364,19 +360,7 @@ class _SearchPage extends State<SearchPage> {
                                       ? 'Do not use the @ char.'
                                       : null;
                                 },
-                              )),
-                          Flexible(
-                              flex: 1,
-                              child: new IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  setState(() {
-                                    _controllerPhone.text = '';
-                                  });
-                                },
-                              )),
-
-                              */
+                              ))
                         ])),
                   ),
                 ]))));

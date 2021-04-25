@@ -86,7 +86,7 @@ class DataBase extends ChangeNotifier {
     };
 
     //print('queryParameters $queryParameters');
-    var uri = Uri.http('192.168.1.69:8000', '/contacts_2/', queryParameters);
+    var uri = Uri.http('192.168.0.102:8000', '/contacts_2/', queryParameters);
 
     final response = await http.get(uri);
 
@@ -161,7 +161,7 @@ class CorporationList {
   Future<void> get getCorporation async {
     List corporationlist;
     //print('queryParameters $queryParameters');
-    var uri = Uri.http('192.168.1.69:8000', '/corporation/');
+    var uri = Uri.http('192.168.0.102:8000', '/corporation/');
 
     final response = await http.get(uri);
 
@@ -178,5 +178,57 @@ class CorporationList {
     // notifyListeners();
     return corporationlist.map((s) => s as String).toList();
     //notifyListeners();
+  }
+}
+
+class DepartmentList {
+  Future<void> get getDepartment async {
+    List departmentlist;
+    //print('queryParameters $queryParameters');
+    var uri = Uri.http('192.168.0.102:8000', '/department/');
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      departmentlist = jsonDecode(utf8.decode(response.bodyBytes));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      //throw Exception('Failed to load contacts');
+      departmentlist = [];
+    }
+    // notifyListeners();
+    return departmentlist.map((s) => s as String).toList();
+    //notifyListeners();
+  }
+}
+
+class SearchContacts {
+  Future<List> postContacts(String title) async {
+    List departmentlist;
+    final response = await http.post(
+      Uri.http('192.168.0.102:8000', '/searchcontacts/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': title,
+      }),
+    );
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      departmentlist = jsonDecode(utf8.decode(response.bodyBytes));
+      print('fffff-11-00');
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      departmentlist = [];
+      print('fffff-22-00');
+    }
+    print('syatus ' + response.statusCode.toString());
+    return departmentlist.map((s) => s as String).toList();
   }
 }

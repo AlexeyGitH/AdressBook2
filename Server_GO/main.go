@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -121,6 +122,8 @@ func main() {
 	r.HandleFunc("/contacts/", ContactsHandler)
 	r.HandleFunc("/contacts_2/", getUsers)
 	r.HandleFunc("/corporation/", getCorporations)
+	r.HandleFunc("/department/", getDepartaments)
+	r.HandleFunc("/searchcontacts/", getContacts)
 
 	// Bind to a port and pass our router in
 	log.Fatal(http.ListenAndServe(":8000", r))
@@ -201,7 +204,7 @@ func getCorporations(w http.ResponseWriter, r *http.Request) {
 	var Corporation string
 	var Corporations []string
 
-	selectionCorporation := fmt.Sprintf("SELECT 'All' UNION SELECT corporation FROM Contacts GROUP BY corporation ORDER BY corporation")
+	selectionCorporation := fmt.Sprintf("SELECT 'All' UNION SELECT corporation FROM Contacts where corporation <> '' GROUP BY corporation ORDER BY corporation")
 
 	db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
 	if err != nil {
@@ -227,5 +230,45 @@ func getCorporations(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusOK, Corporations)
+
+}
+
+func getDepartaments(w http.ResponseWriter, r *http.Request) {
+	var Department string
+	var Departments []string
+
+	selectionDepartment := fmt.Sprintf("SELECT 'All' UNION SELECT department FROM Contacts where department <> '' GROUP BY department ORDER BY department ")
+
+	db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query(selectionDepartment)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+
+		err := rows.Scan(&Department)
+
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		Departments = append(Departments, Department)
+	}
+
+	respondWithJSON(w, http.StatusOK, Departments)
+
+}
+
+func getContacts(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("r-request")
+	b, _ := ioutil.ReadAll(r.Body)
+	fmt.Printf("%s \n", string(b))
 
 }
