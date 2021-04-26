@@ -279,10 +279,6 @@ func getContacts(w http.ResponseWriter, r *http.Request) {
 	b, _ := ioutil.ReadAll(r.Body)
 	json.Unmarshal(b, &m)
 
-	for i := 0; i < len(m.FIO); i++ {
-		fmt.Println(m.FIO[i])
-	}
-
 	/*
 		fmt.Println("r-request")
 		b, _ := ioutil.ReadAll(r.Body)
