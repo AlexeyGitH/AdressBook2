@@ -35,9 +35,13 @@ class _SearchPage extends State<SearchPage> {
                 child: new Column(children: [
                   RaisedButton.icon(
                     onPressed: () async {
-                      print('fffff-222');
-                      List _d =
-                          await SearchContacts().postContacts('fffff-222');
+                      // print('fffff-222');
+                      List _d = await SearchContacts().postContacts(
+                          _controllerFIO.text,
+                          _controllerCorporation.text,
+                          _controllerDepartament.text,
+                          _controllerPhone.text,
+                          _controllerTypePhone.text);
                       print(_d);
                     },
                     color: Colors.blue,
@@ -144,8 +148,12 @@ class _SearchPage extends State<SearchPage> {
                                           },
                                           onSelected: (value) {
                                             setState(() {
-                                              _controllerCorporation.text =
-                                                  value;
+                                              if (value == "All")
+                                                _controllerCorporation.text =
+                                                    "";
+                                              else
+                                                _controllerCorporation.text =
+                                                    value;
                                             });
                                           },
                                         );
@@ -236,8 +244,12 @@ class _SearchPage extends State<SearchPage> {
                                           },
                                           onSelected: (value) {
                                             setState(() {
-                                              _controllerDepartament.text =
-                                                  value;
+                                              if (value == "All")
+                                                _controllerDepartament.text =
+                                                    "";
+                                              else
+                                                _controllerDepartament.text =
+                                                    value;
                                             });
                                           },
                                         );

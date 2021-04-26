@@ -267,8 +267,27 @@ func getDepartaments(w http.ResponseWriter, r *http.Request) {
 }
 
 func getContacts(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("r-request")
+
+	type ContactMember struct {
+		FIO         string
+		Corporation string
+		Departament string
+		Phone       string
+		TypePhone   string
+	}
+	var m ContactMember
 	b, _ := ioutil.ReadAll(r.Body)
+	json.Unmarshal(b, &m)
+
+	for i := 0; i < len(m.FIO); i++ {
+		fmt.Println(m.FIO[i])
+	}
+
+	/*
+		fmt.Println("r-request")
+		b, _ := ioutil.ReadAll(r.Body)
+	*/
 	fmt.Printf("%s \n", string(b))
+	fmt.Printf("%s \n", string(m.FIO))
 
 }

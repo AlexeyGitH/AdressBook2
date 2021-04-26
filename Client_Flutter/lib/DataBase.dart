@@ -4,6 +4,8 @@ import 'PostContact.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+String iplocalhost = "172.16.40.14:8000";
+
 class DataBaseData {
   int datalistcount;
   ContactServer database;
@@ -86,7 +88,7 @@ class DataBase extends ChangeNotifier {
     };
 
     //print('queryParameters $queryParameters');
-    var uri = Uri.http('192.168.0.102:8000', '/contacts_2/', queryParameters);
+    var uri = Uri.http(iplocalhost, '/contacts_2/', queryParameters);
 
     final response = await http.get(uri);
 
@@ -161,7 +163,7 @@ class CorporationList {
   Future<void> get getCorporation async {
     List corporationlist;
     //print('queryParameters $queryParameters');
-    var uri = Uri.http('192.168.0.102:8000', '/corporation/');
+    var uri = Uri.http(iplocalhost, '/corporation/');
 
     final response = await http.get(uri);
 
@@ -185,7 +187,7 @@ class DepartmentList {
   Future<void> get getDepartment async {
     List departmentlist;
     //print('queryParameters $queryParameters');
-    var uri = Uri.http('192.168.0.102:8000', '/department/');
+    var uri = Uri.http(iplocalhost, '/department/');
 
     final response = await http.get(uri);
 
@@ -206,27 +208,37 @@ class DepartmentList {
 }
 
 class SearchContacts {
-  Future<List> postContacts(String title) async {
+  Future<List> postContacts(
+      String _controllerFIO,
+      String _controllerCorporation,
+      String _controllerDepartament,
+      String _controllerPhone,
+      String _controllerTypePhone) async {
     List departmentlist;
     final response = await http.post(
-      Uri.http('192.168.0.102:8000', '/searchcontacts/'),
+      Uri.http(iplocalhost, '/searchcontacts/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'title': title,
+        'FIO': _controllerFIO,
+        'Corporation': _controllerCorporation,
+        'Departament': _controllerDepartament,
+        'Phone': _controllerPhone,
+        'TypePhone': _controllerTypePhone,
       }),
     );
     if (response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      departmentlist = jsonDecode(utf8.decode(response.bodyBytes));
-      print('fffff-11-00');
+      //departmentlist = jsonDecode(utf8.decode(response.bodyBytes));
+      departmentlist = [];
+      //print('fffff-11-00');
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
       departmentlist = [];
-      print('fffff-22-00');
+      //print('fffff-22-00');
     }
     print('syatus ' + response.statusCode.toString());
     return departmentlist.map((s) => s as String).toList();
