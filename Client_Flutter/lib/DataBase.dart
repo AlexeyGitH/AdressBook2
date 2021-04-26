@@ -4,7 +4,8 @@ import 'PostContact.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-String iplocalhost = "172.16.40.14:8000";
+//String iplocalhost = "172.16.40.14:8000";
+String iplocalhost = "192.168.0.102:8000";
 
 class DataBaseData {
   int datalistcount;

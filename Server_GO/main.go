@@ -134,14 +134,57 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 
 	var contacts_count int
 
+	type ContactMember struct {
+		FIO         string
+		Corporation string
+		Departament string
+		Phone       string
+		TypePhone   string
+	}
+	var m ContactMember
+	paramrequest, _ := ioutil.ReadAll(r.Body)
+	json.Unmarshal(paramrequest, &m)
+
+	var Wheretext string = ""
+	if paramrequest.FIO != "" {
+		Wheretext = " where "
+	}
+
 	count, _ := strconv.Atoi(r.FormValue("count"))
 	limit, _ := strconv.Atoi(r.FormValue("limit"))
 
 	//fmt.Println("count " + strconv.Itoa(count))
 	//fmt.Println("limit " + strconv.Itoa(limit))
 
-	selection_contacts := fmt.Sprintf("SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts ORDER BY l_FIO ASC LIMIT %d, %d", count, limit)
-	selection_count_contacts := fmt.Sprintf("SELECT COUNT(*) as count FROM Contacts")
+	selection_contacts := fmt.Sprintf("SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts "+Wheretext+" ORDER BY l_FIO ASC LIMIT %d, %d", count, limit)
+	selection_count_contacts := fmt.Sprintf("SELECT COUNT(*) as count FROM Contacts " + Wheretext)
+
+	/*
+
+		let params = {$offset: offset, $limit: limit}
+		let sql_req = "SELECT * FROM Contacts";
+		let count_sql_req = "SELECT COUNT(*) as count FROM Contacts";
+
+		let f_FIO = "";
+		if (filter.filterFIO != '') {params.$FIO = '%'+filter.filterFIO.toLocaleLowerCase()+'%'; f_FIO = " l_FIO LIKE $FIO"};
+
+		let f_dep = "";
+		if (filter.filterDepartment != '') {params.$Department = '%'+filter.filterDepartment.toLocaleLowerCase()+'%'; f_dep = " l_department LIKE $Department"}
+		if (f_FIO != "" && f_dep != "") {f_dep = ' AND' + f_dep};
+
+		let f_corp = "";
+		if (filter.filterCorporation != '') {params.$Corporation = '%'+filter.filterCorporation.toLocaleLowerCase()+'%'; f_corp = " l_corporation LIKE $Corporation"}
+		if ((f_FIO != "" || f_dep != "") && f_corp != "") {f_corp = ' AND' + f_corp};
+
+
+		let f_phone = "";
+		//console.log('filter.filterTypePhone ' + filter.filterTypePhone);
+		//console.log('filter.filterPhone ' + filter.filterPhone);
+		if (filter.filterTypePhone === 'all' && filter.filterPhone != '') {params.$Phone = '%'+filter.filterPhone+'%'; f_phone = " (work_phone LIKE $Phone OR mobile_phone LIKE $Phone OR additional_phone LIKE $Phone)"}
+		else if (filter.filterTypePhone === 'phone_additional' && filter.filterPhone != '') {params.$Phone = '%'+filter.filterPhone+'%'; f_phone = " (additional_phone LIKE $Phone)"}
+		else if (filter.filterTypePhone === 'phone_work' && filter.filterPhone != '') {params.$Phone = '%'+filter.filterPhone+'%'; f_phone = " (work_phone LIKE $Phone)"}
+		else if (filter.filterTypePhone === 'phone_mobile' && filter.filterPhone != '') {params.$Phone = '%'+filter.filterPhone+'%'; f_phone = " (mobile_phone LIKE $Phone)"}
+	*/
 
 	db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
 	if err != nil {
