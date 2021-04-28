@@ -133,6 +133,8 @@ func main() {
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
 
+	//fmt.Printf("fff start")
+
 	var contacts_count int
 
 	count, _ := strconv.Atoi(r.FormValue("count"))
@@ -166,29 +168,33 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	//var param_req []string
 	var text_selection_contacts string
 	var text_selection_count_contacts string
-	var para_req []string
+	var param_req []interface{}
 	var wheretext string
 
 	wheretext = ""
 
+	fmt.Printf("%+v\n", t)
+
 	if err != nil {
 		//panic(err)
 		//log.Println("search contacts without parametrs!")
-		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts ORDER BY l_FIO ASC LIMIT %d, %d"
+		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts ORDER BY l_FIO ASC LIMIT ?, ?"
 		text_selection_count_contacts = "SELECT COUNT(*) as count FROM Contacts "
 
 	} else {
 		if t.FIO != "" {
-			para_req = append(para_req, "%"+strings.ToLower(t.FIO)+"%")
-			wheretext = " l_FIO LIKE $FIO"
+			param_req = append(param_req, "%"+strings.ToLower(t.FIO)+"%")
+			wheretext = " where l_FIO LIKE ?"
 
 		}
 		//log.Println("FIO " + t.FIO)
 
-		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts " + wheretext + " ORDER BY l_FIO ASC LIMIT %d, %d"
+		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts " + wheretext + " ORDER BY l_FIO ASC LIMIT ?, ?"
 		text_selection_count_contacts = "SELECT COUNT(*) as count FROM Contacts " + wheretext
 
 	}
+
+	//param_req = append(param_req, count, limit)
 
 	//fmt.Println("count " + strconv.Itoa(count))
 	//fmt.Println("limit " + strconv.Itoa(limit))
@@ -220,16 +226,40 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 		else if (filter.filterTypePhone === 'phone_mobile' && filter.filterPhone != '') {params.$Phone = '%'+filter.filterPhone+'%'; f_phone = " (mobile_phone LIKE $Phone)"}
 	*/
 
-	selection_contacts := fmt.Sprintf(text_selection_contacts, count, limit, para_req)
-	selection_count_contacts := fmt.Sprintf(text_selection_count_contacts, para_req)
+	//selection_contacts := fmt.Sprintf(text_selection_contacts, count, limit, para_req)
+	//selection_count_contacts := fmt.Sprintf(text_selection_count_contacts, para_req)
 
+	///////////////////////
+	///count
+	//////////////////
 	db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
+	rows_count, err := db.Query(text_selection_count_contacts, param_req...)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer rows_count.Close()
+
+	for rows_count.Next() {
+		err := rows_count.Scan(&contacts_count)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+
+	}
+
+	///////////////////////
+	///contacts
+	//////////////////
+
+	param_req = append(param_req, count, limit)
+
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
 
-	rows, err := db.Query(selection_contacts)
+	rows, err := db.Query(text_selection_contacts, param_req...)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -248,34 +278,19 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 		Contacts = append(Contacts, p)
 	}
 
-	///////////////////////
-	///count
-	//////////////////
-
-	rows_count, err := db.Query(selection_count_contacts)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer rows_count.Close()
-
-	for rows_count.Next() {
-		err := rows_count.Scan(&contacts_count)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-
-	}
-
-	data := Contact_data{
-		Count:       contacts_count,
-		ContactList: Contacts,
-	}
 	/*
 		for _, p := range data.ContactList {
 			fmt.Println("ContactList " + p.LastName)
 		}
 	*/
+
+	data := Contact_data{
+		Count:       contacts_count,
+		ContactList: Contacts,
+	}
+
+	fmt.Printf("%+v\n", data)
+
 	respondWithJSON(w, http.StatusOK, data)
 
 }

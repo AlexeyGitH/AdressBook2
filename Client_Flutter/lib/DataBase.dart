@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 //String iplocalhost = "172.16.40.14:8000";
-String iplocalhost = "192.168.0.102:8000";
+String iplocalhost = "192.168.0.107:8000";
 
 class DataBaseData {
   int datalistcount;
@@ -217,7 +217,8 @@ class SearchContacts {
       String _controllerTypePhone) async {
     List departmentlist;
     final response = await http.post(
-      Uri.http(iplocalhost, '/searchcontacts/'),
+      //Uri.http(iplocalhost, '/searchcontacts/'),
+      Uri.http(iplocalhost, '/contacts_2/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
