@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 
@@ -134,6 +135,9 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 
 	var contacts_count int
 
+	count, _ := strconv.Atoi(r.FormValue("count"))
+	limit, _ := strconv.Atoi(r.FormValue("limit"))
+
 	type ContactMember struct {
 		FIO         string
 		Corporation string
@@ -141,23 +145,53 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 		Phone       string
 		TypePhone   string
 	}
-	var m ContactMember
-	paramrequest, _ := ioutil.ReadAll(r.Body)
-	json.Unmarshal(paramrequest, &m)
 
-	var Wheretext string = ""
-	if paramrequest.FIO != "" {
-		Wheretext = " where "
+	/*
+		var m ContactMember
+		paramrequest, _ := ioutil.ReadAll(r.Body)
+		json.Unmarshal(paramrequest, &m)
+	*/
+
+	/*
+		if paramrequest.FIO != "" {
+			Wheretext = " where "
+
+		}
+	*/
+
+	decoder := json.NewDecoder(r.Body)
+	var t ContactMember
+	err := decoder.Decode(&t)
+
+	//var param_req []string
+	var text_selection_contacts string
+	var text_selection_count_contacts string
+	var para_req []string
+	var wheretext string
+
+	wheretext = ""
+
+	if err != nil {
+		//panic(err)
+		//log.Println("search contacts without parametrs!")
+		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts ORDER BY l_FIO ASC LIMIT %d, %d"
+		text_selection_count_contacts = "SELECT COUNT(*) as count FROM Contacts "
+
+	} else {
+		if t.FIO != "" {
+			para_req = append(para_req, "%"+strings.ToLower(t.FIO)+"%")
+			wheretext = " l_FIO LIKE $FIO"
+
+		}
+		//log.Println("FIO " + t.FIO)
+
+		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts " + wheretext + " ORDER BY l_FIO ASC LIMIT %d, %d"
+		text_selection_count_contacts = "SELECT COUNT(*) as count FROM Contacts " + wheretext
+
 	}
-
-	count, _ := strconv.Atoi(r.FormValue("count"))
-	limit, _ := strconv.Atoi(r.FormValue("limit"))
 
 	//fmt.Println("count " + strconv.Itoa(count))
 	//fmt.Println("limit " + strconv.Itoa(limit))
-
-	selection_contacts := fmt.Sprintf("SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts "+Wheretext+" ORDER BY l_FIO ASC LIMIT %d, %d", count, limit)
-	selection_count_contacts := fmt.Sprintf("SELECT COUNT(*) as count FROM Contacts " + Wheretext)
 
 	/*
 
@@ -185,6 +219,9 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 		else if (filter.filterTypePhone === 'phone_work' && filter.filterPhone != '') {params.$Phone = '%'+filter.filterPhone+'%'; f_phone = " (work_phone LIKE $Phone)"}
 		else if (filter.filterTypePhone === 'phone_mobile' && filter.filterPhone != '') {params.$Phone = '%'+filter.filterPhone+'%'; f_phone = " (mobile_phone LIKE $Phone)"}
 	*/
+
+	selection_contacts := fmt.Sprintf(text_selection_contacts, count, limit, para_req)
+	selection_count_contacts := fmt.Sprintf(text_selection_count_contacts, para_req)
 
 	db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
 	if err != nil {
