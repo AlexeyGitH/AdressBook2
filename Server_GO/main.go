@@ -187,6 +187,57 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 			wheretext = " where l_FIO LIKE ?"
 
 		}
+		if t.Corporation != "" {
+			param_req = append(param_req, "%"+strings.ToLower(t.Corporation)+"%")
+			if wheretext != "" {
+				wheretext += " and l_corporation LIKE ?"
+			} else {
+				wheretext = " where l_corporation LIKE ?"
+			}
+		}
+
+		if t.Departament != "" {
+			param_req = append(param_req, "%"+strings.ToLower(t.Departament)+"%")
+			if wheretext != "" {
+				wheretext += " and l_department LIKE ?"
+			} else {
+				wheretext = " where l_department LIKE ?"
+			}
+		}
+
+		if t.Phone != "" {
+			param_req = append(param_req, "%"+t.Phone+"%")
+			if t.TypePhone == "phone_additional" {
+				if wheretext != "" {
+					wheretext += " and additional_phone LIKE ?"
+				} else {
+					wheretext = " where additional_phone LIKE ?"
+				}
+			} else if t.TypePhone == "phone_work" {
+				if wheretext != "" {
+					wheretext += " and work_phone LIKE ?"
+				} else {
+					wheretext = " where work_phone LIKE ?"
+				}
+			} else if t.TypePhone == "phone_mobile" {
+				if wheretext != "" {
+					wheretext += " and mobile_phone LIKE ?"
+				} else {
+					wheretext = " where mobile_phone LIKE ?"
+				}
+			} else {
+				param_req = append(param_req, "%"+t.Phone+"%")
+				param_req = append(param_req, "%"+t.Phone+"%")
+
+				if wheretext != "" {
+					wheretext += " and (additional_phone LIKE ? OR work_phone LIKE ? OR mobile_phone LIKE ?)"
+				} else {
+					wheretext = " where (additional_phone LIKE ? OR work_phone LIKE ? OR mobile_phone LIKE ?)"
+				}
+			}
+
+		}
+
 		//log.Println("FIO " + t.FIO)
 
 		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts " + wheretext + " ORDER BY l_FIO ASC LIMIT ?, ?"

@@ -216,6 +216,20 @@ class SearchContacts {
       String _controllerPhone,
       String _controllerTypePhone) async {
     List departmentlist;
+
+    if (_controllerTypePhone == "Все") {
+      _controllerTypePhone = "all";
+    }
+    if (_controllerTypePhone == "Доб") {
+      _controllerTypePhone = "phone_additional";
+    }
+    if (_controllerTypePhone == "Раб") {
+      _controllerTypePhone = "phone_work";
+    }
+    if (_controllerTypePhone == "Моб") {
+      _controllerTypePhone = "phone_mobile";
+    }
+
     final response = await http.post(
       //Uri.http(iplocalhost, '/searchcontacts/'),
       Uri.http(iplocalhost, '/contacts_2/'),
