@@ -311,6 +311,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	rows, err := db.Query(text_selection_contacts, param_req...)
+	//fmt.Println(text_selection_contacts)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -340,7 +341,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 		ContactList: Contacts,
 	}
 
-	fmt.Printf("%+v\n", data)
+	//fmt.Printf("%+v\n", data)
 
 	respondWithJSON(w, http.StatusOK, data)
 

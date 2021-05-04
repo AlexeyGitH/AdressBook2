@@ -1,3 +1,5 @@
+//import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'ConstSystemAD.dart';
 import 'PostContact.dart';
@@ -12,7 +14,11 @@ class DataBaseData {
   ContactServer database;
   bool blockrightarrow;
 
-  DataBaseData({this.datalistcount, this.database, this.blockrightarrow});
+  DataBaseData({
+    this.datalistcount,
+    this.database,
+    this.blockrightarrow,
+  });
 }
 
 class DataBase extends ChangeNotifier {
@@ -82,16 +88,34 @@ class DataBase extends ChangeNotifier {
   }
 */
 
-  Future<void> get getContacts async {
+  Future<void> getContacts(
+      String _controllerFIO,
+      String _controllerCorporation,
+      String _controllerDepartament,
+      String _controllerPhone,
+      String _controllerTypePhone) async {
     var queryParameters = {
       'count': _databasedata.datalistcount.toString(),
       'limit': Limit_const.toString(),
     };
 
     //print('queryParameters $queryParameters');
-    var uri = Uri.http(iplocalhost, '/contacts_2/', queryParameters);
-
-    final response = await http.get(uri);
+//    var uri = Uri.http(iplocalhost, '/contacts_2/', queryParameters);
+//    final response = await http.get(uri);
+//
+    final response = await http.post(
+      Uri.http(iplocalhost, '/contacts_2/', queryParameters),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'FIO': _controllerFIO,
+        'Corporation': _controllerCorporation,
+        'Departament': _controllerDepartament,
+        'Phone': _controllerPhone,
+        'TypePhone': _controllerTypePhone,
+      }),
+    );
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -208,6 +232,7 @@ class DepartmentList {
   }
 }
 
+/*
 class SearchContacts {
   Future<List> postContacts(
       String _controllerFIO,
@@ -260,3 +285,4 @@ class SearchContacts {
     return departmentlist.map((s) => s as String).toList();
   }
 }
+*/

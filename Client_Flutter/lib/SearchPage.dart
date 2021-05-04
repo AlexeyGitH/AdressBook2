@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ad_book_2/DataBase.dart';
+import 'main.dart';
+import 'DataBase.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);
@@ -33,19 +35,33 @@ class _SearchPage extends State<SearchPage> {
             child: ConstrainedBox(
                 constraints: BoxConstraints(),
                 child: new Column(children: [
-                  RaisedButton.icon(
+                  ElevatedButton.icon(
                     onPressed: () async {
                       // print('fffff-222');
+                      //
+                      /*
                       List _d = await SearchContacts().postContacts(
                           _controllerFIO.text,
                           _controllerCorporation.text,
                           _controllerDepartament.text,
                           _controllerPhone.text,
                           _controllerTypePhone.text);
-                      print(_d);
+                          */
+                      //print(_d);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                BasePage(title: "Address book")),
+                      );
                     },
-                    color: Colors.blue,
-                    textColor: Colors.white,
+                    //color: Colors.blue,
+                    //textColor: Colors.white,
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                    ), //
                     icon: Icon(Icons.search),
                     label: Text('Найти'),
                   ),
@@ -122,7 +138,8 @@ class _SearchPage extends State<SearchPage> {
                                           return new Text(
                                               'Error: ${snapshot.error}');
                                         else
-                                          lisCorp = new List();
+                                          //lisCorp = new List();
+                                          lisCorp = [];
 
                                         snapshot.data.forEach((branchItem) {
                                           //listItemNames.add(branchItem.itemName);
@@ -136,7 +153,7 @@ class _SearchPage extends State<SearchPage> {
                                         });
 
                                         return PopupMenuButton(
-                                          captureInheritedThemes: false,
+                                          //captureInheritedThemes: false,
                                           icon: Icon(Icons.filter_list),
                                           itemBuilder: (BuildContext context) {
                                             return lisCorp
@@ -218,7 +235,8 @@ class _SearchPage extends State<SearchPage> {
                                           return new Text(
                                               'Error: ${snapshot.error}');
                                         else
-                                          lisDep = new List();
+                                          //lisDep = new List();
+                                          lisDep = [];
 
                                         snapshot.data.forEach((branchItem) {
                                           //listItemNames.add(branchItem.itemName);
@@ -232,7 +250,7 @@ class _SearchPage extends State<SearchPage> {
                                         });
 
                                         return PopupMenuButton(
-                                          captureInheritedThemes: false,
+                                          //captureInheritedThemes: false,
                                           icon: Icon(Icons.filter_list),
                                           itemBuilder: (BuildContext context) {
                                             return lisDep

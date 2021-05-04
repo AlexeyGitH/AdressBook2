@@ -1,3 +1,5 @@
+//import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'DataBase.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Address book',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -32,7 +34,9 @@ class MyApp extends StatelessWidget {
 
 class BasePage extends StatelessWidget {
   final String title;
-  BasePage({this.title});
+  BasePage({
+    this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +77,7 @@ class GetBasePageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var futureBuilder = new FutureBuilder(
-      future: Provider.of<DataBase>(context).getContacts,
+      future: Provider.of<DataBase>(context).getContacts("", "orp", "", "", ""),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
