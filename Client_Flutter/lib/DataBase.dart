@@ -13,19 +13,23 @@ class DataBaseData {
   int datalistcount;
   ContactServer database;
   bool blockrightarrow;
+  ParamFilter filters;
 
   DataBaseData({
     this.datalistcount,
     this.database,
     this.blockrightarrow,
+    this.filters,
   });
 }
 
 class DataBase extends ChangeNotifier {
   var _databasedata = new DataBaseData(
-      datalistcount: 0,
-      database: new ContactServer(countlist: 0, contacts: null),
-      blockrightarrow: false);
+    datalistcount: 0,
+    database: new ContactServer(countlist: 0, contacts: null),
+    blockrightarrow: false,
+    filters: new ParamFilter(fio: ""),
+  );
 
   DataBaseData get getContactList {
     return _databasedata;

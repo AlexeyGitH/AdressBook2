@@ -61,3 +61,18 @@ class ContactServer {
     );
   }
 }
+
+class ParamFilter {
+  String fio;
+  String corporation;
+  String departament;
+  String phone;
+  String typephone;
+
+  ParamFilter(
+      {this.fio,
+      this.corporation,
+      this.departament,
+      this.phone,
+      this.typephone});
+}
