@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ad_book_2/DataBase.dart';
-import 'main.dart';
+//import 'main.dart';
+import 'package:provider/provider.dart';
 import 'DataBase.dart';
 
 class SearchPage extends StatefulWidget {
@@ -35,26 +36,29 @@ class _SearchPage extends State<SearchPage> {
             child: ConstrainedBox(
                 constraints: BoxConstraints(),
                 child: new Column(children: [
+                  RightArrowBottomWidgetSearch(),
+                  /*
                   ElevatedButton.icon(
                     onPressed: () async {
                       // print('fffff-222');
                       //
-                      /*
+
                       List _d = await SearchContacts().postContacts(
                           _controllerFIO.text,
                           _controllerCorporation.text,
                           _controllerDepartament.text,
                           _controllerPhone.text,
                           _controllerTypePhone.text);
-                          */
-                      //print(_d);
 
+                      //print(_d);
+/*
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 BasePage(title: "Address book")),
                       );
+                      */
                     },
                     //color: Colors.blue,
                     //textColor: Colors.white,
@@ -65,6 +69,7 @@ class _SearchPage extends State<SearchPage> {
                     icon: Icon(Icons.search),
                     label: Text('Найти'),
                   ),
+                  */
                   new Container(
                       margin: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
@@ -398,3 +403,33 @@ class _SearchPage extends State<SearchPage> {
 }
 
 ///https://www.russianfood.com/recipes/recipe.php?rid=125019
+
+class RightArrowBottomWidgetSearch extends StatelessWidget {
+  void _getContactsAdd(BuildContext context) {
+    Provider.of<DataBase>(context, listen: false).getContactsAdd();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var contactlist = Provider.of<DataBase>(context).getContactList;
+    Color colorarrow;
+    //Waiting spiner ... ... ..
+    colorarrow = contactlist.blockrightarrow == true
+        ? Colors.blueGrey[600]
+        : Colors.white;
+    return new SizedBox(
+      height: 40.0,
+      width: 40.0,
+      child: new IconButton(
+          padding: new EdgeInsets.all(0.0),
+          color: colorarrow,
+          icon: new Icon(Icons.arrow_right, size: 40.0),
+          onPressed: () {
+            print("press right arrow");
+            if (contactlist.blockrightarrow != true) {
+              _getContactsAdd(context);
+            }
+          }),
+    );
+  }
+}
