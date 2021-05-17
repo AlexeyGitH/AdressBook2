@@ -12,6 +12,10 @@ class MyModel extends  ChangeNotifier {
   addNumber() {
     c =c+1;
   }
+  changeA(t) {
+    this.a = 'Test 1A' + (t+1).toString();
+    notifyListeners();
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -67,7 +71,16 @@ class Page2 extends StatelessWidget {
       appBar: AppBar(
         title: Text(myModel.b),
       ),
-      body: Center(child: Text('You have pressed the button ' + myModel.c.toString())),
+      body:
+      Center(child: Text('You have pressed the button ' + myModel.c.toString())),
+      floatingActionButton: FloatingActionButton(
+        onPressed:
+
+            () => {myModel.changeA(myModel.c)
+        },
+        tooltip: 'Increment Counter',
+        child: const Icon(Icons.add),
+      ),
     );
 
   }
