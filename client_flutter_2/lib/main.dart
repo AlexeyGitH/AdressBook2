@@ -13,7 +13,7 @@ class MyModel extends  ChangeNotifier {
     c =c+1;
   }
   changeA(t) {
-    this.a = 'Test 1A' + (t+1).toString();
+    this.a = 'Test 1A' + (t).toString();
     notifyListeners();
   }
 }
@@ -48,7 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () =>
-                    Navigator.of(context).push(_createRoute(),
+                    Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => Page2(),
+                    ),
                     ),
                 tooltip: 'Press',
                 child: Icon(Icons.access_alarm),
@@ -59,30 +61,12 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => Page2(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(0.0, 1.0);
-      var end = Offset.zero;
-      var curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
-}
-
 class Page2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     var myModel = Provider.of<MyModel>(context); // A
-    myModel.addNumber();
+   // myModel.addNumber();
     return Scaffold(
       appBar: AppBar(
         title: Text(myModel.b),
@@ -93,6 +77,7 @@ class Page2 extends StatelessWidget {
         onPressed:
 
             () => {
+          myModel.addNumber(),
           myModel.changeA(myModel.c),
           Navigator.of(context).pop(),
         },
