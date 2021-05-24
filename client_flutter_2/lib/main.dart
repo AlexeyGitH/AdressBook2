@@ -21,10 +21,15 @@ class MyModel extends  ChangeNotifier {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create: (_)=> MyModel(),
-        child: MaterialApp(
-          home: MyHomePage(),));
+    return
 
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_)=> MyModel()),
+        ],
+        child: MaterialApp(
+        home: MyHomePage(),),
+      );
   }
 }
 
