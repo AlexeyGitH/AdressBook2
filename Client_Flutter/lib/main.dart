@@ -65,6 +65,20 @@ class _AddressBookHomePageState extends State<AddressBookHomePage> {
   }
 }
 
+
+class GetBasePageWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var ModelDateBase = Provider.of<DataBase>(context);
+
+    //var futureBuilder = new FutureBuilder()
+
+    return ModelDateBase.getContactList();
+    //return futureBuilder;
+  }
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +92,7 @@ class _AddressBookHomePageState extends State<AddressBookHomePage> {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 class MyApp_ extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -99,7 +114,9 @@ class MyApp_ extends StatelessWidget {
     );
   }
 }
+*/
 
+/*
 class BasePage extends StatelessWidget {
   final String title;
   BasePage({
@@ -140,8 +157,10 @@ class BasePage extends StatelessWidget {
     );
   }
 }
+*/
 
-class GetBasePageWidget extends StatelessWidget {
+/*
+class _GetBasePageWidget_ extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var futureBuilder = new FutureBuilder(
@@ -180,6 +199,7 @@ class GetBasePageWidget extends StatelessWidget {
     return futureBuilder;
   }
 }
+*/
 
 class RightArrowBottomWidget extends StatelessWidget {
   void _getContactsAdd(BuildContext context) {

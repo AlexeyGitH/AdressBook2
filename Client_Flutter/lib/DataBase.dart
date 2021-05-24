@@ -6,8 +6,8 @@ import 'PostContact.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-//String iplocalhost = "172.16.40.14:8000";
-String iplocalhost = "192.168.0.107:8000";
+String iplocalhost = "172.16.40.14:8000";
+//String iplocalhost = "192.168.0.107:8000";
 
 class DataBaseData {
   int datalistcount;
@@ -23,18 +23,45 @@ class DataBaseData {
   });
 }
 
+class DataBaseFilter {
+  String controllerFIO;
+  String controllerCorporation;
+  String controllerDepartament;
+  String controllerPhone;
+  String controllerTypePhone;
+
+  DataBaseFilter({
+    this.controllerFIO,
+    this.controllerCorporation,
+    this.controllerDepartament,
+    this.controllerPhone,
+    this.controllerTypePhone
+  });
+}
+
 class DataBase extends ChangeNotifier {
-  var _databasedata = new DataBaseData(
+
+  DataBaseFilter _dataBaseFilter = new DataBaseFilter(controllerFIO: "",
+    controllerCorporation: "",
+    controllerDepartament: "",
+    controllerPhone: "",
+    controllerTypePhone: "",
+  );
+
+  DataBaseData _dataBaseData = new DataBaseData(
     datalistcount: 0,
     database: new ContactServer(countlist: 0, contacts: null),
     blockrightarrow: false,
     filters: new ParamFilter(fio: ""),
   );
 
-  DataBaseData get getContactList {
-    return _databasedata;
+
+  Future<void> get getContactList async {
+
+
   }
 
+/*
   void getContactsAdd() {
     //print('add1 ${_databasedata.datalistcount}');
 
@@ -62,7 +89,9 @@ class DataBase extends ChangeNotifier {
     };*/
     //getContacts(queryParameters);
   }
+*/
 
+  /*
   void getContactsMinus() {
     //print('minus1 ${_databasedata.datalistcount}');
     if (_databasedata.datalistcount - Limit_const < 0) {
@@ -73,6 +102,7 @@ class DataBase extends ChangeNotifier {
     //print('minus2 ${_databasedata.datalistcount}');
     _databasedata.blockrightarrow = false;
     notifyListeners();
+
 /*
     var queryParameters = {
       'count': _databasedata.datalistcount.toString(),
@@ -80,6 +110,8 @@ class DataBase extends ChangeNotifier {
     };*/
     //getContacts(queryParameters);
   }
+*/
+
 
 /*
   void getContactsInit() {
@@ -91,6 +123,8 @@ class DataBase extends ChangeNotifier {
     //getContacts(queryParameters);
   }
 */
+
+  /*
 
   Future<void> getContacts(
       String _controllerFIO,
@@ -149,6 +183,8 @@ class DataBase extends ChangeNotifier {
     return _databasedata;
     //notifyListeners();
   }
+*/
+
 
 /*
 
