@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'DataBase.dart';
 import 'package:provider/provider.dart';
-import 'SearchPage.dart';
+//import 'SearchPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_)=> DataBase()),
+          FutureProvider(create: (context) => DataBase().fetchSomething()),
         ],
         child: MaterialApp(
           theme: ThemeData(
@@ -54,9 +55,9 @@ class _AddressBookHomePageState extends State<AddressBookHomePage> {
                 color: Colors.blue[700],
                 child: Row(
                   children: [
-                    LeftArrowBottomWidget(),
+                    //LeftArrowBottomWidget(),
                     Spacer(),
-                    RightArrowBottomWidget(),
+                    //RightArrowBottomWidget(),
                   ],
                 ),
               ),
@@ -70,11 +71,16 @@ class GetBasePageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var ModelDateBase = Provider.of<DataBase>(context);
+    //var ModelDateBase2 = Provider.of<DataBase>(context);
 
     //var futureBuilder = new FutureBuilder()
 
-    return ModelDateBase.getContactList();
+    //return ModelDateBase.getContactList();
     //return futureBuilder;
+
+
+
+    return Text(ModelDateBase.fetchSomething());
   }
 }
 
@@ -201,6 +207,9 @@ class _GetBasePageWidget_ extends StatelessWidget {
 }
 */
 
+
+
+/*
 class RightArrowBottomWidget extends StatelessWidget {
   void _getContactsAdd(BuildContext context) {
     Provider.of<DataBase>(context, listen: false).getContactsAdd();
@@ -485,3 +494,4 @@ class ListPageList extends StatelessWidget {
     );
   }
 }
+*/

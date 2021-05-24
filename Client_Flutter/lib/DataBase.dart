@@ -55,11 +55,73 @@ class DataBase extends ChangeNotifier {
     filters: new ParamFilter(fio: ""),
   );
 
-
-  Future<void> get getContactList async {
-
-
+  Future<String> fetchSomething() async {
+    final address = Future.delayed(Duration(seconds: 7), () {
+      return '1234 North Commercial Ave.';
+    });
   }
+
+
+/*
+  Future<void> get getContactList async {
+    var queryParameters = {
+      'count': _databasedata.datalistcount.toString(),
+      'limit': Limit_const.toString(),
+    };
+*/
+
+
+
+
+    //print('queryParameters $queryParameters');
+//    var uri = Uri.http(iplocalhost, '/contacts_2/', queryParameters);
+//    final response = await http.get(uri);
+//
+
+  /*
+    final response = await http.post(
+      Uri.http(iplocalhost, '/contacts_2/', queryParameters),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'FIO': _controllerFIO,
+        'Corporation': _controllerCorporation,
+        'Departament': _controllerDepartament,
+        'Phone': _controllerPhone,
+        'TypePhone': _controllerTypePhone,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var _database =
+      ContactServer.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      bool _blockrightarrow = false;
+
+      if (_databasedata.datalistcount + Limit_const >= _database.countlist) {
+        _blockrightarrow = true;
+      }
+
+      _databasedata = new DataBaseData(
+          datalistcount: _databasedata.datalistcount,
+          database: _database,
+          blockrightarrow: _blockrightarrow);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      //throw Exception('Failed to load contacts');
+      _databasedata = new DataBaseData(
+          datalistcount: 0,
+          database: new ContactServer(countlist: 0, contacts: null),
+          blockrightarrow: false);
+    }
+    // notifyListeners();
+    return _databasedata;
+    //notifyListeners();
+  }
+*/
 
 /*
   void getContactsAdd() {
