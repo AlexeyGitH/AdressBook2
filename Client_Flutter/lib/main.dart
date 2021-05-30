@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_)=> DataBase()),
+          //ChangeNotifierProvider(create: (_)=> DataBase()),
           FutureProvider(create: (context) => DataBase().fetchSomething()),
         ],
         child: MaterialApp(
@@ -44,9 +44,9 @@ class _AddressBookHomePageState extends State<AddressBookHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    return Consumer<DataBase>(
-        builder: (context, myModel, child) =>
-            Scaffold(
+    //return Consumer<DataBase>(
+    //    builder: (context, myModel, child) =>
+    return        Scaffold(
               appBar: AppBar(
                 title: Text('Address book'),
               ),
@@ -61,8 +61,8 @@ class _AddressBookHomePageState extends State<AddressBookHomePage> {
                   ],
                 ),
               ),
-            )
-    );
+            );
+   // );
   }
 }
 
@@ -70,7 +70,7 @@ class _AddressBookHomePageState extends State<AddressBookHomePage> {
 class GetBasePageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var ModelDateBase = Provider.of<DataBase>(context);
+    var ModelDateBase = Provider.of<String>(context);
     //var ModelDateBase2 = Provider.of<DataBase>(context);
 
     //var futureBuilder = new FutureBuilder()
@@ -79,8 +79,15 @@ class GetBasePageWidget extends StatelessWidget {
     //return futureBuilder;
 
 
-
-    return Text(ModelDateBase.fetchSomething());
+    //return Text(ModelDateBase.f);
+    return
+      Consumer<String>(
+          builder: (context, myModel, child) =>
+            ModelDateBase == null ? Text('Loading...') : Text(ModelDateBase)
+      );
+    //print('dsfsdfsdf ');
+    //print(ModelDateBase.fetchSomething());
+    //return Text(ModelDateBase.f);
   }
 }
 

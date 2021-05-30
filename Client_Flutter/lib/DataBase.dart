@@ -41,6 +41,8 @@ class DataBaseFilter {
 
 class DataBase extends ChangeNotifier {
 
+  var f='44';
+
   DataBaseFilter _dataBaseFilter = new DataBaseFilter(controllerFIO: "",
     controllerCorporation: "",
     controllerDepartament: "",
@@ -56,7 +58,10 @@ class DataBase extends ChangeNotifier {
   );
 
   Future<String> fetchSomething() async {
-    final address = Future.delayed(Duration(seconds: 7), () {
+    return Future.delayed(Duration(seconds: 3), () {
+      //this.f = 'future';
+      //print('future');
+      //notifyListeners();
       return '1234 North Commercial Ave.';
     });
   }
