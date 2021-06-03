@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
 
       MultiProvider(
         providers: [
-          //ChangeNotifierProvider(create: (_)=> DataBase()),
-          FutureProvider(create: (context) => DataBase().fetchSomething()),
+          ChangeNotifierProvider(create: (_)=> DataBase()),
+          //FutureProvider(create: (context) => DataBase().getContactList()),
         ],
         child: MaterialApp(
           theme: ThemeData(
@@ -70,7 +70,7 @@ class _AddressBookHomePageState extends State<AddressBookHomePage> {
 class GetBasePageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var ModelDateBase = Provider.of<String>(context);
+    var modelDateBase = Provider.of<DataBase>(context);
     //var ModelDateBase2 = Provider.of<DataBase>(context);
 
     //var futureBuilder = new FutureBuilder()
@@ -81,9 +81,28 @@ class GetBasePageWidget extends StatelessWidget {
 
     //return Text(ModelDateBase.f);
     return
-      Consumer<String>(
+      Consumer<DataBase>(
           builder: (context, myModel, child) =>
-            ModelDateBase == null ? Text('Loading...') : Text(ModelDateBase)
+          modelDateBase == null ? Text('Loading...') :
+          FutureBuilder(
+
+          future: modelDateBase.getContactList(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text("non");
+              //return ListPageList(serverdata: snapshot.data);
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+
+            // By default, show a loading spinner.
+            return ListPageWaiting();
+          },
+          )
+
+
+
+
       );
     //print('dsfsdfsdf ');
     //print(ModelDateBase.fetchSomething());
@@ -245,7 +264,8 @@ class RightArrowBottomWidget extends StatelessWidget {
     );
   }
 }
-
+*/
+/*
 class LeftArrowBottomWidget extends StatelessWidget {
   void _getContactsMinus(BuildContext context) {
     Provider.of<DataBase>(context, listen: false).getContactsMinus();
@@ -277,6 +297,7 @@ class LeftArrowBottomWidget extends StatelessWidget {
     );
   }
 }
+*/
 
 widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
   return Container(
@@ -501,4 +522,3 @@ class ListPageList extends StatelessWidget {
     );
   }
 }
-*/

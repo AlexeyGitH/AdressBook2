@@ -67,34 +67,29 @@ class DataBase extends ChangeNotifier {
   }
 
 
-/*
-  Future<void> get getContactList async {
+  Future<DataBaseData> getContactList() async {
     var queryParameters = {
-      'count': _databasedata.datalistcount.toString(),
+      'count': _dataBaseData.datalistcount.toString(),
       'limit': Limit_const.toString(),
     };
-*/
-
-
-
 
     //print('queryParameters $queryParameters');
 //    var uri = Uri.http(iplocalhost, '/contacts_2/', queryParameters);
 //    final response = await http.get(uri);
 //
 
-  /*
+
     final response = await http.post(
       Uri.http(iplocalhost, '/contacts_2/', queryParameters),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'FIO': _controllerFIO,
-        'Corporation': _controllerCorporation,
-        'Departament': _controllerDepartament,
-        'Phone': _controllerPhone,
-        'TypePhone': _controllerTypePhone,
+        'FIO': _dataBaseFilter.controllerFIO,
+        'Corporation': _dataBaseFilter.controllerCorporation,
+        'Department': _dataBaseFilter.controllerDepartament,
+        'Phone': _dataBaseFilter.controllerPhone,
+        'TypePhone': _dataBaseFilter.controllerTypePhone,
       }),
     );
 
@@ -105,28 +100,28 @@ class DataBase extends ChangeNotifier {
       ContactServer.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       bool _blockrightarrow = false;
 
-      if (_databasedata.datalistcount + Limit_const >= _database.countlist) {
+      if (_dataBaseData.datalistcount + Limit_const >= _database.countlist) {
         _blockrightarrow = true;
       }
 
-      _databasedata = new DataBaseData(
-          datalistcount: _databasedata.datalistcount,
+      _dataBaseData = new DataBaseData(
+          datalistcount: _dataBaseData.datalistcount,
           database: _database,
           blockrightarrow: _blockrightarrow);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       //throw Exception('Failed to load contacts');
-      _databasedata = new DataBaseData(
+      _dataBaseData = new DataBaseData(
           datalistcount: 0,
           database: new ContactServer(countlist: 0, contacts: null),
           blockrightarrow: false);
     }
     // notifyListeners();
-    return _databasedata;
+    return _dataBaseData;
     //notifyListeners();
   }
-*/
+
 
 /*
   void getContactsAdd() {
