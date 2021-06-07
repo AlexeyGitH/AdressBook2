@@ -51,6 +51,7 @@ class _AddressBookHomePageState extends State<AddressBookHomePage> {
                 title: Text('Address book'),
               ),
               body: GetBasePageWidget(),
+              //body: Text('body'),
               bottomNavigationBar: BottomAppBar(
                 color: Colors.blue[700],
                 child: Row(
@@ -83,9 +84,9 @@ class GetBasePageWidget extends StatelessWidget {
     return
       Consumer<DataBase>(
           builder: (context, myModel, child) =>
-          modelDateBase == null ? Text('Loading...') :
-          FutureBuilder(
+          //Text("non")
 
+          FutureBuilder(
           future: modelDateBase.getContactList(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -94,12 +95,10 @@ class GetBasePageWidget extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
-
             // By default, show a loading spinner.
             return ListPageWaiting();
           },
           )
-
 
 
 
@@ -235,18 +234,15 @@ class _GetBasePageWidget_ extends StatelessWidget {
 
 
 
-/*
+
 class RightArrowBottomWidget extends StatelessWidget {
-  void _getContactsAdd(BuildContext context) {
-    Provider.of<DataBase>(context, listen: false).getContactsAdd();
-  }
 
   @override
   Widget build(BuildContext context) {
-    var contactlist = Provider.of<DataBase>(context).getContactList;
+    var modelDateBase = Provider.of<DataBase>(context);
     Color colorarrow;
     //Waiting spiner ... ... ..
-    colorarrow = contactlist.blockrightarrow == true
+    colorarrow = modelDateBase.dataBaseData.blockrightarrow == true
         ? Colors.blueGrey[600]
         : Colors.white;
     return new SizedBox(
@@ -257,27 +253,23 @@ class RightArrowBottomWidget extends StatelessWidget {
           color: colorarrow,
           icon: new Icon(Icons.arrow_right, size: 40.0),
           onPressed: () {
-            if (contactlist.blockrightarrow != true) {
-              _getContactsAdd(context);
+            if (modelDateBase.dataBaseData.blockrightarrow != true) {
+              modelDateBase.contactsForward();
             }
           }),
     );
   }
 }
-*/
-/*
-class LeftArrowBottomWidget extends StatelessWidget {
-  void _getContactsMinus(BuildContext context) {
-    Provider.of<DataBase>(context, listen: false).getContactsMinus();
-  }
 
+
+class LeftArrowBottomWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var contactlist = Provider.of<DataBase>(context).getContactList;
+    var modelDateBase = Provider.of<DataBase>(context);
     Color colorarrow;
     //Waiting spiner ... ... ..
     colorarrow =
-        (contactlist.datalistcount == 0 && contactlist.database.countlist != 0)
+        (modelDateBase.dataBaseData.datalistcount == 0 && modelDateBase.dataBaseData.database.countlist != 0)
             ? Colors.blueGrey[600]
             : Colors.white;
 
@@ -289,15 +281,15 @@ class LeftArrowBottomWidget extends StatelessWidget {
           color: colorarrow,
           icon: new Icon(Icons.arrow_left, size: 40.0),
           onPressed: () {
-            if (contactlist.datalistcount != 0 ||
-                contactlist.database.countlist == 0) {
-              _getContactsMinus(context);
+            if (modelDateBase.dataBaseData.datalistcount != 0 ||
+                modelDateBase.dataBaseData.database.countlist == 0) {
+              modelDateBase.contactsBack();
             }
           }),
     );
   }
 }
-*/
+
 
 widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
   return Container(

@@ -6,8 +6,8 @@ import 'PostContact.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-String iplocalhost = "172.16.40.14:8000";
-//String iplocalhost = "192.168.0.107:8000";
+//String IpLocalhost = "172.16.40.14:8000";
+String IpLocalhost = "192.168.88.254:8000";
 
 class DataBaseData {
   int datalistcount;
@@ -41,22 +41,28 @@ class DataBaseFilter {
 
 class DataBase extends ChangeNotifier {
 
-  var f='44';
-
-  DataBaseFilter _dataBaseFilter = new DataBaseFilter(controllerFIO: "",
+  DataBaseFilter dataBaseFilter = new DataBaseFilter(controllerFIO: "",
     controllerCorporation: "",
     controllerDepartament: "",
     controllerPhone: "",
     controllerTypePhone: "",
   );
 
-  DataBaseData _dataBaseData = new DataBaseData(
+  DataBaseData dataBaseData = new DataBaseData(
     datalistcount: 0,
     database: new ContactServer(countlist: 0, contacts: null),
     blockrightarrow: false,
     filters: new ParamFilter(fio: ""),
   );
 
+  /*
+  DataBase({
+    this.dataBaseFilter,
+    this.dataBaseData,
+  });
+*/
+
+  /*
   Future<String> fetchSomething() async {
     return Future.delayed(Duration(seconds: 3), () {
       //this.f = 'future';
@@ -65,31 +71,56 @@ class DataBase extends ChangeNotifier {
       return '1234 North Commercial Ave.';
     });
   }
+*/
 
+  void contactsForward() {
+    if (this.dataBaseData.datalistcount + Limit_const >=
+        this.dataBaseData.database.countlist) {
+    } else {
+      this.dataBaseData.datalistcount = this.dataBaseData.datalistcount + Limit_const;
+    }
+
+    this.dataBaseData.blockrightarrow = false;
+    if (this.dataBaseData.datalistcount + Limit_const >=
+        this.dataBaseData.database.countlist) {
+      this.dataBaseData.blockrightarrow = true;
+    }
+    notifyListeners();
+  }
+
+  void contactsBack() {
+    if (this.dataBaseData.datalistcount - Limit_const < 0) {
+      this.dataBaseData.datalistcount = 0;
+    } else {
+      this.dataBaseData.datalistcount = this.dataBaseData.datalistcount - Limit_const;
+    }
+    this.dataBaseData.blockrightarrow = false;
+    notifyListeners();
+  }
 
   Future<DataBaseData> getContactList() async {
     var queryParameters = {
-      'count': _dataBaseData.datalistcount.toString(),
+      'count': dataBaseData.datalistcount.toString(),
       'limit': Limit_const.toString(),
     };
 
     //print('queryParameters $queryParameters');
-//    var uri = Uri.http(iplocalhost, '/contacts_2/', queryParameters);
+//    var uri = Uri.http(IpLocalhost, '/contacts_2/', queryParameters);
 //    final response = await http.get(uri);
 //
 
 
     final response = await http.post(
-      Uri.http(iplocalhost, '/contacts_2/', queryParameters),
+      Uri.http(IpLocalhost, '/contacts_2/', queryParameters),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'FIO': _dataBaseFilter.controllerFIO,
-        'Corporation': _dataBaseFilter.controllerCorporation,
-        'Department': _dataBaseFilter.controllerDepartament,
-        'Phone': _dataBaseFilter.controllerPhone,
-        'TypePhone': _dataBaseFilter.controllerTypePhone,
+        'FIO': dataBaseFilter.controllerFIO,
+        'Corporation': dataBaseFilter.controllerCorporation,
+        'Department': dataBaseFilter.controllerDepartament,
+        'Phone': dataBaseFilter.controllerPhone,
+        'TypePhone': dataBaseFilter.controllerTypePhone,
       }),
     );
 
@@ -100,25 +131,26 @@ class DataBase extends ChangeNotifier {
       ContactServer.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       bool _blockrightarrow = false;
 
-      if (_dataBaseData.datalistcount + Limit_const >= _database.countlist) {
+      if (dataBaseData.datalistcount + Limit_const >= _database.countlist) {
         _blockrightarrow = true;
       }
 
-      _dataBaseData = new DataBaseData(
-          datalistcount: _dataBaseData.datalistcount,
+      dataBaseData = new DataBaseData(
+          datalistcount: dataBaseData.datalistcount,
           database: _database,
           blockrightarrow: _blockrightarrow);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       //throw Exception('Failed to load contacts');
-      _dataBaseData = new DataBaseData(
+      dataBaseData = new DataBaseData(
           datalistcount: 0,
           database: new ContactServer(countlist: 0, contacts: null),
           blockrightarrow: false);
     }
     // notifyListeners();
-    return _dataBaseData;
+    print('datalistcount' + this.dataBaseData.datalistcount.toString());
+    return dataBaseData;
     //notifyListeners();
   }
 
@@ -200,11 +232,11 @@ class DataBase extends ChangeNotifier {
     };
 
     //print('queryParameters $queryParameters');
-//    var uri = Uri.http(iplocalhost, '/contacts_2/', queryParameters);
+//    var uri = Uri.http(IpLocalhost, '/contacts_2/', queryParameters);
 //    final response = await http.get(uri);
 //
     final response = await http.post(
-      Uri.http(iplocalhost, '/contacts_2/', queryParameters),
+      Uri.http(IpLocalhost, '/contacts_2/', queryParameters),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -290,7 +322,7 @@ class CorporationList {
   Future<void> get getCorporation async {
     List corporationlist;
     //print('queryParameters $queryParameters');
-    var uri = Uri.http(iplocalhost, '/corporation/');
+    var uri = Uri.http(IpLocalhost, '/corporation/');
 
     final response = await http.get(uri);
 
@@ -314,7 +346,7 @@ class DepartmentList {
   Future<void> get getDepartment async {
     List departmentlist;
     //print('queryParameters $queryParameters');
-    var uri = Uri.http(iplocalhost, '/department/');
+    var uri = Uri.http(IpLocalhost, '/department/');
 
     final response = await http.get(uri);
 
@@ -358,8 +390,8 @@ class SearchContacts {
     }
 
     final response = await http.post(
-      //Uri.http(iplocalhost, '/searchcontacts/'),
-      Uri.http(iplocalhost, '/contacts_2/'),
+      //Uri.http(IpLocalhost, '/searchcontacts/'),
+      Uri.http(IpLocalhost, '/contacts_2/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

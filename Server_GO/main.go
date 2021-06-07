@@ -227,7 +227,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 				}
 			} else {
 				param_req = append(param_req, "%"+t.Phone+"%")
-				param_req = append(param_req, "%"+t.Phone+"%")
+				//param_req = append(param_req, "%"+t.Phone+"%")
 
 				if wheretext != "" {
 					wheretext += " and (additional_phone LIKE ? OR work_phone LIKE ? OR mobile_phone LIKE ?)"
@@ -335,6 +335,8 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("ContactList " + p.LastName)
 		}
 	*/
+
+	fmt.Println(contacts_count)
 
 	data := Contact_data{
 		Count:       contacts_count,
