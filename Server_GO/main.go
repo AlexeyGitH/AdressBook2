@@ -336,7 +336,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 		}
 	*/
 
-	fmt.Println(contacts_count)
+	//fmt.Println(contacts_count)
 
 	data := Contact_data{
 		Count:       contacts_count,

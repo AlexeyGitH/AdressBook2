@@ -6,8 +6,8 @@ import 'PostContact.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-//String IpLocalhost = "172.16.40.14:8000";
-String IpLocalhost = "192.168.88.254:8000";
+//String ipLocalhost = "172.16.40.14:8000";
+String ipLocalhost = "192.168.88.254:8000";
 
 class DataBaseData {
   int datalistcount;
@@ -105,49 +105,61 @@ class DataBase extends ChangeNotifier {
     };
 
     //print('queryParameters $queryParameters');
-//    var uri = Uri.http(IpLocalhost, '/contacts_2/', queryParameters);
+//    var uri = Uri.http(ipLocalhost, '/contacts_2/', queryParameters);
 //    final response = await http.get(uri);
 //
 
+    try {
+      final response = await http.post(
+        Uri.http(ipLocalhost, '/contacts_2/', queryParameters),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'FIO': dataBaseFilter.controllerFIO,
+          'Corporation': dataBaseFilter.controllerCorporation,
+          'Department': dataBaseFilter.controllerDepartament,
+          'Phone': dataBaseFilter.controllerPhone,
+          'TypePhone': dataBaseFilter.controllerTypePhone,
+        }),
+      );
 
-    final response = await http.post(
-      Uri.http(IpLocalhost, '/contacts_2/', queryParameters),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'FIO': dataBaseFilter.controllerFIO,
-        'Corporation': dataBaseFilter.controllerCorporation,
-        'Department': dataBaseFilter.controllerDepartament,
-        'Phone': dataBaseFilter.controllerPhone,
-        'TypePhone': dataBaseFilter.controllerTypePhone,
-      }),
-    );
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        // then parse the JSON.
+        var _database =
+        ContactServer.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        bool _blockrightarrow = false;
 
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      var _database =
-      ContactServer.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-      bool _blockrightarrow = false;
+        if (dataBaseData.datalistcount + Limit_const >= _database.countlist) {
+          _blockrightarrow = true;
+        }
 
-      if (dataBaseData.datalistcount + Limit_const >= _database.countlist) {
-        _blockrightarrow = true;
+        dataBaseData = new DataBaseData(
+            datalistcount: dataBaseData.datalistcount,
+            database: _database,
+            blockrightarrow: _blockrightarrow);
+      } else {
+        // If the server did not return a 200 OK response,
+        // then throw an exception.
+        //throw Exception('Failed to load contacts');
+        dataBaseData = new DataBaseData(
+            datalistcount: 0,
+            database: new ContactServer(countlist: 0, contacts: null),
+            blockrightarrow: false);
       }
 
-      dataBaseData = new DataBaseData(
-          datalistcount: dataBaseData.datalistcount,
-          database: _database,
-          blockrightarrow: _blockrightarrow);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      //throw Exception('Failed to load contacts');
+    }
+    catch (err)
+    {
+      print('Caught error: $err');
       dataBaseData = new DataBaseData(
           datalistcount: 0,
           database: new ContactServer(countlist: 0, contacts: null),
           blockrightarrow: false);
+
     }
+
     // notifyListeners();
     print('datalistcount' + this.dataBaseData.datalistcount.toString());
     return dataBaseData;
@@ -232,11 +244,11 @@ class DataBase extends ChangeNotifier {
     };
 
     //print('queryParameters $queryParameters');
-//    var uri = Uri.http(IpLocalhost, '/contacts_2/', queryParameters);
+//    var uri = Uri.http(ipLocalhost, '/contacts_2/', queryParameters);
 //    final response = await http.get(uri);
 //
     final response = await http.post(
-      Uri.http(IpLocalhost, '/contacts_2/', queryParameters),
+      Uri.http(ipLocalhost, '/contacts_2/', queryParameters),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -322,7 +334,7 @@ class CorporationList {
   Future<void> get getCorporation async {
     List corporationlist;
     //print('queryParameters $queryParameters');
-    var uri = Uri.http(IpLocalhost, '/corporation/');
+    var uri = Uri.http(ipLocalhost, '/corporation/');
 
     final response = await http.get(uri);
 
@@ -346,7 +358,7 @@ class DepartmentList {
   Future<void> get getDepartment async {
     List departmentlist;
     //print('queryParameters $queryParameters');
-    var uri = Uri.http(IpLocalhost, '/department/');
+    var uri = Uri.http(ipLocalhost, '/department/');
 
     final response = await http.get(uri);
 
@@ -390,8 +402,8 @@ class SearchContacts {
     }
 
     final response = await http.post(
-      //Uri.http(IpLocalhost, '/searchcontacts/'),
-      Uri.http(IpLocalhost, '/contacts_2/'),
+      //Uri.http(ipLocalhost, '/searchcontacts/'),
+      Uri.http(ipLocalhost, '/contacts_2/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
