@@ -99,11 +99,11 @@ class DataBase extends ChangeNotifier {
   }
 
   Future<DataBaseData> getContactList() async {
-    var queryParameters = {
+ /*   var queryParameters = {
       'count': dataBaseData.datalistcount.toString(),
       'limit': Limit_const.toString(),
     };
-
+*/
     //print('queryParameters $queryParameters');
 //    var uri = Uri.http(ipLocalhost, '/contacts_2/', queryParameters);
 //    final response = await http.get(uri);
@@ -111,11 +111,13 @@ class DataBase extends ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.http(ipLocalhost, '/contacts_2/', queryParameters),
+        Uri.http(ipLocalhost, '/contacts_2/'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
+          'Count': dataBaseData.datalistcount.toString(),
+          'Limit': Limit_const.toString(),
           'FIO': dataBaseFilter.controllerFIO,
           'Corporation': dataBaseFilter.controllerCorporation,
           'Department': dataBaseFilter.controllerDepartament,

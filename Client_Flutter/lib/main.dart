@@ -56,9 +56,9 @@ class _AddressBookHomePageState extends State<AddressBookHomePage> {
                 color: Colors.blue[700],
                 child: Row(
                   children: [
-                    //LeftArrowBottomWidget(),
+                    LeftArrowBottomWidget(),
                     Spacer(),
-                    //RightArrowBottomWidget(),
+                    RightArrowBottomWidget(),
                   ],
                 ),
               ),
@@ -90,8 +90,8 @@ class GetBasePageWidget extends StatelessWidget {
           future: modelDateBase.getContactList(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text("non");
-              //return ListPageList(serverdata: snapshot.data);
+              //return Text("non");
+              return ListPageList(serverdata: snapshot.data);
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }

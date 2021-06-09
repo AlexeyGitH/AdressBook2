@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -137,10 +136,12 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 
 	var contacts_count int
 
-	count, _ := strconv.Atoi(r.FormValue("count"))
-	limit, _ := strconv.Atoi(r.FormValue("limit"))
+	//	count, _ := strconv.Atoi(r.FormValue("count"))
+	//	limit, _ := strconv.Atoi(r.FormValue("limit"))
 
-	type ContactMember struct {
+	type ContactFilter struct {
+		Count       string
+		Limit       string
 		FIO         string
 		Corporation string
 		Departament string
@@ -162,8 +163,11 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	*/
 
 	decoder := json.NewDecoder(r.Body)
-	var t ContactMember
+	var t ContactFilter
 	err := decoder.Decode(&t)
+
+	count := t.Count
+	limit := t.Limit
 
 	//var param_req []string
 	var text_selection_contacts string
