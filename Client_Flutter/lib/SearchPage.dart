@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ad_book_2/DataBase.dart';
+//import 'package:ad_book_2/DataBase.dart';
 //import 'main.dart';
 import 'package:provider/provider.dart';
 import 'DataBase.dart';
@@ -36,20 +36,21 @@ class _SearchPage extends State<SearchPage> {
             child: ConstrainedBox(
                 constraints: BoxConstraints(),
                 child: new Column(children: [
-                  RightArrowBottomWidgetSearch(),
-                  /*
+                  //RightArrowBottomWidgetSearch(),
+
                   ElevatedButton.icon(
                     onPressed: () async {
                       // print('fffff-222');
                       //
-
+                      //setFilters
+/*
                       List _d = await SearchContacts().postContacts(
                           _controllerFIO.text,
                           _controllerCorporation.text,
                           _controllerDepartament.text,
                           _controllerPhone.text,
                           _controllerTypePhone.text);
-
+*/
                       //print(_d);
 /*
                       Navigator.push(
@@ -69,7 +70,7 @@ class _SearchPage extends State<SearchPage> {
                     icon: Icon(Icons.search),
                     label: Text('Найти'),
                   ),
-                  */
+
                   new Container(
                       margin: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
@@ -403,7 +404,7 @@ class _SearchPage extends State<SearchPage> {
 }
 
 ///https://www.russianfood.com/recipes/recipe.php?rid=125019
-
+/*
 class RightArrowBottomWidgetSearch extends StatelessWidget {
   void _getContactsAdd(BuildContext context) {
     Provider.of<DataBase>(context, listen: false).getContactsAdd();
@@ -433,3 +434,4 @@ class RightArrowBottomWidgetSearch extends StatelessWidget {
     );
   }
 }
+*/

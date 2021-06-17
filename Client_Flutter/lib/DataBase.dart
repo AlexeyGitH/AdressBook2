@@ -73,6 +73,10 @@ class DataBase extends ChangeNotifier {
   }
 */
 
+  void setFilters(String FIO) {
+    this.dataBaseFilter.controllerFIO = FIO;
+  }
+
   void contactsForward() {
     if (this.dataBaseData.datalistcount + Limit_const >=
         this.dataBaseData.database.countlist) {
@@ -157,7 +161,7 @@ class DataBase extends ChangeNotifier {
       print('Caught error: $err');
       dataBaseData = new DataBaseData(
           datalistcount: 0,
-          database: new ContactServer(countlist: 0, contacts: null),
+          database: new ContactServer(countlist: 0, contacts: []),
           blockrightarrow: false);
 
     }

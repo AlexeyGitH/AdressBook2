@@ -3,10 +3,15 @@
 import 'package:flutter/material.dart';
 import 'DataBase.dart';
 import 'package:provider/provider.dart';
-//import 'SearchPage.dart';
+import 'SearchPage.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    RestartWidget(
+      child: MyApp(),
+    ),
+  );
+  //runApp(MyApp());
 
   //runApp(ListPage());
 }
@@ -14,20 +19,19 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return
-
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_)=> DataBase()),
-          //FutureProvider(create: (context) => DataBase().getContactList()),
-        ],
-        child: MaterialApp(
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: AddressBookHomePage(),),
-      );
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DataBase()),
+        //FutureProvider(create: (context) => DataBase().getContactList()),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: AddressBookHomePage(),
+      ),
+    );
   }
 }
 
@@ -38,35 +42,101 @@ class AddressBookHomePage extends StatefulWidget {
   _AddressBookHomePageState createState() => _AddressBookHomePageState();
 }
 
-
 class _AddressBookHomePageState extends State<AddressBookHomePage> {
-
   @override
   Widget build(BuildContext context) {
-
     //return Consumer<DataBase>(
     //    builder: (context, myModel, child) =>
-    return        Scaffold(
-              appBar: AppBar(
-                title: Text('Address book'),
-              ),
-              body: GetBasePageWidget(),
-              //body: Text('body'),
-              bottomNavigationBar: BottomAppBar(
-                color: Colors.blue[700],
-                child: Row(
-                  children: [
-                    LeftArrowBottomWidget(),
-                    Spacer(),
-                    RightArrowBottomWidget(),
-                  ],
-                ),
-              ),
-            );
-   // );
+
+    var modelDateBase = Provider.of<DataBase>(context);
+    return Consumer<DataBase>(
+        builder: (context, myModel, child) =>
+            //Text("non")
+
+            FutureBuilder(
+              future: modelDateBase.getContactList(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  //return Text("non");
+                  //return ListPageList(serverdata: snapshot.data);
+
+                  if (snapshot.data.database.contacts.length == 0) {
+                    return Scaffold(
+                      appBar: AppBar(
+                        title: Text('Address book 22'),
+                      ),
+                      body: ListPageError(),
+                    );
+                  } else {
+                    return Scaffold(
+
+                        appBar: AppBar(
+                          title: Text('Address book'),
+                          actions: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => SearchPage()),
+                                  );
+                                },
+                                child: Icon(Icons.search),
+                              ),
+                            ),
+                          ],
+                        ),
+
+
+                      body: ListPageList(serverdata: snapshot.data),
+                      //body: Text('body'),
+                      bottomNavigationBar: BottomAppBar(
+                        color: Colors.blue[700],
+                        child: Row(
+                          children: [
+                            LeftArrowBottomWidget(),
+                            Spacer(),
+                            RightArrowBottomWidget(),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text('Address book'),
+                  ),
+                  body: ListPageWaiting(),
+                );
+              },
+            ));
+
+/*
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Address book'),
+      ),
+      body: GetBasePageWidget(),
+      //body: Text('body'),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blue[700],
+        child: Row(
+          children: [
+            LeftArrowBottomWidget(),
+            Spacer(),
+            RightArrowBottomWidget(),
+          ],
+        ),
+      ),
+    );
+    */
+    // );
   }
 }
-
 
 class GetBasePageWidget extends StatelessWidget {
   @override
@@ -79,36 +149,29 @@ class GetBasePageWidget extends StatelessWidget {
     //return ModelDateBase.getContactList();
     //return futureBuilder;
 
-
     //return Text(ModelDateBase.f);
-    return
-      Consumer<DataBase>(
-          builder: (context, myModel, child) =>
-          //Text("non")
+    return Consumer<DataBase>(
+        builder: (context, myModel, child) =>
+            //Text("non")
 
-          FutureBuilder(
-          future: modelDateBase.getContactList(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              //return Text("non");
-              return ListPageList(serverdata: snapshot.data);
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            // By default, show a loading spinner.
-            return ListPageWaiting();
-          },
-          )
-
-
-
-      );
+            FutureBuilder(
+              future: modelDateBase.getContactList(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  //return Text("non");
+                  return ListPageList(serverdata: snapshot.data);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // By default, show a loading spinner.
+                return ListPageWaiting();
+              },
+            ));
     //print('dsfsdfsdf ');
     //print(ModelDateBase.fetchSomething());
     //return Text(ModelDateBase.f);
   }
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,11 +295,7 @@ class _GetBasePageWidget_ extends StatelessWidget {
 }
 */
 
-
-
-
 class RightArrowBottomWidget extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     var modelDateBase = Provider.of<DataBase>(context);
@@ -261,17 +320,16 @@ class RightArrowBottomWidget extends StatelessWidget {
   }
 }
 
-
 class LeftArrowBottomWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var modelDateBase = Provider.of<DataBase>(context);
     Color colorarrow;
     //Waiting spiner ... ... ..
-    colorarrow =
-        (modelDateBase.dataBaseData.datalistcount == 0 && modelDateBase.dataBaseData.database.countlist != 0)
-            ? Colors.blueGrey[600]
-            : Colors.white;
+    colorarrow = (modelDateBase.dataBaseData.datalistcount == 0 &&
+            modelDateBase.dataBaseData.database.countlist != 0)
+        ? Colors.blueGrey[600]
+        : Colors.white;
 
     return new SizedBox(
       height: 40.0,
@@ -289,7 +347,6 @@ class LeftArrowBottomWidget extends StatelessWidget {
     );
   }
 }
-
 
 widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
   return Container(
@@ -395,18 +452,22 @@ class ListPageWaiting extends StatelessWidget {
 class ListPageError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Column(
-      children: [
-        new Container(
-          margin: const EdgeInsets.only(top: 25.0),
-          child: new Center(
-            child: new Text(
-              "connection error..",
-              style: new TextStyle(color: Colors.blue),
-            ),
+    final ButtonStyle style =
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ElevatedButton(
+            style: style,
+            onPressed: () {
+              RestartWidget.restartApp(context);
+            },
+            child: const Text('Restart'),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -419,98 +480,132 @@ class ListPageList extends StatelessWidget {
   Widget build(BuildContext context) {
     //print('12345');
     // print('datalist  ;22; ${serverdata.database.contacts[0].firstname}');
-    // return Text('22131231212');
 
-    return new ListView.builder(
-      itemCount: serverdata.database.contacts.length,
-      itemBuilder: (context, index) {
-        var postPone = serverdata.database.contacts[index];
-        return new Container(
-            decoration: myBoxDecoration(),
-            margin: const EdgeInsets.all(6.0),
-            padding: const EdgeInsets.all(3.0),
-            child: Column(children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Image.network(
-                      postPone.image.toString(),
-                      fit: BoxFit.fitHeight,
+    //  return Text('22131231212');
+
+      return new ListView.builder(
+        itemCount: serverdata.database.contacts.length,
+        itemBuilder: (context, index) {
+          var postPone = serverdata.database.contacts[index];
+          return new Container(
+              decoration: myBoxDecoration(),
+              margin: const EdgeInsets.all(6.0),
+              padding: const EdgeInsets.all(3.0),
+              child: Column(children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Image.network(
+                        postPone.image.toString(),
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                      flex: 5,
-                      child: Column(
-                        children: [
-                          Row(children: [
-                            Expanded(
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        text: 'Статус: ',
+                    Expanded(
+                        flex: 5,
+                        child: Column(
+                          children: [
+                            Row(children: [
+                              Expanded(
+                                  child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Статус: ',
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              color: Colors.black),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                                text:
+                                                    postPone.status.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 12.0,
+                                                    color: Colors.green[900])),
+                                          ],
+                                        ),
+                                      ))),
+                            ]),
+                            Row(children: [
+                              Expanded(
+                                  child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        postPone.firstname.toString() +
+                                            " " +
+                                            postPone.middlename.toString() +
+                                            " " +
+                                            postPone.lastname.toString(),
                                         style: new TextStyle(
-                                            fontSize: 12.0,
-                                            color: Colors.black),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                              text: postPone.status.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 12.0,
-                                                  color: Colors.green[900])),
-                                        ],
-                                      ),
-                                    ))),
-                          ]),
-                          Row(children: [
-                            Expanded(
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      postPone.firstname.toString() +
-                                          " " +
-                                          postPone.middlename.toString() +
-                                          " " +
-                                          postPone.lastname.toString(),
-                                      style: new TextStyle(
-                                        //backgroundColor: Colors.blue,
-                                        fontFamily: 'Quicksand',
-                                        fontSize: 20.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ))),
-                          ])
-                        ],
-                      )),
-                ],
-              ),
-              Container(
-                  margin: const EdgeInsets.all(3.0),
-                  child: Column(
-                    children: [
-                      /////////
-                      widgetADPropertyValue(
-                          'Организация', postPone.corporation.toString(), ''),
-                      widgetADPropertyValue(
-                          'Должность', postPone.position.toString(), ''),
-                      widgetADPropertyValue(
-                          'Подразделение', postPone.department.toString(), ''),
-                      widgetADPropertyValue(
-                          'Дата рождения', postPone.birthdate.toString(), ''),
+                                          //backgroundColor: Colors.blue,
+                                          fontFamily: 'Quicksand',
+                                          fontSize: 20.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ))),
+                            ])
+                          ],
+                        )),
+                  ],
+                ),
+                Container(
+                    margin: const EdgeInsets.all(3.0),
+                    child: Column(
+                      children: [
+                        /////////
+                        widgetADPropertyValue(
+                            'Организация', postPone.corporation.toString(), ''),
+                        widgetADPropertyValue(
+                            'Должность', postPone.position.toString(), ''),
+                        widgetADPropertyValue('Подразделение',
+                            postPone.department.toString(), ''),
+                        widgetADPropertyValue(
+                            'Дата рождения', postPone.birthdate.toString(), ''),
 
-                      widgetADPropertyValue(
-                          'Рабочий тел.', postPone.workphone.toString(), 'p'),
-                      widgetADPropertyValue('Мобильный тел.',
-                          postPone.mobilephone.toString(), 'p'),
-                      widgetADPropertyValue(
-                          'Почта', postPone.mail.toString(), 'e'),
-                    ],
-                  )),
-            ]));
-      },
+                        widgetADPropertyValue(
+                            'Рабочий тел.', postPone.workphone.toString(), 'p'),
+                        widgetADPropertyValue('Мобильный тел.',
+                            postPone.mobilephone.toString(), 'p'),
+                        widgetADPropertyValue(
+                            'Почта', postPone.mail.toString(), 'e'),
+                      ],
+                    )),
+              ]));
+        },
+      );
+
+  }
+}
+
+class RestartWidget extends StatefulWidget {
+  RestartWidget({this.child});
+
+  final Widget child;
+
+  static void restartApp(BuildContext context) {
+    context.findAncestorStateOfType<_RestartWidgetState>().restartApp();
+  }
+
+  @override
+  _RestartWidgetState createState() => _RestartWidgetState();
+}
+
+class _RestartWidgetState extends State<RestartWidget> {
+  Key key = UniqueKey();
+
+  void restartApp() {
+    setState(() {
+      key = UniqueKey();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return KeyedSubtree(
+      key: key,
+      child: widget.child,
     );
   }
 }
