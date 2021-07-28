@@ -6,7 +6,7 @@ class Filters extends StatelessWidget {
   @override
 
   Widget build(BuildContext context) {
-    var filters = context.watch<DataBaseFilter>();
+    var filters = context.watch<FiltersModel>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Search contact',
@@ -83,6 +83,7 @@ class Filters extends StatelessWidget {
               onSaved: (String value) {
                 // This optional block of code can be used to run
                 // code when the user saves the form.
+                filters.setFilters(filters.controllerFIO.text);
               },
               validator: (String value) {
                 return value.contains('@') ? 'Do not use the @ char.' : null;

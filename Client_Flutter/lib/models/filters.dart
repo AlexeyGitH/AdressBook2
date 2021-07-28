@@ -4,27 +4,30 @@ import 'package:flutter/foundation.dart';
 
 class DataBaseFilter {
   TextEditingController controllerFIO;
-  String controllerCorporation;
+  /*String controllerCorporation;
   String controllerDepartament;
   String controllerPhone;
   String controllerTypePhone;
-
+*/
   DataBaseFilter({
     this.controllerFIO,
-    this.controllerCorporation,
+  /*  this.controllerCorporation,
     this.controllerDepartament,
     this.controllerPhone,
-    this.controllerTypePhone
+    this.controllerTypePhone*/
   });
 }
 
 class FiltersModel extends ChangeNotifier {
 
-    DataBaseFilter filters;
+    DataBaseFilter filters = new DataBaseFilter(
+
+    );
+
 
     void setFilters(String fio) {
       filters.controllerFIO.text = fio;
-      notifyListeners();
+      //notifyListeners();
     }
 
 
