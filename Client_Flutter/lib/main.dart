@@ -24,8 +24,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => DataBase()),
-        Provider(create: (context) => DataBaseFilter()),
+        //Provider(create: (context) => DataBase()),
+        //Provider(create: (context) => DataBaseFilter()),
+        Provider(create: (context) => FiltersModel()),
+
         /*
         ChangeNotifierProxyProvider<DataBase, FiltersModel>(
           create: (context) => FiltersModel(),
@@ -36,6 +38,10 @@ class MyApp extends StatelessWidget {
           },
         ),
         */
+    ChangeNotifierProvider<FiltersModel>(
+      create: (context) => FiltersModel(),
+
+    ),
       ],
       child:
 
