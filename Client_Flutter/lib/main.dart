@@ -37,7 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         */
       ],
-      child: MaterialApp(
+      child:
+
+      MaterialApp(
         title: 'Address book',
         theme: appTheme,
         initialRoute: '/',
@@ -46,6 +48,7 @@ class MyApp extends StatelessWidget {
           '/filters': (context) => Filters(),
         },
     ),
+
     );
   }
 }

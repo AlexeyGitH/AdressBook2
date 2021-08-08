@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 
 class DataBaseFilter {
-  TextEditingController controllerFIO;
+  String controllerFIO;
   /*String controllerCorporation;
   String controllerDepartament;
   String controllerPhone;
@@ -21,12 +21,12 @@ class DataBaseFilter {
 class FiltersModel extends ChangeNotifier {
 
     DataBaseFilter filters = new DataBaseFilter(
-
-    );
+controllerFIO: '');
 
 
     void setFilters(String fio) {
-      filters.controllerFIO.text = fio;
+      //filters.controllerFIO.text = fio;
+      filters.controllerFIO = fio;
       //notifyListeners();
     }
 

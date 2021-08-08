@@ -61,7 +61,8 @@ class Filters extends StatelessWidget {
               ),
             ),
             const Divider(height: 4, color: Colors.black),
-            TextFormField(
+            Text(filters.filters.controllerFIO),
+            /*TextFormField(
               controller: filters.controllerFIO,
               decoration: new InputDecoration(
                 //icon: Icon(Icons.arrow_drop_down),
@@ -88,7 +89,7 @@ class Filters extends StatelessWidget {
               validator: (String value) {
                 return value.contains('@') ? 'Do not use the @ char.' : null;
               },
-            ),
+            ),*/
           ],
         ),
       ),
