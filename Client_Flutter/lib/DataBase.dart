@@ -352,7 +352,7 @@ class DataBase extends ChangeNotifier {
 }
 
 class CorporationList {
-  Future<void> get getCorporation async {
+  Future<List> get getCorporation async {
     List corporationlist;
     //print('queryParameters $queryParameters');
     var uri = Uri.http(ipLocalhost, '/corporation/');

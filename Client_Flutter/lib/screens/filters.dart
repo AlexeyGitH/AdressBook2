@@ -11,6 +11,8 @@ class Filters extends StatelessWidget {
   final _controllerPhone = TextEditingController();
   final _controllerTypePhone = TextEditingController(text: "Все");
 
+  late Future<List> futuregetCorporation;
+
   List<String> lisCorp = [];
   List<String> lisDep = [];
 
@@ -122,23 +124,24 @@ class Filters extends StatelessWidget {
                                       tooltip: 'Increase volume by 10',
                                       onPressed: () {
 
-                                        showDialog<String>(
-                                          context: context,
-                                          builder: (BuildContext context) => AlertDialog(
-                                            title: const Text('AlertDialog Title'),
-                                            content: const Text('AlertDialog description'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(context, 'Cancel'),
-                                                child: const Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(context, 'OK'),
-                                                child: const Text('OK'),
-                                              ),
-                                            ],
-                                          ),
-                                        );
+                                        futuregetCorporation = CorporationList().getCorporation;
+                                        // showDialog<String>(
+                                        //   context: context,
+                                        //   builder: (BuildContext context) => AlertDialog(
+                                        //     title: const Text('AlertDialog Title'),
+                                        //     content: const Text('AlertDialog description'),
+                                        //     actions: <Widget>[
+                                        //       TextButton(
+                                        //         onPressed: () => Navigator.pop(context, 'Cancel'),
+                                        //         child: const Text('Cancel'),
+                                        //       ),
+                                        //       TextButton(
+                                        //         onPressed: () => Navigator.pop(context, 'OK'),
+                                        //         child: const Text('OK'),
+                                        //       ),
+                                        //     ],
+                                        //   ),
+                                        // );
 
                                       },
                                     ),
@@ -194,7 +197,7 @@ class Filters extends StatelessWidget {
                               icon: new FutureBuilder(
                                 // future: _getData(),
 
-                                future: CorporationList().getCorporation,
+                                future: futuregetCorporation;//CorporationList().getCorporation,
                                 builder: (BuildContext context,
                                     AsyncSnapshot snapshot) {
                                   switch (snapshot.connectionState) {
