@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'DataBase.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({Key key}) : super(key: key);
+  SearchPage({Key? key}) : super(key: key);
 
   @override
   _SearchPage createState() => _SearchPage();
@@ -105,12 +105,12 @@ class _SearchPage extends State<SearchPage> {
                                   },
                                 ),
                               ),
-                              onSaved: (String value) {
+                              onSaved: (value) {
                                 // This optional block of code can be used to run
                                 // code when the user saves the form.
                               },
-                              validator: (String value) {
-                                return value.contains('@')
+                              validator: (value) {
+                                return value.toString().contains('@')
                                     ? 'Do not use the @ char.'
                                     : null;
                               },
@@ -178,7 +178,7 @@ class _SearchPage extends State<SearchPage> {
                                                     "";
                                               else
                                                 _controllerCorporation.text =
-                                                    value;
+                                                    value.toString();
                                             });
                                           },
                                         );
@@ -202,12 +202,12 @@ class _SearchPage extends State<SearchPage> {
                                   },
                                 ),
                               ),
-                              onSaved: (String value) {
+                              onSaved: (value) {
                                 // This optional block of code can be used to run
                                 // code when the user saves the form.
                               },
-                              validator: (String value) {
-                                return value.contains('@')
+                              validator: (value) {
+                                return value.toString().contains('@')
                                     ? 'Do not use the @ char.'
                                     : null;
                               },
@@ -275,7 +275,7 @@ class _SearchPage extends State<SearchPage> {
                                                     "";
                                               else
                                                 _controllerDepartament.text =
-                                                    value;
+                                                    value.toString();
                                             });
                                           },
                                         );
@@ -299,12 +299,12 @@ class _SearchPage extends State<SearchPage> {
                                   },
                                 ),
                               ),
-                              onSaved: (String value) {
+                              onSaved: (value) {
                                 // This optional block of code can be used to run
                                 // code when the user saves the form.
                               },
-                              validator: (String value) {
-                                return value.contains('@')
+                              validator: (value) {
+                                return value.toString().contains('@')
                                     ? 'Do not use the @ char.'
                                     : null;
                               },
@@ -349,7 +349,7 @@ class _SearchPage extends State<SearchPage> {
                                           ),
                                         ],
                                         onSelected: (value) {
-                                          _controllerTypePhone.text = value;
+                                          _controllerTypePhone.text = value.toString();
                                           // print('value-value-value' + value);
                                         },
                                         icon: Icon(Icons.filter_list),
@@ -359,7 +359,7 @@ class _SearchPage extends State<SearchPage> {
                                         enabled: false,
                                         controller: _controllerTypePhone,
                                         //initialValue: 'Все',
-                                        onSaved: (String value) {
+                                        onSaved: (value) {
                                           // This optional block of code can be used to run
                                           // code when the user saves the form.
                                         },
@@ -389,12 +389,12 @@ class _SearchPage extends State<SearchPage> {
                                     },
                                   ),
                                 ),
-                                onSaved: (String value) {
+                                onSaved: (value) {
                                   // This optional block of code can be used to run
                                   // code when the user saves the form.
                                 },
-                                validator: (String value) {
-                                  return value.contains('@')
+                                validator: (value) {
+                                  return value.toString().contains('@')
                                       ? 'Do not use the @ char.'
                                       : null;
                                 },

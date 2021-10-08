@@ -12,9 +12,11 @@ import 'package:ad_book_2/models/filters.dart';
 
 void main() {
   runApp(
+      MyApp()
+    /*
     RestartWidget(
       child: MyApp(),
-    ),
+    ),*/
   );
 
 }
@@ -60,7 +62,7 @@ class MyApp extends StatelessWidget {
 }
 
 
-
+/*
 class RestartWidget extends StatefulWidget {
   RestartWidget({this.child});
 
@@ -73,7 +75,9 @@ class RestartWidget extends StatefulWidget {
   @override
   _RestartWidgetState createState() => _RestartWidgetState();
 }
+*/
 
+/*
 class _RestartWidgetState extends State<RestartWidget> {
   Key key = UniqueKey();
 
@@ -91,3 +95,4 @@ class _RestartWidgetState extends State<RestartWidget> {
     );
   }
 }
+*/

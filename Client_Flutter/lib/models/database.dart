@@ -10,7 +10,7 @@ String ipLocalhost = "192.168.0.105:8000";
 
 
 class CorporationList {
-  Future<void> get getCorporation async {
+  Future<List> get getCorporation async {
     List corporationlist;
     //print('queryParameters $queryParameters');
     var uri = Uri.http(ipLocalhost, '/corporation/');
@@ -34,7 +34,7 @@ class CorporationList {
 }
 
 class DepartmentList {
-  Future<void> get getDepartment async {
+  Future<List> get getDepartment async {
     List departmentlist;
     //print('queryParameters $queryParameters');
     var uri = Uri.http(ipLocalhost, '/department/');

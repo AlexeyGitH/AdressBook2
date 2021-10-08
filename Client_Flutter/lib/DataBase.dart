@@ -13,13 +13,13 @@ class DataBaseData {
   int datalistcount;
   ContactServer database;
   bool blockrightarrow;
-  DataBaseFilter filters;
+  //DataBaseFilter filters;
 
   DataBaseData({
-    this.datalistcount,
-    this.database,
-    this.blockrightarrow,
-    this.filters,
+    required this.datalistcount,
+    required this.database,
+    required this.blockrightarrow,
+   // required this.filters,
   });
 }
 
@@ -31,11 +31,11 @@ class DataBaseFilter {
   String controllerTypePhone;
 
   DataBaseFilter({
-    this.controllerFIO,
-    this.controllerCorporation,
-    this.controllerDepartament,
-    this.controllerPhone,
-    this.controllerTypePhone
+    required this.controllerFIO,
+    required this.controllerCorporation,
+    required this.controllerDepartament,
+    required this.controllerPhone,
+    required this.controllerTypePhone
   });
 }
 
@@ -51,14 +51,15 @@ class DataBase extends ChangeNotifier {
 */
   DataBaseData dataBaseData = new DataBaseData(
     datalistcount: 0,
-    database: new ContactServer(countlist: 0, contacts: null),
+    database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
     blockrightarrow: false,
+    /*
     filters: new DataBaseFilter(controllerFIO: "",
       controllerCorporation: "",
       controllerDepartament: "",
       controllerPhone: "",
       controllerTypePhone: "",
-    ),
+    ),*/
   );
 
   /*
@@ -80,8 +81,8 @@ class DataBase extends ChangeNotifier {
 */
 
   void setFilters(String FIO) {
-    this.dataBaseData.filters.controllerFIO = FIO;
-    notifyListeners();
+    //this.dataBaseData.filters.controllerFIO = FIO;
+    //notifyListeners();
   }
 
   void contactsForward() {
@@ -129,8 +130,8 @@ class DataBase extends ChangeNotifier {
         body: jsonEncode(<String, String>{
           'Count': dataBaseData.datalistcount.toString(),
           'Limit': Limit_const.toString(),
-          //'FIO': '',
-          'FIO': dataBaseData.filters.controllerFIO,
+          'FIO': '',
+          //'FIO': dataBaseData.filters.controllerFIO,
           'Corporation': '',
           'Department': '',
           'Phone': '',
@@ -166,7 +167,7 @@ class DataBase extends ChangeNotifier {
         //throw Exception('Failed to load contacts');
         dataBaseData = new DataBaseData(
             datalistcount: 0,
-            database: new ContactServer(countlist: 0, contacts: null),
+            database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
             blockrightarrow: false);
       }
 
@@ -376,7 +377,7 @@ class CorporationList {
 }
 
 class DepartmentList {
-  Future<void> get getDepartment async {
+  Future<List> get getDepartment async {
     List departmentlist;
     //print('queryParameters $queryParameters');
     var uri = Uri.http(ipLocalhost, '/department/');
@@ -395,6 +396,7 @@ class DepartmentList {
     }
     // notifyListeners();
     return departmentlist.map((s) => s as String).toList();
+
     //notifyListeners();
   }
 }

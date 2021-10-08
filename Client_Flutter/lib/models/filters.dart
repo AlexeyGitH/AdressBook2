@@ -11,8 +11,8 @@ class DataBaseFilter {
   String controllerTypePhone;
 */
   DataBaseFilter({
-    this.controllerFIO,
-    this.controllerCorporation,
+    required this.controllerFIO,
+    required  this.controllerCorporation,
     /*
     this.controllerDepartament,
     this.controllerPhone,

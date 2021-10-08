@@ -14,19 +14,19 @@ class ContactItem {
   final String mail;
 
   ContactItem(
-      {this.id,
-      this.status,
-      this.firstname,
-      this.middlename,
-      this.lastname,
-      this.image,
-      this.department,
-      this.corporation,
-      this.position,
-      this.workphone,
-      this.mobilephone,
-      this.birthdate,
-      this.mail});
+      { required this.id,
+        required this.status,
+        required this.firstname,
+        required this.middlename,
+        required this.lastname,
+        required this.image,
+        required this.department,
+        required this.corporation,
+        required this.position,
+        required this.workphone,
+        required this.mobilephone,
+        required this.birthdate,
+        required this.mail});
 
   factory ContactItem.fromJson(Map<String, dynamic> parsedJson) {
     return new ContactItem(
@@ -50,7 +50,7 @@ class ContactItem {
 class ContactServer {
   final int countlist;
   final List<ContactItem> contacts;
-  ContactServer({this.countlist, this.contacts});
+  ContactServer({required this.countlist, required  this.contacts});
 
   factory ContactServer.fromJson(Map<String, dynamic> parsedJson) {
     var list = parsedJson['ContactList'] as List;
@@ -70,9 +70,9 @@ class ParamFilter {
   String typephone;
 
   ParamFilter(
-      {this.fio,
-      this.corporation,
-      this.departament,
-      this.phone,
-      this.typephone});
+      { required this.fio,
+        required this.corporation,
+        required this.departament,
+        required this.phone,
+        required this.typephone});
 }

@@ -11,7 +11,7 @@ class Filters extends StatelessWidget {
   final _controllerPhone = TextEditingController();
   final _controllerTypePhone = TextEditingController(text: "Все");
 
-  late Future<List> futuregetCorporation;
+  //late Future<List> futuregetCorporation;
 
   List<String> lisCorp = [];
   List<String> lisDep = [];
@@ -81,12 +81,12 @@ class Filters extends StatelessWidget {
                                 },
                               ),
                             ),
-                            onSaved: (String value) {
+                            onSaved: (value) {
                               // This optional block of code can be used to run
                               // code when the user saves the form.
                             },
-                            validator: (String value) {
-                              return value.contains('@')
+                            validator: (value) {
+                              return value.toString().contains('@')
                                   ? 'Do not use the @ char.'
                                   : null;
                             },
@@ -124,7 +124,7 @@ class Filters extends StatelessWidget {
                                       tooltip: 'Increase volume by 10',
                                       onPressed: () {
 
-                                        futuregetCorporation = CorporationList().getCorporation;
+                                        //futuregetCorporation = CorporationList().getCorporation;
                                         // showDialog<String>(
                                         //   context: context,
                                         //   builder: (BuildContext context) => AlertDialog(
@@ -197,7 +197,8 @@ class Filters extends StatelessWidget {
                               icon: new FutureBuilder(
                                 // future: _getData(),
 
-                                future: futuregetCorporation;//CorporationList().getCorporation,
+                                future: CorporationList().getCorporation,
+                                // future: futuregetCorporation;//CorporationList().getCorporation,
                                 builder: (BuildContext context,
                                     AsyncSnapshot snapshot) {
                                   switch (snapshot.connectionState) {
@@ -227,7 +228,7 @@ class Filters extends StatelessWidget {
                                               _controllerCorporation.text = "";
                                             else
                                               _controllerCorporation.text =
-                                                  value;
+                                                  value.toString();
                                           },
                                         );
                                       }
@@ -266,7 +267,7 @@ class Filters extends StatelessWidget {
                                           if (value == "All")
                                             _controllerCorporation.text = "";
                                           else
-                                            _controllerCorporation.text = value;
+                                            _controllerCorporation.text = value.toString();
                                         },
                                       );
                                   }
@@ -288,12 +289,12 @@ class Filters extends StatelessWidget {
                                 },
                               ),
                             ),
-                            onSaved: (String value) {
+                            onSaved: (value) {
                               // This optional block of code can be used to run
                               // code when the user saves the form.
                             },
-                            validator: (String value) {
-                              return value.contains('@')
+                            validator: (value) {
+                              return value.toString().contains('@')
                                   ? 'Do not use the @ char.'
                                   : null;
                             },
@@ -386,12 +387,12 @@ class Filters extends StatelessWidget {
                                 },
                               ),
                             ),
-                            onSaved: (String value) {
+                            onSaved: (value) {
                               // This optional block of code can be used to run
                               // code when the user saves the form.
                             },
-                            validator: (String value) {
-                              return value.contains('@')
+                            validator: (value) {
+                              return value.toString().contains('@')
                                   ? 'Do not use the @ char.'
                                   : null;
                             },
@@ -436,7 +437,7 @@ class Filters extends StatelessWidget {
                                         ),
                                       ],
                                       onSelected: (value) {
-                                        _controllerTypePhone.text = value;
+                                        _controllerTypePhone.text = value.toString();
                                         // print('value-value-value' + value);
                                       },
                                       icon: Icon(Icons.filter_list),
@@ -446,7 +447,7 @@ class Filters extends StatelessWidget {
                                       enabled: false,
                                       controller: _controllerTypePhone,
                                       //initialValue: 'Все',
-                                      onSaved: (String value) {
+                                      onSaved: (value) {
                                         // This optional block of code can be used to run
                                         // code when the user saves the form.
                                       },
@@ -476,12 +477,12 @@ class Filters extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              onSaved: (String value) {
+                              onSaved: (value) {
                                 // This optional block of code can be used to run
                                 // code when the user saves the form.
                               },
-                              validator: (String value) {
-                                return value.contains('@')
+                              validator: (value) {
+                                return value.toString().contains('@')
                                     ? 'Do not use the @ char.'
                                     : null;
                               },
