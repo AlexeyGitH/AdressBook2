@@ -5,6 +5,7 @@ import 'package:ad_book_2/models/filters.dart';
 import 'package:ad_book_2/models/database.dart';
 import 'package:ad_book_2/screens/filterWidget.dart';
 
+
 class Filters extends StatelessWidget {
   final _controllerFIO = TextEditingController();
   final _controllerCorporation = TextEditingController();
@@ -20,6 +21,7 @@ class Filters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var filters = context.watch<FiltersModel>();
+
     //var filterView = context.watch<FiltersModelView>();
 
     _controllerCorporation.text = filters.filters.controllerCorporation;

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:ad_book_2/models/filterWidget.dart';
 
 
-
 class RowFiltersButton extends StatefulWidget {
   final String labelltext;
   final String initialltext;
@@ -89,7 +88,6 @@ class FiltersButton extends StatefulWidget {
   @override
   _FiltersButton createState() => _FiltersButton();
 }
-
 
 class _FiltersButton extends State<FiltersButton> {
   List<String> lisCorp = [];
