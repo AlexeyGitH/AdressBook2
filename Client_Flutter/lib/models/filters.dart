@@ -9,10 +9,10 @@ class DataBaseFilter {
   String controllerDepartament;
   String controllerPhone;
   String controllerTypePhone;
-*/
+  */
   DataBaseFilter({
     required this.controllerFIO,
-    required  this.controllerCorporation,
+    required this.controllerCorporation,
     /*
     this.controllerDepartament,
     this.controllerPhone,
@@ -33,8 +33,11 @@ controllerFIO: '', controllerCorporation: '');
       notifyListeners();
     }
 
-
   }
+
+
+
+
 
 
 

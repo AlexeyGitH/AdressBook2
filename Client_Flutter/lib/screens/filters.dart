@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ad_book_2/models/filters.dart';
 import 'package:ad_book_2/models/database.dart';
+import 'package:ad_book_2/screens/filterWidget.dart';
 
 class Filters extends StatelessWidget {
   final _controllerFIO = TextEditingController();
@@ -19,6 +20,7 @@ class Filters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var filters = context.watch<FiltersModel>();
+    //var filterView = context.watch<FiltersModelView>();
 
     _controllerCorporation.text = filters.filters.controllerCorporation;
 
@@ -32,6 +34,13 @@ class Filters extends StatelessWidget {
           child: ConstrainedBox(
               constraints: BoxConstraints(),
               child: new Column(children: [
+
+                Text("ff00-111"),
+                RowFiltersButton(labelltext:'Организация 22'),
+                RowFiltersButton(labelltext:'Организация 33'),
+                Text("ff00-222"),
+
+
                 //RightArrowBottomWidgetSearch(),
 
                 ElevatedButton.icon(

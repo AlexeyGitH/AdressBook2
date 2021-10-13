@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:ad_book_2/models/filters.dart';
 import 'package:ad_book_2/models/database.dart';
 
+
 List<String> lisCorp = [];
 
 class Contacts extends StatelessWidget {
@@ -19,6 +20,11 @@ class Contacts extends StatelessWidget {
             icon: const Icon(Icons.search),
             onPressed: () => Navigator.pushNamed(context, '/filters'),
           ),
+          IconButton(
+            icon: const Icon(Icons.qr_code),
+            onPressed: () => Navigator.pushNamed(context, '/test'),
+          ),
+
         ],
       ),
       body: Container(

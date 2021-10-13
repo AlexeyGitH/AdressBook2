@@ -6,6 +6,7 @@ import 'SearchPage.dart';
 import 'common/theme.dart';
 import 'screens/contacts.dart';
 import 'screens/filters.dart';
+import 'screens/test.dart';
 import 'package:ad_book_2/models/contacts.dart';
 import 'package:ad_book_2/models/filters.dart';
 
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => Contacts(),
           '/filters': (context) => Filters(),
+          '/test': (context) => Test(),
         },
     ),
 
