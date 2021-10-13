@@ -23,6 +23,7 @@ class Filters extends StatelessWidget {
     //var filterView = context.watch<FiltersModelView>();
 
     _controllerCorporation.text = filters.filters.controllerCorporation;
+    _controllerCorporation.text = 'init 3';
 
     return Scaffold(
       appBar: AppBar(
@@ -36,8 +37,8 @@ class Filters extends StatelessWidget {
               child: new Column(children: [
 
                 Text("ff00-111"),
-                RowFiltersButton(labelltext:'Организация 22'),
-                RowFiltersButton(labelltext:'Организация 33'),
+                RowFiltersButton(labelltext:'Организация 22', initialltext: _controllerCorporation.text),
+                RowFiltersButton(labelltext:'Организация 33', initialltext: _controllerCorporation.text),
                 Text("ff00-222"),
 
 

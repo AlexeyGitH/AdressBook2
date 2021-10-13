@@ -6,8 +6,9 @@ import 'package:ad_book_2/models/filterWidget.dart';
 
 class RowFiltersButton extends StatefulWidget {
   final String labelltext;
+  final String initialltext;
 
-  RowFiltersButton({required this.labelltext});
+  RowFiltersButton({required this.labelltext, required this.initialltext});
 
   @override
   _RowFiltersButton createState() => _RowFiltersButton();
@@ -23,15 +24,16 @@ class _RowFiltersButton extends State<RowFiltersButton> {
           create: (context) => FiltersModelView(),
         ),
       ],
-      child: FiltersViewRow(labelltext: widget.labelltext),
+      child: FiltersViewRow(labelltext: widget.labelltext, initialltext: widget.initialltext),
     );
   }
 }
 
 class FiltersViewRow extends StatefulWidget {
   final String labelltext;
+  final String initialltext;
 
-  FiltersViewRow({required this.labelltext});
+  FiltersViewRow({required this.labelltext, required this.initialltext});
 
   @override
   _FiltersViewRow createState() => _FiltersViewRow();
@@ -45,6 +47,7 @@ class _FiltersViewRow extends State<FiltersViewRow> {
     var filterModelV = context.watch<FiltersModelView>();
     var typeV = filterModelV.filterView;
 
+    //_valController.text = widget.initialltext;
     _valController.text = filterModelV.textValue;
 
     return new Container(
@@ -60,7 +63,7 @@ class _FiltersViewRow extends State<FiltersViewRow> {
                       controller: _valController,
                       decoration: new InputDecoration(
                         icon:
-                            FiltersButton(controllervalue: _valController.text),
+                            FiltersButton(controllervalue: widget.initialltext),
                         labelText: widget.labelltext,
                         fillColor: Colors.white,
                         enabledBorder: OutlineInputBorder(
@@ -79,7 +82,7 @@ class _FiltersViewRow extends State<FiltersViewRow> {
 }
 
 class FiltersButton extends StatefulWidget {
-  final String controllervalue;
+  String controllervalue;
 
   FiltersButton({required this.controllervalue});
 
@@ -87,11 +90,13 @@ class FiltersButton extends StatefulWidget {
   _FiltersButton createState() => _FiltersButton();
 }
 
+
 class _FiltersButton extends State<FiltersButton> {
   List<String> lisCorp = [];
 
   @override
   Widget build(BuildContext context) {
+
     var filterModelV = context.watch<FiltersModelView>();
     int typeV = filterModelV.filterView;
 
@@ -113,6 +118,7 @@ class _FiltersButton extends State<FiltersButton> {
           if (value == "All")
             filterModelV.setFilterValue("");
           else
+            widget.controllervalue = value.toString();
             filterModelV.setFilterValue(value.toString());
         },
       );
