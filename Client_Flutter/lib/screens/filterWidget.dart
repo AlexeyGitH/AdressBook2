@@ -5,12 +5,16 @@ import 'package:ad_book_2/models/filterWidget.dart';
 
 class RowFiltersButton extends StatefulWidget {
   final String labelltext;
-  final String initialltext;
+  String initialltext;
 
+ // VoidCallback onChangeTextCallBack;
+ //RowFiltersButton({required this.labelltext, required this.initialltext, required this.onChangeTextCallBack});
   RowFiltersButton({required this.labelltext, required this.initialltext});
 
   @override
   _RowFiltersButton createState() => _RowFiltersButton();
+
+
 }
 
 class _RowFiltersButton extends State<RowFiltersButton> {
@@ -30,7 +34,7 @@ class _RowFiltersButton extends State<RowFiltersButton> {
 
 class FiltersViewRow extends StatefulWidget {
   final String labelltext;
-  final String initialltext;
+  String initialltext;
 
   FiltersViewRow({required this.labelltext, required this.initialltext});
 
@@ -46,8 +50,11 @@ class _FiltersViewRow extends State<FiltersViewRow> {
     var filterModelV = context.watch<FiltersModelView>();
     var typeV = filterModelV.filterView;
 
-    //_valController.text = widget.initialltext;
-    _valController.text = filterModelV.textValue;
+    _valController.text = widget.initialltext;
+
+    //filterModelV.setFilterValue(widget.initialltext);
+
+    //_valController.text = filterModelV.textValue;
 
     return new Container(
         margin: const EdgeInsets.all(10.0),
@@ -75,7 +82,13 @@ class _FiltersViewRow extends State<FiltersViewRow> {
                             _valController.text = '';
                           },
                         ),
-                      )))
+                      ),
+                    onChanged: (text) {
+                      filterModelV.setFilterValueonlyset(text);
+                      widget.initialltext = text;
+                      //print('widget text field: $widget.initialltext');
+                    },
+                  ))
             ])));
   }
 }

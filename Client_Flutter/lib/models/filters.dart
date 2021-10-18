@@ -30,6 +30,7 @@ controllerFIO: '', controllerCorporation: '');
       //filters.controllerFIO.text = fio;
       filters.controllerFIO = fio;
       filters.controllerCorporation = corporation;
+      print('Set state corporation $corporation');
       notifyListeners();
     }
 

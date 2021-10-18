@@ -15,4 +15,8 @@ class FiltersModelView extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setFilterValueonlyset(String _val) {
+    textValue = _val;
+  }
+
 }
