@@ -7,9 +7,12 @@ class RowFiltersButton extends StatefulWidget {
   final String labelltext;
   String initialltext;
 
- // VoidCallback onChangeTextCallBack;
- //RowFiltersButton({required this.labelltext, required this.initialltext, required this.onChangeTextCallBack});
-  RowFiltersButton({required this.labelltext, required this.initialltext});
+  final Function(String) changeParentValue;
+
+  //VoidCallback onChangeTextCallBack;
+  //RowFiltersButton({required this.labelltext, required this.initialltext, required this.onChangeTextCallBack});
+  //RowFiltersButton({required this.labelltext, required this.initialltext});
+  RowFiltersButton({required this.labelltext, required this.initialltext, required this.changeParentValue});
 
   @override
   _RowFiltersButton createState() => _RowFiltersButton();
@@ -27,7 +30,7 @@ class _RowFiltersButton extends State<RowFiltersButton> {
           create: (context) => FiltersModelView(),
         ),
       ],
-      child: FiltersViewRow(labelltext: widget.labelltext, initialltext: widget.initialltext),
+      child: FiltersViewRow(labelltext: widget.labelltext, initialltext: widget.initialltext, changeParentValue: widget.changeParentValue),
     );
   }
 }
@@ -36,7 +39,8 @@ class FiltersViewRow extends StatefulWidget {
   final String labelltext;
   String initialltext;
 
-  FiltersViewRow({required this.labelltext, required this.initialltext});
+  final Function(String) changeParentValue;
+  FiltersViewRow({required this.labelltext, required this.initialltext, required this.changeParentValue});
 
   @override
   _FiltersViewRow createState() => _FiltersViewRow();
@@ -85,8 +89,9 @@ class _FiltersViewRow extends State<FiltersViewRow> {
                       ),
                     onChanged: (text) {
                       filterModelV.setFilterValueonlyset(text);
-                      widget.initialltext = text;
-                      //print('widget text field: $widget.initialltext');
+                      widget.changeParentValue(text);
+                      //widget.initialltext = text;
+                      print('widget text field: $text');
                     },
                   ))
             ])));
