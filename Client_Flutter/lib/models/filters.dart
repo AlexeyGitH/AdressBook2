@@ -37,7 +37,7 @@ controllerFIO: '', controllerCorporation: '');
     void setFilter(String corporation) {
       print('Set state corporation $corporation');
       filters.controllerCorporation = corporation;
-      notifyListeners();
+      //notifyListeners();
     }
 
   }

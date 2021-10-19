@@ -13,7 +13,7 @@ class Filters extends StatelessWidget {
   final _controllerPhone = TextEditingController();
   final _controllerTypePhone = TextEditingController(text: "Все");
 
-  String _textsample = 'init FGH';
+  //String _textsample = 'init FGH';
   //late Future<List> futuregetCorporation;
 
   List<String> lisCorp = [];
@@ -26,7 +26,7 @@ class Filters extends StatelessWidget {
     //var filterView = context.watch<FiltersModelView>();
 
     _controllerCorporation.text = filters.filters.controllerCorporation;
-    _controllerCorporation.text = 'init FGH';
+    //_controllerCorporation.text = 'init FGH';
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +40,7 @@ class Filters extends StatelessWidget {
               child: new Column(children: [
 
                 Text("ff00-111"),
-                RowFiltersButton(labelltext:'Организация 22', initialltext: _textsample, changeParentValue: filters.setFilter),
+                RowFiltersButton(labelltext:'Организация 22', initialltext: _controllerCorporation.text, changeParentValue: filters.setFilter),
                 //RowFiltersButton(labelltext:'Организация 33', initialltext: _controllerCorporation.text),
                 Text("ff00-222"),
 
@@ -50,12 +50,14 @@ class Filters extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () async {
                     //modelDateBase.contactsForward();
-                    var p;
-                    p = filters.filters.controllerCorporation;
-                    print('5757657657: $_textsample');
-                    print('controllerCorporation: $p');
+                    //var p;
+                    //p = filters.filters.controllerCorporation;
+                    //print('5757657657: $_textsample');
+                    //print('controllerCorporation: $p');
                     //filters.setFilters(
                     //    _controllerFIO.text, _controllerCorporation.text);
+                    filters.setFilters(
+                        _controllerFIO.text, filters.filters.controllerCorporation);
                   },
                   style: ButtonStyle(
                     backgroundColor:

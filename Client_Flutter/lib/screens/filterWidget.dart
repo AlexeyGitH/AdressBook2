@@ -84,14 +84,14 @@ class _FiltersViewRow extends State<FiltersViewRow> {
                           icon: const Icon(Icons.clear),
                           onPressed: () {
                             _valController.text = '';
+                            widget.changeParentValue('');
                           },
                         ),
                       ),
                     onChanged: (text) {
                       filterModelV.setFilterValueonlyset(text);
                       widget.changeParentValue(text);
-                      //widget.initialltext = text;
-                      print('widget text field: $text');
+                      //print('widget text field: $text');
                     },
                   ))
             ])));
