@@ -30,14 +30,14 @@ controllerFIO: '', controllerCorporation: '');
       //filters.controllerFIO.text = fio;
       filters.controllerFIO = fio;
       filters.controllerCorporation = corporation;
-      print('Set state corporation $corporation');
+      //print('Set state corporation $corporation');
       notifyListeners();
     }
 
     void setFilter(String corporation) {
       print('Set state corporation $corporation');
       filters.controllerCorporation = corporation;
-      //notifyListeners();
+      //setFilternotifyListeners();
     }
 
   }

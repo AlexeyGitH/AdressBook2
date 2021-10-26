@@ -6,6 +6,8 @@ import 'package:ad_book_2/models/database.dart';
 import 'package:ad_book_2/screens/filterWidget.dart';
 
 
+
+
 class Filters extends StatelessWidget {
   final _controllerFIO = TextEditingController();
   final _controllerCorporation = TextEditingController();
@@ -16,13 +18,14 @@ class Filters extends StatelessWidget {
   //String _textsample = 'init FGH';
   //late Future<List> futuregetCorporation;
 
+
+
   List<String> lisCorp = [];
   List<String> lisDep = [];
 
   @override
   Widget build(BuildContext context) {
     var filters = context.watch<FiltersModel>();
-
     //var filterView = context.watch<FiltersModelView>();
 
     _controllerCorporation.text = filters.filters.controllerCorporation;
@@ -40,7 +43,7 @@ class Filters extends StatelessWidget {
               child: new Column(children: [
 
                 Text("ff00-111"),
-                RowFiltersButton(labelltext:'Организация 22', initialltext: _controllerCorporation.text, changeParentValue: filters.setFilter),
+                RowFiltersButton(labelltext:'Организация 22', initialltext: _controllerCorporation.text, changeParentValue: filters.setFilter, loaddataList: getCorporationList()),
                 //RowFiltersButton(labelltext:'Организация 33', initialltext: _controllerCorporation.text),
                 Text("ff00-222"),
 

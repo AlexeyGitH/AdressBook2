@@ -8,11 +8,12 @@ class RowFiltersButton extends StatefulWidget {
   String initialltext;
 
   final Function(String) changeParentValue;
+  Future<List> loaddataList;
 
   //VoidCallback onChangeTextCallBack;
   //RowFiltersButton({required this.labelltext, required this.initialltext, required this.onChangeTextCallBack});
   //RowFiltersButton({required this.labelltext, required this.initialltext});
-  RowFiltersButton({required this.labelltext, required this.initialltext, required this.changeParentValue});
+  RowFiltersButton({required this.labelltext, required this.initialltext, required this.changeParentValue, required this.loaddataList});
 
   @override
   _RowFiltersButton createState() => _RowFiltersButton();
@@ -30,6 +31,7 @@ class _RowFiltersButton extends State<RowFiltersButton> {
           create: (context) => FiltersModelView(),
         ),
       ],
+      //child: FiltersViewRow(labelltext: widget.labelltext, initialltext: widget.initialltext, changeParentValue: widget.changeParentValue, loaddataList: widget.loaddataList),
       child: FiltersViewRow(labelltext: widget.labelltext, initialltext: widget.initialltext, changeParentValue: widget.changeParentValue),
     );
   }
@@ -40,6 +42,9 @@ class FiltersViewRow extends StatefulWidget {
   String initialltext;
 
   final Function(String) changeParentValue;
+  //Future<List> loaddataList;
+
+  //FiltersViewRow({required this.labelltext, required this.initialltext, required this.changeParentValue, required this.loaddataList});
   FiltersViewRow({required this.labelltext, required this.initialltext, required this.changeParentValue});
 
   @override
@@ -60,6 +65,8 @@ class _FiltersViewRow extends State<FiltersViewRow> {
 
     //_valController.text = filterModelV.textValue;
 
+
+
     return new Container(
         margin: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
@@ -73,6 +80,7 @@ class _FiltersViewRow extends State<FiltersViewRow> {
                       controller: _valController,
                       decoration: new InputDecoration(
                         icon:
+                            //FiltersButton(controllervalue: widget.initialltext, loaddataList: widget.loaddataList),
                             FiltersButton(controllervalue: widget.initialltext),
                         labelText: widget.labelltext,
                         fillColor: Colors.white,
@@ -100,7 +108,9 @@ class _FiltersViewRow extends State<FiltersViewRow> {
 
 class FiltersButton extends StatefulWidget {
   String controllervalue;
+  //Future<List> loaddataList;
 
+  //FiltersButton({required this.controllervalue, required this.loaddataList});
   FiltersButton({required this.controllervalue});
 
   @override
@@ -165,6 +175,7 @@ class _FiltersButton extends State<FiltersButton> {
 
       return GestureDetector(
           onTap: () {
+            //filterModelV.setListdata(widget.loaddataList);
             filterModelV.setFilterView(0);
             },
           child: CircularProgressIndicator(), );
