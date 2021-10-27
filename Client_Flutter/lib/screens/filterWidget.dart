@@ -184,3 +184,37 @@ class _FiltersButton extends State<FiltersButton> {
     }
   }
 }
+
+void LoadDataList() async {
+  List corporationlist;
+
+  print('start load corporation list');
+  //print('queryParameters $queryParameters');
+  try {
+    var uri = Uri.http(ipLocalhost, '/corporation/');
+
+    //final response = await http.get(uri);
+    http.Response response = await http.get(uri);
+
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      corporationlist = jsonDecode(utf8.decode(response.bodyBytes));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      //throw Exception('Failed to load contacts');
+      corporationlist = [];
+    }
+  }
+  catch (e) {
+    print('fdsfvvv exeption');
+    corporationlist = [];
+  }
+  print('fdsfvvv 1234 21 0000');
+  // notifyListeners();
+  return corporationlist.map((s) => s as String).toList();
+  //notifyListeners();
+
+}
