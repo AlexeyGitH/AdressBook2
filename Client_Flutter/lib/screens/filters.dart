@@ -43,7 +43,7 @@ class Filters extends StatelessWidget {
               child: new Column(children: [
 
                 Text("ff00-111"),
-                RowFiltersButton(labelltext:'Организация 22', initialltext: _controllerCorporation.text, changeParentValue: filters.setFilter, loaddataList: getCorporationList()),
+                RowFiltersButton(labelltext:'Организация 22', initialltext: _controllerCorporation.text, changeParentValue: filters.setFilter),
                 //RowFiltersButton(labelltext:'Организация 33', initialltext: _controllerCorporation.text),
                 Text("ff00-222"),
 

@@ -6,7 +6,8 @@ import 'dart:convert';
 
 //String ipLocalhost = "172.16.40.14:8000";
 //String ipLocalhost = "192.168.88.252:8000";
-String ipLocalhost = "192.168.0.105:8000";
+//String ipLocalhost = "192.168.0.105:8000";
+String ipLocalhost = "192.168.88.253:8000";
 
 
 class CorporationList {

@@ -1,6 +1,11 @@
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ad_book_2/models/filterWidget.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class RowFiltersButton extends StatefulWidget {
@@ -8,12 +13,11 @@ class RowFiltersButton extends StatefulWidget {
   String initialltext;
 
   final Function(String) changeParentValue;
-  Future<List> loaddataList;
 
   //VoidCallback onChangeTextCallBack;
   //RowFiltersButton({required this.labelltext, required this.initialltext, required this.onChangeTextCallBack});
   //RowFiltersButton({required this.labelltext, required this.initialltext});
-  RowFiltersButton({required this.labelltext, required this.initialltext, required this.changeParentValue, required this.loaddataList});
+  RowFiltersButton({required this.labelltext, required this.initialltext, required this.changeParentValue});
 
   @override
   _RowFiltersButton createState() => _RowFiltersButton();
@@ -26,9 +30,9 @@ class _RowFiltersButton extends State<RowFiltersButton> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => FiltersModelView()),
+        Provider(create: (context) => FiltersModelView(widget.initialltext)),
         ChangeNotifierProvider<FiltersModelView>(
-          create: (context) => FiltersModelView(),
+          create: (context) => FiltersModelView(widget.initialltext),
         ),
       ],
       //child: FiltersViewRow(labelltext: widget.labelltext, initialltext: widget.initialltext, changeParentValue: widget.changeParentValue, loaddataList: widget.loaddataList),
@@ -57,13 +61,11 @@ class _FiltersViewRow extends State<FiltersViewRow> {
     var _valController = TextEditingController();
 
     var filterModelV = context.watch<FiltersModelView>();
-    var typeV = filterModelV.filterView;
 
-    _valController.text = widget.initialltext;
 
-    //filterModelV.setFilterValue(widget.initialltext);
 
-    //_valController.text = filterModelV.textValue;
+    _valController.text = filterModelV.textValue;
+    //_valController.text = widget.initialltext;
 
 
 
@@ -81,7 +83,7 @@ class _FiltersViewRow extends State<FiltersViewRow> {
                       decoration: new InputDecoration(
                         icon:
                             //FiltersButton(controllervalue: widget.initialltext, loaddataList: widget.loaddataList),
-                            FiltersButton(controllervalue: widget.initialltext),
+                            FiltersButton(controllervalue: widget.initialltext, changeParentValue: widget.changeParentValue),
                         labelText: widget.labelltext,
                         fillColor: Colors.white,
                         enabledBorder: OutlineInputBorder(
@@ -108,30 +110,43 @@ class _FiltersViewRow extends State<FiltersViewRow> {
 
 class FiltersButton extends StatefulWidget {
   String controllervalue;
+  final Function(String) changeParentValue;
   //Future<List> loaddataList;
 
   //FiltersButton({required this.controllervalue, required this.loaddataList});
-  FiltersButton({required this.controllervalue});
+  FiltersButton({required this.controllervalue, required this.changeParentValue});
 
   @override
   _FiltersButton createState() => _FiltersButton();
 }
 
 class _FiltersButton extends State<FiltersButton> {
-  List<String> lisCorp = [];
+
+  String ipLocalhost = '55';
+  List<String> DDDList = ['f11f','f22f','f33f'];
 
   @override
   Widget build(BuildContext context) {
 
     var filterModelV = context.watch<FiltersModelView>();
     int typeV = filterModelV.filterView;
+    List<String> lisCorp = filterModelV.listdata;
+
+    if (ipLocalhost.length == 0 && typeV==0 && lisCorp.length==0) {
+      filterModelV.setlistdataonlyset(DDDList);
+      lisCorp = DDDList;
+    }
+    else if (ipLocalhost.length != 0 && typeV==0){
+      typeV=1;
+      filterModelV.setFilterViewonlyset(1);
+    }
+
+
 
     if (typeV == 0) {
       return PopupMenuButton(
         icon: Icon(Icons.filter_list),
         itemBuilder: (BuildContext context) {
-          lisCorp = [];
-          lisCorp.insert(0, "no..no..");
           return lisCorp
               .map((day) => PopupMenuItem(
                     child: Text(day),
@@ -140,81 +155,103 @@ class _FiltersButton extends State<FiltersButton> {
               .toList();
         },
         onSelected: (value) {
-          filterModelV.setFilterView(1);
-          if (value == "All")
-            filterModelV.setFilterValue("");
-          else
-            widget.controllervalue = value.toString();
+          if (value == "Все") {
+            filterModelV.setFilterValue('');
+            widget.changeParentValue('');
+          }
+          else {
+            widget.changeParentValue(value.toString());
             filterModelV.setFilterValue(value.toString());
+          }
         },
       );
-    } else if (typeV == 1) {
-      return PopupMenuButton(
-        icon: Icon(Icons.wifi),
-        itemBuilder: (BuildContext context) {
-          lisCorp = [];
-          lisCorp.insert(0, "All");
-          return lisCorp
-              .map((day) => PopupMenuItem(
-                    child: Text(day),
-                    value: day,
-                  ))
-              .toList();
-        },
-        onSelected: (value) {
-          filterModelV.setFilterView(3);
-
-          if (value == "All")
-            filterModelV.setFilterValue("");
-          else
-            filterModelV.setFilterValue(value.toString());
-        },
-      );
-    } else {
-
-
+    }
+    else if (typeV == 1) {
       return GestureDetector(
-          onTap: () {
-            //filterModelV.setListdata(widget.loaddataList);
-            filterModelV.setFilterView(0);
-            },
-          child: CircularProgressIndicator(), );
-
+        onTap: () {
+          filterModelV.setFilterView(2);
+          Future f = getCorporationList(filterModelV.setFilterView, filterModelV.setlistdataonlyset);
+        },
+        child: Icon(Icons.filter_list));
 
     }
+    else if (typeV == 2) {
+      return GestureDetector(
+          onTap: () {
+            //
+          },
+          child: CircularProgressIndicator(),);
+    }
+    else if (typeV == 3) {
+      return PopupMenuButton(
+        icon: Icon(Icons.filter_list),
+        itemBuilder: (BuildContext context) {
+          return lisCorp
+              .map((day) => PopupMenuItem(
+            child: Text(day),
+            value: day,
+          ))
+              .toList();
+        },
+        onSelected: (value) {
+          if (value == "Все") {
+            filterModelV.setFilterValue('');
+            widget.changeParentValue('');
+          }
+          else {
+            widget.changeParentValue(value.toString());
+            filterModelV.setFilterValue(value.toString());
+          }
+        },
+      );    }
+
+    else  {
+      return GestureDetector(
+        onTap: () {
+          filterModelV.setFilterView(2);
+          getCorporationList(filterModelV.setFilterView, filterModelV.setlistdataonlyset);
+          },
+        child: Icon(Icons.error, color: Colors.blueGrey,),);
+    }
+
   }
 }
 
-void LoadDataList() async {
-  List corporationlist;
 
-  print('start load corporation list');
-  //print('queryParameters $queryParameters');
+
+Future getCorporationList(void settypeV(int _val), void setlistdata(List<String> _list)) async {
+  //settypeV(4);
+  List listdate;
+  String ipLocalhost = "192.168.88.253:8000";
   try {
+
     var uri = Uri.http(ipLocalhost, '/corporation/');
-
-    //final response = await http.get(uri);
-    http.Response response = await http.get(uri);
-
+    final response = await http.get(uri);
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      corporationlist = jsonDecode(utf8.decode(response.bodyBytes));
+      listdate = jsonDecode(utf8.decode(response.bodyBytes));
+      //listdate.map((s) => s as String).toList();
+      setlistdata(listdate.map((s) => s as String).toList());
+      settypeV(3);
+      //print('list server'+listdate.length.toString());
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       //throw Exception('Failed to load contacts');
-      corporationlist = [];
+      listdate = [];
+      settypeV(4);
+      print('CONTACTTS list server/ERROR-3');
     }
   }
   catch (e) {
-    print('fdsfvvv exeption');
-    corporationlist = [];
+    listdate = [];
+    settypeV(4);
+    print('CONTACTTS list server/ERROR-4');
+    print(e);
   }
-  print('fdsfvvv 1234 21 0000');
-  // notifyListeners();
-  return corporationlist.map((s) => s as String).toList();
-  //notifyListeners();
-
+  print('CONTACTTS list server');
 }
+
+
