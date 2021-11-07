@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:ad_book_2/ConstSystemAD.dart';
 import 'PostContact.dart';
@@ -40,7 +42,7 @@ class DepartmentList {
     //print('queryParameters $queryParameters');
     var uri = Uri.http(ipLocalhost, '/department/');
 
-    final response = await http.get(uri);
+    final response = await http.get(uri).timeout(const Duration(seconds: 5));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -60,13 +62,12 @@ class DepartmentList {
 
 
 Future getCorporationList(void settypeV(int _val), void setlistdata(List<String> _list)) async {
-
+  var uri = Uri.http(ipLocalhost, '/corporation/');
   List listdate;
-  //String ipLocalhost = "192.168.88.253:8000";
+  var now1 = new DateTime.now();
+
   try {
-    var now1 = new DateTime.now();
-    var uri = Uri.http(ipLocalhost, '/corporation/');
-    final response = await http.get(uri);
+    final response = await http.get(uri).timeout(const Duration(seconds: 3));
 
     if (response.statusCode == 200) {
       var now2 = new DateTime.now();
@@ -88,24 +89,28 @@ Future getCorporationList(void settypeV(int _val), void setlistdata(List<String>
       settypeV(4);
       //print('CONTACTTS list server/ERROR-3');
     }
-  }
-  catch (e) {
+
+  } on TimeoutException catch (e) {
     listdate = [];
     settypeV(4);
-    //print('CONTACTTS list server/ERROR-4');
-    print(e);
+    print('Timeout');
+  } on Error catch (e) {
+    listdate = [];
+    settypeV(4);
+    print('Error: $e');
   }
+
   //print('CONTACTTS list server DONE');
 }
 
 Future getDepartmentList(void settypeV(int _val), void setlistdata(List<String> _list)) async {
 
+  var uri = Uri.http(ipLocalhost, '/department/');
   List listdate;
-  //String ipLocalhost = "192.168.88.253:8000";
+  var now1 = new DateTime.now();
+
   try {
-    var now1 = new DateTime.now();
-    var uri = Uri.http(ipLocalhost, '/department/');
-    final response = await http.get(uri);
+    final response = await http.get(uri).timeout(const Duration(seconds: 3));
 
     if (response.statusCode == 200) {
       var now2 = new DateTime.now();
@@ -127,12 +132,16 @@ Future getDepartmentList(void settypeV(int _val), void setlistdata(List<String> 
       settypeV(4);
       //print('CONTACTTS list server/ERROR-3');
     }
-  }
-  catch (e) {
+
+  } on TimeoutException catch (e) {
     listdate = [];
     settypeV(4);
-    //print('CONTACTTS list server/ERROR-4');
-    print(e);
+    print('Timeout');
+  } on Error catch (e) {
+    listdate = [];
+    settypeV(4);
+    print('Error: $e');
   }
+
   //print('CONTACTTS list server DONE');
 }
