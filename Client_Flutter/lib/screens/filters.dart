@@ -22,6 +22,8 @@ class Filters extends StatelessWidget {
 
   List<String> lisCorp = [];
   List<String> lisDep = [];
+  List<String> emp_list = [];
+  //List<String> emp_list = ['dssd1', 'dssd2'];
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +43,9 @@ class Filters extends StatelessWidget {
           child: ConstrainedBox(
               constraints: BoxConstraints(),
               child: new Column(children: [
-
-                Text("ff00-111"),
-                RowFiltersButton(labelltext:'Организация 22', initialltext: _controllerCorporation.text, changeParentValue: filters.setFilter),
-                //RowFiltersButton(labelltext:'Организация 33', initialltext: _controllerCorporation.text),
-                Text("ff00-222"),
-
-
-                //RightArrowBottomWidgetSearch(),
-
-                ElevatedButton.icon(
+              new Container(
+              margin: const EdgeInsets.only(top: 10.0),
+              child :ElevatedButton.icon(
                   onPressed: () async {
                     //modelDateBase.contactsForward();
                     //var p;
@@ -69,7 +64,7 @@ class Filters extends StatelessWidget {
                   icon: Icon(Icons.search),
                   label: Text('Найти'),
                 ),
-
+              ),
                 new Container(
                     margin: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
@@ -115,311 +110,14 @@ class Filters extends StatelessWidget {
                           )),
                         ]))),
 
+                RowFiltersButton(labelltext:'Организация', initialltext: _controllerCorporation.text, changeParentValue: filters.setFilter, ListData: emp_list, LoadListData: getCorporationList),
+                RowFiltersButton(labelltext:'Подразделение', initialltext: _controllerDepartament.text, changeParentValue: filters.setFilter, ListData: emp_list, LoadListData: getDepartmentList),
 
 
 
 
 
 
-
-
-
-
-                new Container(
-                    margin: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: new Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(children: [
-                          Flexible(
-                              child: TextFormField(
-                                  controller: _controllerCorporation,
-                                  decoration: new InputDecoration(
-                                    //icon: Icon(Icons.arrow_drop_down),
-                                    //
-                                    icon:
-
-                                    IconButton(
-                                      icon: const Icon(Icons.filter_list),
-                                      tooltip: 'Increase volume by 10',
-                                      onPressed: () {
-
-                                        //futuregetCorporation = CorporationList().getCorporation;
-                                        // showDialog<String>(
-                                        //   context: context,
-                                        //   builder: (BuildContext context) => AlertDialog(
-                                        //     title: const Text('AlertDialog Title'),
-                                        //     content: const Text('AlertDialog description'),
-                                        //     actions: <Widget>[
-                                        //       TextButton(
-                                        //         onPressed: () => Navigator.pop(context, 'Cancel'),
-                                        //         child: const Text('Cancel'),
-                                        //       ),
-                                        //       TextButton(
-                                        //         onPressed: () => Navigator.pop(context, 'OK'),
-                                        //         child: const Text('OK'),
-                                        //       ),
-                                        //     ],
-                                        //   ),
-                                        // );
-
-                                      },
-                                    ),
-
-
-                                    labelText: 'Организация',
-                                    fillColor: Colors.white,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                      BorderSide(width: 0.0, color: Colors.white),
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: const Icon(Icons.clear),
-                                      onPressed: () {
-                                        _controllerCorporation.text = '';
-                                      },
-                                    ),
-
-                                  )))
-                        ]))),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                new Container(
-                    margin: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: new Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(children: [
-                          Flexible(
-                              child: TextFormField(
-                            controller: _controllerCorporation,
-                            decoration: new InputDecoration(
-                              //icon: Icon(Icons.arrow_drop_down),
-                              //
-                              icon: new FutureBuilder(
-                                // future: _getData(),
-
-                                future: CorporationList().getCorporation,
-                                // future: futuregetCorporation;//CorporationList().getCorporation,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot snapshot) {
-                                  switch (snapshot.connectionState) {
-                                    case ConnectionState.none:
-                                    case ConnectionState.waiting:
-                                      //return new Text('loading...');
-                                      return CircularProgressIndicator();
-                                    default:
-                                      if (snapshot.hasError)
-                                      //return new Text('No signal..');
-                                      {
-                                        lisCorp = [];
-                                        lisCorp.insert(0, "no..");
-                                        return PopupMenuButton(
-                                          //captureInheritedThemes: false,
-                                          icon: Icon(Icons.filter_list),
-                                          itemBuilder: (BuildContext context) {
-                                            return lisCorp
-                                                .map((day) => PopupMenuItem(
-                                                      child: Text(day),
-                                                      value: day,
-                                                    ))
-                                                .toList();
-                                          },
-                                          onSelected: (value) {
-                                            if (value == "All")
-                                              _controllerCorporation.text = "";
-                                            else
-                                              _controllerCorporation.text =
-                                                  value.toString();
-                                          },
-                                        );
-                                      }
-                                      /*
-                                              return
-                                              new Text(
-                                                'Error: ${snapshot.error}');
-                                              */
-                                      else
-                                        //lisCorp = new List();
-                                        lisCorp = [];
-
-                                      snapshot.data.forEach((branchItem) {
-                                        //listItemNames.add(branchItem.itemName);
-                                        int index =
-                                            snapshot.data.indexOf(branchItem);
-                                        // dropDownItemsMap[index] = branchItem;
-
-                                        lisCorp.insert(
-                                            index, branchItem.toString());
-                                        //listtt.insert(0, 'fff');
-                                      });
-
-                                      return PopupMenuButton(
-                                        //captureInheritedThemes: false,
-                                        icon: Icon(Icons.filter_list),
-                                        itemBuilder: (BuildContext context) {
-                                          return lisCorp
-                                              .map((day) => PopupMenuItem(
-                                                    child: Text(day),
-                                                    value: day,
-                                                  ))
-                                              .toList();
-                                        },
-                                        onSelected: (value) {
-                                          if (value == "All")
-                                            _controllerCorporation.text = "";
-                                          else
-                                            _controllerCorporation.text = value.toString();
-                                        },
-                                      );
-                                  }
-                                },
-                              ),
-                              //
-                              //
-                              //
-                              labelText: 'Организация',
-                              fillColor: Colors.white,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 0.0, color: Colors.white),
-                              ),
-                              suffixIcon: IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  _controllerCorporation.text = '';
-                                },
-                              ),
-                            ),
-                            onSaved: (value) {
-                              // This optional block of code can be used to run
-                              // code when the user saves the form.
-                            },
-                            validator: (value) {
-                              return value.toString().contains('@')
-                                  ? 'Do not use the @ char.'
-                                  : null;
-                            },
-                          )),
-                        ]))),
-                new Container(
-                    margin: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: new Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(children: [
-                          Flexible(
-                              child: TextFormField(
-                            controller: _controllerDepartament,
-                            decoration: new InputDecoration(
-                              //icon: Icon(Icons.arrow_drop_down),
-                              //
-                              icon: new FutureBuilder(
-                                // future: _getData(),
-
-                                future: DepartmentList().getDepartment,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot snapshot) {
-                                  switch (snapshot.connectionState) {
-                                    case ConnectionState.none:
-                                    case ConnectionState.waiting:
-                                      //return new Text('loading...');
-                                      return CircularProgressIndicator();
-                                    default:
-                                      if (snapshot.hasError)
-                                        return new Text(
-                                            'Error: ${snapshot.error}');
-                                      else
-                                        //lisDep = new List();
-                                        lisDep = [];
-
-                                      snapshot.data.forEach((branchItem) {
-                                        //listItemNames.add(branchItem.itemName);
-                                        int index =
-                                            snapshot.data.indexOf(branchItem);
-                                        // dropDownItemsMap[index] = branchItem;
-
-                                        lisDep.insert(
-                                            index, branchItem.toString());
-                                        //listtt.insert(0, 'fff');
-                                      });
-
-                                      return PopupMenuButton(
-                                        //captureInheritedThemes: false,
-                                        icon: Icon(Icons.filter_list),
-                                        itemBuilder: (BuildContext context) {
-                                          return lisDep
-                                              .map((day) => PopupMenuItem(
-                                                    child: Text(day),
-                                                    value: day,
-                                                  ))
-                                              .toList();
-                                        },
-                                        onSelected: (value) {
-                                          /*setState(() {
-                                                if (value == "All")
-                                                  _controllerDepartament.text =
-                                                  "";
-                                                else
-                                                  _controllerDepartament.text =
-                                                      value;
-                                              });*/
-                                        },
-                                      );
-                                  }
-                                },
-                              ),
-                              //
-                              //
-                              //
-                              labelText: 'Подразделение',
-                              fillColor: Colors.white,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 0.0, color: Colors.white),
-                              ),
-                              suffixIcon: IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  /*setState(() {
-                                        _controllerDepartament.text = '';
-                                      });*/
-                                },
-                              ),
-                            ),
-                            onSaved: (value) {
-                              // This optional block of code can be used to run
-                              // code when the user saves the form.
-                            },
-                            validator: (value) {
-                              return value.toString().contains('@')
-                                  ? 'Do not use the @ char.'
-                                  : null;
-                            },
-                          )),
-                        ]))),
                 new Container(
                   margin: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(

@@ -13,11 +13,10 @@ class RowFiltersButton extends StatefulWidget {
   String initialltext;
 
   final Function(String) changeParentValue;
+  final List<String> ListData;
+  final Future Function(void  Function(int), void Function(List<String>)) LoadListData;
 
-  //VoidCallback onChangeTextCallBack;
-  //RowFiltersButton({required this.labelltext, required this.initialltext, required this.onChangeTextCallBack});
-  //RowFiltersButton({required this.labelltext, required this.initialltext});
-  RowFiltersButton({required this.labelltext, required this.initialltext, required this.changeParentValue});
+  RowFiltersButton({required this.labelltext, required this.initialltext, required this.changeParentValue, required this.ListData, required this.LoadListData});
 
   @override
   _RowFiltersButton createState() => _RowFiltersButton();
@@ -35,8 +34,7 @@ class _RowFiltersButton extends State<RowFiltersButton> {
           create: (context) => FiltersModelView(widget.initialltext),
         ),
       ],
-      //child: FiltersViewRow(labelltext: widget.labelltext, initialltext: widget.initialltext, changeParentValue: widget.changeParentValue, loaddataList: widget.loaddataList),
-      child: FiltersViewRow(labelltext: widget.labelltext, initialltext: widget.initialltext, changeParentValue: widget.changeParentValue),
+      child: FiltersViewRow(labelltext: widget.labelltext, initialltext: widget.initialltext, changeParentValue: widget.changeParentValue, ListData: widget.ListData, LoadListData: widget.LoadListData),
     );
   }
 }
@@ -46,10 +44,10 @@ class FiltersViewRow extends StatefulWidget {
   String initialltext;
 
   final Function(String) changeParentValue;
-  //Future<List> loaddataList;
+  final List<String> ListData;
+  final Future Function(void  Function(int), void Function(List<String>)) LoadListData;
 
-  //FiltersViewRow({required this.labelltext, required this.initialltext, required this.changeParentValue, required this.loaddataList});
-  FiltersViewRow({required this.labelltext, required this.initialltext, required this.changeParentValue});
+  FiltersViewRow({required this.labelltext, required this.initialltext, required this.changeParentValue, required this.ListData, required this.LoadListData});
 
   @override
   _FiltersViewRow createState() => _FiltersViewRow();
@@ -59,17 +57,11 @@ class _FiltersViewRow extends State<FiltersViewRow> {
   @override
   Widget build(BuildContext context) {
     var _valController = TextEditingController();
-
     var filterModelV = context.watch<FiltersModelView>();
 
-
-
     _valController.text = filterModelV.textValue;
-    //_valController.text = widget.initialltext;
 
-
-
-    return new Container(
+    /*return new Container(
         margin: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
@@ -82,7 +74,6 @@ class _FiltersViewRow extends State<FiltersViewRow> {
                       controller: _valController,
                       decoration: new InputDecoration(
                         icon:
-                            //FiltersButton(controllervalue: widget.initialltext, loaddataList: widget.loaddataList),
                             FiltersButton(controllervalue: widget.initialltext, changeParentValue: widget.changeParentValue),
                         labelText: widget.labelltext,
                         fillColor: Colors.white,
@@ -104,26 +95,104 @@ class _FiltersViewRow extends State<FiltersViewRow> {
                       //print('widget text field: $text');
                     },
                   ))
-            ])));
+            ])),
+    );*/
+
+    return new Container(
+      margin: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(5.0
+          )),
+      child: new
+      Container(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+              children: [
+                Expanded
+                  (flex: 1,
+                    child:
+                         Container
+                      (margin: EdgeInsets.only(right: 10.0),
+                        height: 55,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(color: Colors.grey),
+                          color: Color.fromRGBO(100, 100, 150, 0.11),),
+                        child: Row(
+                          children: [
+                             Expanded( // 1st use Expanded
+                            child: Center(child:
+                            FiltersButton(controllervalue: widget.initialltext, changeParentValue: widget.changeParentValue, ListData: widget.ListData, LoadListData: widget.LoadListData),
+                            ))
+                            /*                              new PopupMenuButton(
+                                  itemBuilder: (context) =>[
+                                    PopupMenuItem(
+                                      value: "Все",
+                                      child: Text("Все"),
+                                    ),
+                                    PopupMenuItem(
+                                      value: "Доб",
+                                      child: Text("Добавочный"),
+                                   ),],
+                                  onSelected: (value) {
+                                    //_controllerTypePhone.text = value.toString();
+                                  },
+                                  icon: Icon
+                                    (Icons.filter_list),
+                                ),
+*/
+                          ],
+                        ))),
+                Expanded
+                  (flex: 6,
+                    child: TextFormField(
+                      controller: _valController,
+                      decoration: new InputDecoration(
+                        labelText: widget.labelltext,
+                        fillColor: Colors.white,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 0.0, color: Colors.white),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _valController.text = '';
+                            widget.changeParentValue('');
+                          },
+                        ),
+                      ),
+                      onChanged: (text) {
+                        filterModelV.setFilterValueonlyset(text);
+                        widget.changeParentValue(text);
+                        //print('widget text field: $text');
+                      },
+                    )),
+              ]
+          )),
+    );
+
+
   }
 }
 
 class FiltersButton extends StatefulWidget {
+
+  final List<String> ListData;
+  final Future Function(void  Function(int), void Function(List<String>)) LoadListData;
+
   String controllervalue;
   final Function(String) changeParentValue;
   //Future<List> loaddataList;
 
   //FiltersButton({required this.controllervalue, required this.loaddataList});
-  FiltersButton({required this.controllervalue, required this.changeParentValue});
+  FiltersButton({required this.controllervalue, required this.changeParentValue, required this.ListData, required this.LoadListData});
 
   @override
   _FiltersButton createState() => _FiltersButton();
 }
 
 class _FiltersButton extends State<FiltersButton> {
-
-  String ipLocalhost = '55';
-  List<String> DDDList = ['f11f','f22f','f33f'];
 
   @override
   Widget build(BuildContext context) {
@@ -132,20 +201,24 @@ class _FiltersButton extends State<FiltersButton> {
     int typeV = filterModelV.filterView;
     List<String> lisCorp = filterModelV.listdata;
 
-    if (ipLocalhost.length == 0 && typeV==0 && lisCorp.length==0) {
-      filterModelV.setlistdataonlyset(DDDList);
-      lisCorp = DDDList;
+    if (typeV==0 && widget.ListData.length!=0) {
+      filterModelV.setlistdataonlyset(widget.ListData);
+      typeV=3;
+      filterModelV.setFilterViewonlyset(3);
+      lisCorp = widget.ListData;
     }
-    else if (ipLocalhost.length != 0 && typeV==0){
+    else if (widget.ListData.length == 0 && typeV==0){
       typeV=1;
       filterModelV.setFilterViewonlyset(1);
     }
 
-
+    //print('11-00 $typeV');
 
     if (typeV == 0) {
       return PopupMenuButton(
+
         icon: Icon(Icons.filter_list),
+
         itemBuilder: (BuildContext context) {
           return lisCorp
               .map((day) => PopupMenuItem(
@@ -170,9 +243,10 @@ class _FiltersButton extends State<FiltersButton> {
       return GestureDetector(
         onTap: () {
           filterModelV.setFilterView(2);
-          Future f = getCorporationList(filterModelV.setFilterView, filterModelV.setlistdataonlyset);
+          Future f = widget.LoadListData(filterModelV.setFilterView, filterModelV.setlistdataonlyset);
         },
-        child: Icon(Icons.filter_list));
+        child: SizedBox(width: 30, height: 30, child: Icon(Icons.filter_list))
+          );
 
     }
     else if (typeV == 2) {
@@ -180,11 +254,12 @@ class _FiltersButton extends State<FiltersButton> {
           onTap: () {
             //
           },
-          child: CircularProgressIndicator(),);
+          child: SizedBox(width: 30, height: 30, child: CircularProgressIndicator()),);
     }
     else if (typeV == 3) {
-      return PopupMenuButton(
-        icon: Icon(Icons.filter_list),
+
+       return PopupMenuButton(
+        icon: SizedBox(width: 30, height: 30, child: Icon(Icons.filter_list, color: Colors.blue,)),
         itemBuilder: (BuildContext context) {
           return lisCorp
               .map((day) => PopupMenuItem(
@@ -194,7 +269,7 @@ class _FiltersButton extends State<FiltersButton> {
               .toList();
         },
         onSelected: (value) {
-          if (value == "Все") {
+          if (value == "All") {
             filterModelV.setFilterValue('');
             widget.changeParentValue('');
           }
@@ -203,15 +278,16 @@ class _FiltersButton extends State<FiltersButton> {
             filterModelV.setFilterValue(value.toString());
           }
         },
-      );    }
+      );
 
+    }
     else  {
       return GestureDetector(
         onTap: () {
           filterModelV.setFilterView(2);
-          getCorporationList(filterModelV.setFilterView, filterModelV.setlistdataonlyset);
+          widget.LoadListData(filterModelV.setFilterView, filterModelV.setlistdataonlyset);
           },
-        child: Icon(Icons.error, color: Colors.blueGrey,),);
+        child: SizedBox(width: 30, height: 30, child: Icon(Icons.error, color: Colors.blueGrey,)),);
     }
 
   }
@@ -219,18 +295,23 @@ class _FiltersButton extends State<FiltersButton> {
 
 
 
+/*
 Future getCorporationList(void settypeV(int _val), void setlistdata(List<String> _list)) async {
-  //settypeV(4);
-  List listdate;
-  String ipLocalhost = "192.168.88.253:8000";
-  try {
 
+  List listdate;
+  //String ipLocalhost = "192.168.88.253:8000";
+  try {
+    var now1 = new DateTime.now();
     var uri = Uri.http(ipLocalhost, '/corporation/');
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
+      var now2 = new DateTime.now();
       // If the server did return a 200 OK response,
       // then parse the JSON.
+      if (now2.millisecondsSinceEpoch - now1.millisecondsSinceEpoch < 500){
+        await Future.delayed(Duration(milliseconds: 600));
+      }
       listdate = jsonDecode(utf8.decode(response.bodyBytes));
       //listdate.map((s) => s as String).toList();
       setlistdata(listdate.map((s) => s as String).toList());
@@ -242,16 +323,16 @@ Future getCorporationList(void settypeV(int _val), void setlistdata(List<String>
       //throw Exception('Failed to load contacts');
       listdate = [];
       settypeV(4);
-      print('CONTACTTS list server/ERROR-3');
+      //print('CONTACTTS list server/ERROR-3');
     }
   }
   catch (e) {
     listdate = [];
     settypeV(4);
-    print('CONTACTTS list server/ERROR-4');
+    //print('CONTACTTS list server/ERROR-4');
     print(e);
   }
-  print('CONTACTTS list server');
+  print('CONTACTTS list server DONE');
 }
 
-
+ */
