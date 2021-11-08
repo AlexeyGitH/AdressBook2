@@ -159,7 +159,7 @@ class Filters extends StatelessWidget {
                                     _controllerTypePhone.text = value.toString();
                                     // print('value-value-value' + value);
                                   },
-                                  icon: Icon(Icons.filter_list),
+                                  icon: Icon(Icons.filter_list, color: Colors.blue),
                                 ),
                                 Expanded(
                                     child: TextFormField(

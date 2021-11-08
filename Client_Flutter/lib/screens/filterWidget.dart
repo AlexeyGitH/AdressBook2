@@ -194,19 +194,18 @@ class _FiltersButton extends State<FiltersButton> {
 
   @override
   Widget build(BuildContext context) {
-
     var filterModelV = context.watch<FiltersModelView>();
     int typeV = filterModelV.filterView;
     List<String> lisCorp = filterModelV.listdata;
 
-    if (typeV==0 && widget.ListData.length!=0) {
+    if (typeV == 0 && widget.ListData.length != 0) {
       filterModelV.setlistdataonlyset(widget.ListData);
-      typeV=3;
+      typeV = 3;
       filterModelV.setFilterViewonlyset(3);
       lisCorp = widget.ListData;
     }
-    else if (widget.ListData.length == 0 && typeV==0){
-      typeV=1;
+    else if (widget.ListData.length == 0 && typeV == 0) {
+      typeV = 1;
       filterModelV.setFilterViewonlyset(1);
     }
 
@@ -219,10 +218,11 @@ class _FiltersButton extends State<FiltersButton> {
 
         itemBuilder: (BuildContext context) {
           return lisCorp
-              .map((day) => PopupMenuItem(
-                    child: Text(day),
-                    value: day,
-                  ))
+              .map((day) =>
+              PopupMenuItem(
+                child: Text(day),
+                value: day,
+              ))
               .toList();
         },
         onSelected: (value) {
@@ -238,32 +238,46 @@ class _FiltersButton extends State<FiltersButton> {
       );
     }
     else if (typeV == 1) {
+      return TextButton(
+        onPressed: () {
+          filterModelV.setFilterView(2);
+          Future f = widget.LoadListData(
+              filterModelV.setFilterView, filterModelV.setlistdataonlyset);
+        },
+        child: SizedBox(width: 30,
+            height: 30,
+            child: Icon(Icons.filter_list, color: Colors.grey)),
+      );
+      /*
       return GestureDetector(
         onTap: () {
           filterModelV.setFilterView(2);
           Future f = widget.LoadListData(filterModelV.setFilterView, filterModelV.setlistdataonlyset);
         },
         child: SizedBox(width: 30, height: 30, child: Icon(Icons.filter_list))
-          );
-
+      );
+*/
     }
     else if (typeV == 2) {
       return GestureDetector(
-          onTap: () {
-            //
-          },
-          child: SizedBox(width: 30, height: 30, child: CircularProgressIndicator()),);
+        onTap: () {
+          //
+        },
+        child: SizedBox(
+            width: 30, height: 30, child: CircularProgressIndicator()),);
     }
     else if (typeV == 3) {
-
-       return PopupMenuButton(
-        icon: SizedBox(width: 30, height: 30, child: Icon(Icons.filter_list, color: Colors.blue,)),
+      return PopupMenuButton(
+        icon: SizedBox(width: 30,
+            height: 30,
+            child: Icon(Icons.filter_list, color: Colors.blue,)),
         itemBuilder: (BuildContext context) {
           return lisCorp
-              .map((day) => PopupMenuItem(
-            child: Text(day),
-            value: day,
-          ))
+              .map((day) =>
+              PopupMenuItem(
+                child: Text(day),
+                value: day,
+              ))
               .toList();
         },
         onSelected: (value) {
@@ -277,20 +291,21 @@ class _FiltersButton extends State<FiltersButton> {
           }
         },
       );
-
     }
-    else  {
-      return GestureDetector(
-        onTap: () {
+    else {
+      return TextButton(
+        onPressed: () {
           filterModelV.setFilterView(2);
-          widget.LoadListData(filterModelV.setFilterView, filterModelV.setlistdataonlyset);
-          },
-        child: SizedBox(width: 30, height: 30, child: Icon(Icons.error, color: Colors.blueGrey,)),);
+          widget.LoadListData(
+              filterModelV.setFilterView, filterModelV.setlistdataonlyset);
+        },
+        child: SizedBox(width: 30,
+            height: 30,
+            child: Icon(Icons.error, color: Colors.grey)),
+      );
     }
-
   }
 }
-
 
 
 /*
