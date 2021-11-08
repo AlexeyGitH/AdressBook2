@@ -1,4 +1,4 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -109,43 +109,41 @@ class _FiltersViewRow extends State<FiltersViewRow> {
           padding: const EdgeInsets.all(10.0),
           child: Row(
               children: [
+                 Container
+                    (margin: EdgeInsets.only(right: 10.0),
+                      height: 55,
+                      width: 55,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(color: Colors.grey),
+                        color: Color.fromRGBO(100, 100, 150, 0.11),),
+                      child: Row(
+                        children: [
+                           Expanded( // 1st use Expanded
+                          child: Center(child:
+                          FiltersButton(controllervalue: widget.initialltext, changeParentValue: widget.changeParentValue, ListData: widget.ListData, LoadListData: widget.LoadListData),
+                          ))
+                          /*                              new PopupMenuButton(
+                                itemBuilder: (context) =>[
+                                  PopupMenuItem(
+                                    value: "Все",
+                                    child: Text("Все"),
+                                  ),
+                                  PopupMenuItem(
+                                    value: "Доб",
+                                    child: Text("Добавочный"),
+                                 ),],
+                                onSelected: (value) {
+                                  //_controllerTypePhone.text = value.toString();
+                                },
+                                icon: Icon
+                                  (Icons.filter_list),
+                              ),
+*/
+                        ],
+                      )),
                 Expanded
                   (flex: 1,
-                    child:
-                         Container
-                      (margin: EdgeInsets.only(right: 10.0),
-                        height: 55,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(color: Colors.grey),
-                          color: Color.fromRGBO(100, 100, 150, 0.11),),
-                        child: Row(
-                          children: [
-                             Expanded( // 1st use Expanded
-                            child: Center(child:
-                            FiltersButton(controllervalue: widget.initialltext, changeParentValue: widget.changeParentValue, ListData: widget.ListData, LoadListData: widget.LoadListData),
-                            ))
-                            /*                              new PopupMenuButton(
-                                  itemBuilder: (context) =>[
-                                    PopupMenuItem(
-                                      value: "Все",
-                                      child: Text("Все"),
-                                    ),
-                                    PopupMenuItem(
-                                      value: "Доб",
-                                      child: Text("Добавочный"),
-                                   ),],
-                                  onSelected: (value) {
-                                    //_controllerTypePhone.text = value.toString();
-                                  },
-                                  icon: Icon
-                                    (Icons.filter_list),
-                                ),
-*/
-                          ],
-                        ))),
-                Expanded
-                  (flex: 6,
                     child: TextFormField(
                       controller: _valController,
                       decoration: new InputDecoration(

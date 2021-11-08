@@ -126,56 +126,57 @@ class Filters extends StatelessWidget {
                   child: new Container(
                       padding: const EdgeInsets.all(10.0),
                       child: Row(children: [
+                        Container(
+                            margin: EdgeInsets.only(right: 10.0),
+                            width: 90,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              border: Border.all(color: Colors.grey),
+                              color: Color.fromRGBO(100, 100, 150, 0.11),
+                            ),
+                            child: Row(
+                              children: [
+                                new PopupMenuButton(
+                                  itemBuilder: (context) => [
+                                    PopupMenuItem(
+                                      value: "Все",
+                                      child: Text("Все"),
+                                    ),
+                                    PopupMenuItem(
+                                      value: "Доб",
+                                      child: Text("Добавочный"),
+                                    ),
+                                    PopupMenuItem(
+                                      value: "Раб",
+                                      child: Text("Рабочий"),
+                                    ),
+                                    PopupMenuItem(
+                                      value: "Моб",
+                                      child: Text("Мобильный"),
+                                    ),
+                                  ],
+                                  onSelected: (value) {
+                                    _controllerTypePhone.text = value.toString();
+                                    // print('value-value-value' + value);
+                                  },
+                                  icon: Icon(Icons.filter_list),
+                                ),
+                                Expanded(
+                                    child: TextFormField(
+                                  enabled: false,
+                                  controller: _controllerTypePhone,
+                                  decoration: new InputDecoration(
+                                      disabledBorder: InputBorder.none,
+                                  ),
+                                  onSaved: (value) {
+                                    // This optional block of code can be used to run
+                                    // code when the user saves the form.
+                                  },
+                                )),
+                              ],
+                            )),
                         Expanded(
                             flex: 1,
-                            child: Container(
-                                margin: EdgeInsets.only(right: 10.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  border: Border.all(color: Colors.grey),
-                                  color: Color.fromRGBO(100, 100, 150, 0.11),
-                                ),
-                                child: Row(
-                                  children: [
-                                    new PopupMenuButton(
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem(
-                                          value: "Все",
-                                          child: Text("Все"),
-                                        ),
-                                        PopupMenuItem(
-                                          value: "Доб",
-                                          child: Text("Добавочный"),
-                                        ),
-                                        PopupMenuItem(
-                                          value: "Раб",
-                                          child: Text("Рабочий"),
-                                        ),
-                                        PopupMenuItem(
-                                          value: "Моб",
-                                          child: Text("Мобильный"),
-                                        ),
-                                      ],
-                                      onSelected: (value) {
-                                        _controllerTypePhone.text = value.toString();
-                                        // print('value-value-value' + value);
-                                      },
-                                      icon: Icon(Icons.filter_list),
-                                    ),
-                                    Expanded(
-                                        child: TextFormField(
-                                      enabled: false,
-                                      controller: _controllerTypePhone,
-                                      //initialValue: 'Все',
-                                      onSaved: (value) {
-                                        // This optional block of code can be used to run
-                                        // code when the user saves the form.
-                                      },
-                                    )),
-                                  ],
-                                ))),
-                        Expanded(
-                            flex: 2,
                             child: TextFormField(
                               controller: _controllerPhone,
                               decoration: new InputDecoration(
@@ -206,9 +207,10 @@ class Filters extends StatelessWidget {
                                     ? 'Do not use the @ char.'
                                     : null;
                               },
-                            ))
-                      ])),
+                            )),
+                 ])),
                 ),
+
               ]))),
     );
   }
