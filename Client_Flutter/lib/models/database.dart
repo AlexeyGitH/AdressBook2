@@ -1,17 +1,19 @@
 import 'dart:async';
 
+import 'package:ad_book_2/models/filterWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:ad_book_2/ConstSystemAD.dart';
 import 'PostContact.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:ad_book_2/models/filters.dart';
 
 //String ipLocalhost = "172.16.40.14:8000";
 //String ipLocalhost = "192.168.88.252:8000";
 //String ipLocalhost = "192.168.0.105:8000";
 String ipLocalhost = "192.168.88.253:8000";
 
-
+/*
 class CorporationList {
   Future<List> get getCorporation async {
     List corporationlist;
@@ -59,7 +61,7 @@ class DepartmentList {
     //notifyListeners();
   }
 }
-
+*/
 
 Future getCorporationList(void settypeV(int _val), void setlistdata(List<String> _list)) async {
   var uri = Uri.http(ipLocalhost, '/corporation/');
@@ -144,4 +146,92 @@ Future getDepartmentList(void settypeV(int _val), void setlistdata(List<String> 
   }
 
   //print('CONTACTTS list server DONE');
+}
+
+
+
+class DataBaseData {
+  int datalistcount;
+  ContactServer database;
+  bool blockrightarrow;
+  //DataBaseFilter filters;
+
+  DataBaseData({
+    required this.datalistcount,
+    required this.database,
+    required this.blockrightarrow,
+    // required this.filters,
+  });
+}
+
+Future<DataBaseData> getContactList() async {
+
+
+  DataBaseData dataBaseData = new DataBaseData(
+    datalistcount: 0,
+    database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
+    blockrightarrow: false,
+    /*
+    filters: new DataBaseFilter(controllerFIO: "",
+      controllerCorporation: "",
+      controllerDepartament: "",
+      controllerPhone: "",
+      controllerTypePhone: "",
+    ),*/
+  );
+
+  try {
+    final response = await http.post(
+      Uri.http(ipLocalhost, '/contacts_2/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'Count': 0.toString(),
+        'Limit': Limit_const.toString(),
+        'FIO': '',
+        'Corporation': '',
+        'Department': '',
+        'Phone': '',
+        'TypePhone': '',
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var _database =
+      ContactServer.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      bool _blockrightarrow = false;
+
+      if (dataBaseData.datalistcount + Limit_const >= _database.countlist) {
+        _blockrightarrow = true;
+      }
+
+      dataBaseData = new DataBaseData(
+          datalistcount: dataBaseData.datalistcount,
+          database: _database,
+          blockrightarrow: _blockrightarrow);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      //throw Exception('Failed to load contacts');
+      dataBaseData = new DataBaseData(
+          datalistcount: 0,
+          database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
+          blockrightarrow: false);
+    }
+
+  }
+  catch (err)
+  {
+    print('Caught error: $err');
+    dataBaseData = new DataBaseData(
+        datalistcount: 0,
+        database: new ContactServer(countlist: 0, contacts: []),
+        blockrightarrow: false);
+
+  }
+
+  return dataBaseData;
 }

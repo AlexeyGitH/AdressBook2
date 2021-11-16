@@ -10,7 +10,6 @@ List<String> lisCorp = [];
 class Contacts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var filters = context.watch<FiltersModel>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Address book', style: Theme.of(context).textTheme.headline1),
@@ -20,10 +19,11 @@ class Contacts extends StatelessWidget {
             icon: const Icon(Icons.search),
             onPressed: () => Navigator.pushNamed(context, '/filters'),
           ),
+          /*
           IconButton(
             icon: const Icon(Icons.qr_code),
             onPressed: () => Navigator.pushNamed(context, '/test'),
-          ),
+          ),*/
 
         ],
       ),
@@ -31,14 +31,15 @@ class Contacts extends StatelessWidget {
         //color: Colors.yellow,
         child: Column(
           children: [
+            /*
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(32),
-                child: Text(filters.filters.controllerCorporation),
+                child: DataViewList(),
               ),
             ),
-            const Divider(height: 4, color: Colors.black),
-
+            */
+            DataViewList(),
 
 
           ],
@@ -48,3 +49,65 @@ class Contacts extends StatelessWidget {
   }
 }
 
+class DataViewList extends StatefulWidget {
+  @override
+  _DataViewList createState() => _DataViewList();
+}
+
+class _DataViewList extends State<DataViewList> {
+  @override
+  Widget build(BuildContext context) {
+    var filters = context.watch<FiltersModel>();
+
+    if (filters.viewResume != 0) {
+      return new Column(children: [
+        SizedBox(
+          height: MediaQuery
+              .of(context)
+              .size
+              .height / 1.3,
+          child: Center(
+            child: SizedBox(
+                width: 150, height: 150, child: CircularProgressIndicator()),
+          ),
+        ),
+        const Divider(height: 4, color: Colors.black),
+        Text('Loading..', style: Theme
+            .of(context)
+            .textTheme
+            .headline5),
+      ]);
+    }
+    else{
+      return Consumer<FiltersModel>(
+          builder: (context, myModel, child) =>
+          FutureBuilder<DataBaseData>(
+            future: getContactList(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                //return Text("non");
+                //return ListPageList(serverdata: snapshot.data);
+
+                if (snapshot.data!.database.contacts.length == 0) {
+                  return Text('ListPageError()');
+                } else {
+
+                  return Text('BodyList()');
+                }
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return Text('ListPageWaiting()');
+            },
+          ));
+    }
+
+    return Column(children: [
+      Text(filters.filters.controllerFIO),
+      Text(filters.filters.controllerCorporation),
+      Text(filters.filters.controllerDepartament),
+      Text(filters.filters.controllerTypePhone),
+      Text(filters.filters.controllerPhone),
+    ]);
+  }
+}
