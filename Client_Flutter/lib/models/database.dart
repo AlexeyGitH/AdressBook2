@@ -154,12 +154,14 @@ class DataBaseData {
   int datalistcount;
   ContactServer database;
   bool blockrightarrow;
+  int viewResume;
   //DataBaseFilter filters;
 
   DataBaseData({
     required this.datalistcount,
     required this.database,
     required this.blockrightarrow,
+    required this.viewResume,
     // required this.filters,
   });
 }
@@ -171,6 +173,8 @@ Future<DataBaseData> getContactList() async {
     datalistcount: 0,
     database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
     blockrightarrow: false,
+    viewResume:0,
+
     /*
     filters: new DataBaseFilter(controllerFIO: "",
       controllerCorporation: "",
@@ -211,27 +215,40 @@ Future<DataBaseData> getContactList() async {
       dataBaseData = new DataBaseData(
           datalistcount: dataBaseData.datalistcount,
           database: _database,
-          blockrightarrow: _blockrightarrow);
+          blockrightarrow: _blockrightarrow,
+          viewResume:0
+      );
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       //throw Exception('Failed to load contacts');
+      print('Error data');
       dataBaseData = new DataBaseData(
           datalistcount: 0,
           database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
-          blockrightarrow: false);
+          blockrightarrow: false,
+          viewResume:0
+      );
     }
 
   }
-  catch (err)
-  {
-    print('Caught error: $err');
+
+ on TimeoutException catch (e) {
+   print('Timeout:');
+   dataBaseData = new DataBaseData(
+       datalistcount: 0,
+       database: new ContactServer(countlist: 0, contacts: []),
+       blockrightarrow: false,
+       viewResume:0);
+} on Error catch (e) {
+    print('Caught error: $e');
     dataBaseData = new DataBaseData(
         datalistcount: 0,
         database: new ContactServer(countlist: 0, contacts: []),
-        blockrightarrow: false);
+        blockrightarrow: false,
+        viewResume: 0);
+}
 
-  }
 
   return dataBaseData;
 }
