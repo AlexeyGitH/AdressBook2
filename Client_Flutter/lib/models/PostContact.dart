@@ -48,8 +48,8 @@ class ContactItem {
 }
 
 class ContactServer {
-  final int countlist;
-  final List<ContactItem> contacts;
+  int countlist;
+  List<ContactItem> contacts;
   ContactServer({required this.countlist, required  this.contacts});
 
   factory ContactServer.fromJson(Map<String, dynamic> parsedJson) {

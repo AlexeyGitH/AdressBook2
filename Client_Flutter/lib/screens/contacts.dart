@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ad_book_2/models/filters.dart';
 import 'package:ad_book_2/models/database.dart';
-
+import 'package:ad_book_2/models/PostContact.dart';
 
 List<String> lisCorp = [];
 
@@ -59,6 +59,47 @@ class _DataViewList extends State<DataViewList> {
   Widget build(BuildContext context) {
     var filters = context.watch<FiltersModel>();
 
+    DataBaseData dataBaseData = new DataBaseData(
+        datalistcount: 0,
+        database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
+        blockrightarrow: false,
+        viewResume:0);
+
+    return FutureBuilder(
+      future: getContactList(),
+      initialData: dataBaseData,
+      builder: (context, AsyncSnapshot<DataBaseData> snapshot) {
+        if (snapshot.hasData) {
+          //return Text("non");
+          //return ListPageList(serverdata: snapshot.data);
+          DataBaseData? ret_value = snapshot.data;
+          if (ret_value != null) {
+            return Text('Address book');
+            /*           body: ListPageList(serverdata: snapshot.data),
+    //body: Text('body'),
+    bottomNavigationBar: BottomAppBar(
+    color: Colors.blue[700],
+    child: Row(
+    children: [
+    LeftArrowBottomWidget(),
+    Spacer(),
+    RightArrowBottomWidget(),
+    ],
+    ),
+    ),
+    );
+*/
+
+          }
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
+        else {
+          return Text("error");
+        }
+
+
+        /*
     if (filters.viewResume != 0) {
       return new Column(children: [
         SizedBox(
@@ -101,7 +142,10 @@ class _DataViewList extends State<DataViewList> {
             },
           ));
     }
+    */
 
+
+        /*
     return Column(children: [
       Text(filters.filters.controllerFIO),
       Text(filters.filters.controllerCorporation),
@@ -109,5 +153,7 @@ class _DataViewList extends State<DataViewList> {
       Text(filters.filters.controllerTypePhone),
       Text(filters.filters.controllerPhone),
     ]);
-  }
+
+     */
+      });}
 }

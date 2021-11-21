@@ -151,10 +151,10 @@ Future getDepartmentList(void settypeV(int _val), void setlistdata(List<String> 
 
 
 class DataBaseData {
-  int datalistcount;
-  ContactServer database;
-  bool blockrightarrow;
-  int viewResume;
+  int datalistcount = 0;
+  ContactServer database = new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty());
+  bool blockrightarrow = false;
+  int viewResume = 0;
   //DataBaseFilter filters;
 
   DataBaseData({
