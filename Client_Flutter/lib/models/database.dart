@@ -154,14 +154,12 @@ class DataBaseData {
   int datalistcount = 0;
   ContactServer database = new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty());
   bool blockrightarrow = false;
-  int viewResume = 0;
   //DataBaseFilter filters;
 
   DataBaseData({
     required this.datalistcount,
     required this.database,
     required this.blockrightarrow,
-    required this.viewResume,
     // required this.filters,
   });
 }
@@ -173,7 +171,6 @@ Future<DataBaseData> getContactList() async {
     datalistcount: 0,
     database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
     blockrightarrow: false,
-    viewResume:0,
 
     /*
     filters: new DataBaseFilter(controllerFIO: "",
@@ -199,8 +196,7 @@ Future<DataBaseData> getContactList() async {
         'Phone': '',
         'TypePhone': '',
       }),
-    );
-
+    ).timeout(const Duration(seconds: 3));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -216,18 +212,16 @@ Future<DataBaseData> getContactList() async {
           datalistcount: dataBaseData.datalistcount,
           database: _database,
           blockrightarrow: _blockrightarrow,
-          viewResume:0
-      );
+       );
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       //throw Exception('Failed to load contacts');
-      print('Error data');
+      //print('Error data');
       dataBaseData = new DataBaseData(
           datalistcount: 0,
           database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
           blockrightarrow: false,
-          viewResume:0
       );
     }
 
@@ -237,16 +231,17 @@ Future<DataBaseData> getContactList() async {
    print('Timeout:');
    dataBaseData = new DataBaseData(
        datalistcount: 0,
-       database: new ContactServer(countlist: 0, contacts: []),
+       //database: new ContactServer(countlist: 0, contacts: []),
+       database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
        blockrightarrow: false,
-       viewResume:0);
+       );
 } on Error catch (e) {
     print('Caught error: $e');
     dataBaseData = new DataBaseData(
         datalistcount: 0,
-        database: new ContactServer(countlist: 0, contacts: []),
+        database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
         blockrightarrow: false,
-        viewResume: 0);
+        );
 }
 
 

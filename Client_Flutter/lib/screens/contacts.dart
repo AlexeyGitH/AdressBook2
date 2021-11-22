@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ad_book_2/models/filters.dart';
@@ -12,7 +11,8 @@ class Contacts extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Address book', style: Theme.of(context).textTheme.headline1),
+        title:
+            Text('Address book', style: Theme.of(context).textTheme.headline1),
         //backgroundColor: Colors.white,
         actions: [
           IconButton(
@@ -24,7 +24,6 @@ class Contacts extends StatelessWidget {
             icon: const Icon(Icons.qr_code),
             onPressed: () => Navigator.pushNamed(context, '/test'),
           ),*/
-
         ],
       ),
       body: Container(
@@ -40,8 +39,6 @@ class Contacts extends StatelessWidget {
             ),
             */
             DataViewList(),
-
-
           ],
         ),
       ),
@@ -55,81 +52,52 @@ class DataViewList extends StatefulWidget {
 }
 
 class _DataViewList extends State<DataViewList> {
+
   @override
   Widget build(BuildContext context) {
     var filters = context.watch<FiltersModel>();
 
     DataBaseData dataBaseData = new DataBaseData(
         datalistcount: 0,
-        database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
-        blockrightarrow: false,
-        viewResume:0);
+        database: new ContactServer(
+            countlist: 0, contacts: new List<ContactItem>.empty()),
+        blockrightarrow: false,);
 
     return FutureBuilder(
-      future: getContactList(),
-      initialData: dataBaseData,
-      builder: (BuildContext context, AsyncSnapshot<DataBaseData> snapshot) {
-
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting: return new Column(children: [
-            SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height / 1.3,
-              child: Center(
-                child: SizedBox(
-                    width: 150, height: 150, child: CircularProgressIndicator()),
-              ),
-            ),
-            const Divider(height: 4, color: Colors.black),
-            Text('Loading..', style: Theme
-                .of(context)
-                .textTheme
-                .headline5),
-          ]);
-          default:
-            if (snapshot.hasError)
+        future: getContactList(),
+        initialData: dataBaseData,
+        builder: (BuildContext context, AsyncSnapshot<DataBaseData> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
               return new Column(children: [
                 SizedBox(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 1.3,
+                  height: MediaQuery.of(context).size.height / 1.3,
                   child: Center(
-                      child:
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)),
-                    ),
-
-                  onPressed: () {
-        },
-        child: Icon(Icons.refresh, size: 150,),
-        ),
-),
+                    child: SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: CircularProgressIndicator()),
+                  ),
                 ),
                 const Divider(height: 4, color: Colors.black),
-                Text('Loading..', style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline5),
+                Text('Loading..', style: Theme.of(context).textTheme.headline5),
               ]);
-            else
-              return Text('Result: ${snapshot.data}');
-        }
+            default:
+              if (snapshot.hasError)
+                return RefreshWidget();
+              else
+                if (snapshot.data == null){
+                  return RefreshWidget();
+                }
+                else{
+                  return Text('Result: ${snapshot.data}');
+                }
 
 
 
+          }
 
-
-
-
-
-
-
-        /*
+          /*
         if (snapshot.hasData) {
           //return Text("non");
           //return ListPageList(serverdata: snapshot.data);
@@ -161,20 +129,7 @@ class _DataViewList extends State<DataViewList> {
 
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
+          /*
     if (filters.viewResume != 0) {
       return new Column(children: [
         SizedBox(
@@ -219,8 +174,7 @@ class _DataViewList extends State<DataViewList> {
     }
     */
 
-
-        /*
+          /*
     return Column(children: [
       Text(filters.filters.controllerFIO),
       Text(filters.filters.controllerCorporation),
@@ -230,5 +184,40 @@ class _DataViewList extends State<DataViewList> {
     ]);
 
      */
-      });}
+        });
+  }
+}
+
+
+class RefreshWidget extends StatefulWidget {
+  @override
+  _RefreshWidget createState() => _RefreshWidget();
+}
+
+class _RefreshWidget extends State<RefreshWidget> {
+  @override
+  Widget build(BuildContext context) {
+
+    return new Column(children: [
+      SizedBox(
+        height: MediaQuery.of(context).size.height / 1.3,
+        child: Center(
+          child: TextButton(
+            style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+            ),
+            onPressed: () {
+              setState(() {});
+            },
+            child: Icon(
+              Icons.refresh,
+              size: 150,
+            ),
+          ),
+        ),
+      ),
+    ]);
+
+  }
 }
