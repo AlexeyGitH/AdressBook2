@@ -68,7 +68,68 @@ class _DataViewList extends State<DataViewList> {
     return FutureBuilder(
       future: getContactList(),
       initialData: dataBaseData,
-      builder: (context, AsyncSnapshot<DataBaseData> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<DataBaseData> snapshot) {
+
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting: return new Column(children: [
+            SizedBox(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height / 1.3,
+              child: Center(
+                child: SizedBox(
+                    width: 150, height: 150, child: CircularProgressIndicator()),
+              ),
+            ),
+            const Divider(height: 4, color: Colors.black),
+            Text('Loading..', style: Theme
+                .of(context)
+                .textTheme
+                .headline5),
+          ]);
+          default:
+            if (snapshot.hasError)
+              return new Column(children: [
+                SizedBox(
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 1.3,
+                  child: Center(
+                      child:
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                    ),
+
+                  onPressed: () {
+        },
+        child: Icon(Icons.refresh, size: 150,),
+        ),
+),
+                ),
+                const Divider(height: 4, color: Colors.black),
+                Text('Loading..', style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5),
+              ]);
+            else
+              return Text('Result: ${snapshot.data}');
+        }
+
+
+
+
+
+
+
+
+
+
+        /*
         if (snapshot.hasData) {
           //return Text("non");
           //return ListPageList(serverdata: snapshot.data);
@@ -97,6 +158,20 @@ class _DataViewList extends State<DataViewList> {
         else {
           return Text("error");
         }
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         /*
