@@ -26,7 +26,11 @@ class Contacts extends StatelessWidget {
           ),*/
         ],
       ),
-      body: Container(
+      body: DataViewList(),
+
+
+      /*
+      Container(
         //color: Colors.yellow,
         child: Column(
           children: [
@@ -42,11 +46,15 @@ class Contacts extends StatelessWidget {
           ],
         ),
       ),
+      */
+
+
     );
   }
 }
 
 class DataViewList extends StatefulWidget {
+
   @override
   _DataViewList createState() => _DataViewList();
 }
@@ -61,7 +69,7 @@ class _DataViewList extends State<DataViewList> {
         datalistcount: 0,
         database: new ContactServer(
             countlist: 0, contacts: new List<ContactItem>.empty()),
-        blockrightarrow: false,);
+        blockrightarrow: false, viewResume: 0);
 
     return FutureBuilder(
         future: getContactList(),
@@ -84,12 +92,20 @@ class _DataViewList extends State<DataViewList> {
               ]);
             default:
               if (snapshot.hasError)
-                return RefreshWidget();
+                return RefreshWidget(changeValueView: filters.setviewResume);
               else
                 if (snapshot.data == null){
-                  return RefreshWidget();
+                  return RefreshWidget(changeValueView: filters.setviewResume);
                 }
                 else{
+                  DataBaseData? vDBD = snapshot.data;
+                  if (vDBD==null){return RefreshWidget(changeValueView: filters.setviewResume);}
+                  else {
+                    if (vDBD.viewResume == 1)
+                    {return ListPageList(serverdata: vDBD.database.contacts);;}
+                    else
+                    {return RefreshWidget(changeValueView: filters.setviewResume);}
+                  }
                   return Text('Result: ${snapshot.data}');
                 }
 
@@ -190,6 +206,9 @@ class _DataViewList extends State<DataViewList> {
 
 
 class RefreshWidget extends StatefulWidget {
+  final Function(int) changeValueView;
+
+  RefreshWidget({required this.changeValueView});
   @override
   _RefreshWidget createState() => _RefreshWidget();
 }
@@ -208,7 +227,7 @@ class _RefreshWidget extends State<RefreshWidget> {
                   borderRadius: BorderRadius.circular(50)),
             ),
             onPressed: () {
-              setState(() {});
+              widget.changeValueView(0);
             },
             child: Icon(
               Icons.refresh,
@@ -220,4 +239,216 @@ class _RefreshWidget extends State<RefreshWidget> {
     ]);
 
   }
+}
+
+class ListPageList extends StatefulWidget {
+  List<ContactItem> serverdata;
+  ListPageList({required this.serverdata});
+  @override
+  _ListPageList createState() => _ListPageList();
+}
+
+
+class _ListPageList extends State<ListPageList> {
+  @override
+  Widget build(BuildContext context) {
+    //print('12345');
+    // print('datalist  ;22; ${serverdata.database.contacts[0].firstname}');
+
+    //  return Text('22131231212');
+
+    return
+
+      Column(
+        children: <Widget>[
+          Expanded(
+            child:
+
+
+       ListView.builder(
+      itemCount: widget.serverdata.length,
+      itemBuilder: (context, index) {
+        var postPone = widget.serverdata[index];
+        return new Container(
+            decoration: myBoxDecoration(),
+            margin: const EdgeInsets.all(6.0),
+            padding: const EdgeInsets.all(3.0),
+            child: Column(children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Image.network(
+                      postPone.image.toString(),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                  Expanded(
+                      flex: 5,
+                      child: Column(
+                        children: [
+                          Row(children: [
+                            Expanded(
+                                child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: 'Статус: ',
+                                        style: new TextStyle(
+                                            fontSize: 12.0,
+                                            color: Colors.black),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text:
+                                              postPone.status.toString(),
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  color: Colors.green[900])),
+                                        ],
+                                      ),
+                                    ))),
+                          ]),
+                          Row(children: [
+                            Expanded(
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      postPone.firstname.toString() +
+                                          " " +
+                                          postPone.middlename.toString() +
+                                          " " +
+                                          postPone.lastname.toString(),
+                                      style: new TextStyle(
+                                        //backgroundColor: Colors.blue,
+                                        fontFamily: 'Quicksand',
+                                        fontSize: 20.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ))),
+                          ])
+                        ],
+                      )),
+                ],
+              ),
+              Container(
+                  margin: const EdgeInsets.all(3.0),
+                  child: Column(
+                    children: [
+                      /////////
+                      widgetADPropertyValue(
+                          'Организация', postPone.corporation.toString(), ''),
+                      widgetADPropertyValue(
+                          'Должность', postPone.position.toString(), ''),
+                      widgetADPropertyValue('Подразделение',
+                          postPone.department.toString(), ''),
+                      widgetADPropertyValue(
+                          'Дата рождения', postPone.birthdate.toString(), ''),
+
+                      widgetADPropertyValue(
+                          'Рабочий тел.', postPone.workphone.toString(), 'p'),
+                      widgetADPropertyValue('Мобильный тел.',
+                          postPone.mobilephone.toString(), 'p'),
+                      widgetADPropertyValue(
+                          'Почта', postPone.mail.toString(), 'e'),
+                    ],
+                  )),
+            ]));
+      },
+    )
+
+          ),
+
+          Expanded(
+            child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: MaterialButton(
+                onPressed: () => {},
+                child: Text('LOGIN'),
+              ),
+            ),
+          ),
+
+
+        ],
+
+
+
+
+
+      );
+
+  }
+}
+
+BoxDecoration myBoxDecoration() {
+  return BoxDecoration(
+    border: Border.all(
+      color: Colors.black38, //                   <--- border color
+      width: 1.0,
+    ),
+    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+    color: Colors.white,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.6),
+        spreadRadius: 3,
+        blurRadius: 2,
+        offset: Offset(2, 3), // changes position of shadow
+      ),
+    ],
+    //
+  );
+}
+
+widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
+  return Container(
+      padding: EdgeInsets.only(top: 3),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 10,
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(
+                  sProperty,
+                  style: new TextStyle(fontSize: 14.0, color: Colors.black),
+                ),
+              )),
+          Expanded(
+              flex: 2,
+              child: Align(
+                alignment: AlignmentDirectional.center,
+                child: _getIcon(sIcon),
+              )),
+          Expanded(
+              flex: 20,
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(
+                  sValue,
+                  style:
+                  new TextStyle(fontSize: 14.0, color: Colors.indigo[900]),
+                ),
+              )),
+        ],
+      ));
+}
+
+Widget _getIcon(sIcon) {
+  if (sIcon == 'p')
+    return Icon(
+      Icons.call,
+      color: Colors.green[900],
+      size: 14.0,
+    );
+  else if (sIcon == 'e')
+    return Icon(
+      Icons.alternate_email,
+      color: Colors.green[900],
+      size: 14.0,
+    );
+  else
+    return Text(':', style: new TextStyle(fontSize: 14.0, color: Colors.black));
 }

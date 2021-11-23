@@ -154,12 +154,14 @@ class DataBaseData {
   int datalistcount = 0;
   ContactServer database = new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty());
   bool blockrightarrow = false;
+  int viewResume = 0;
   //DataBaseFilter filters;
 
   DataBaseData({
     required this.datalistcount,
     required this.database,
     required this.blockrightarrow,
+    required this.viewResume,
     // required this.filters,
   });
 }
@@ -171,6 +173,7 @@ Future<DataBaseData> getContactList() async {
     datalistcount: 0,
     database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
     blockrightarrow: false,
+    viewResume: 0,
 
     /*
     filters: new DataBaseFilter(controllerFIO: "",
@@ -212,6 +215,7 @@ Future<DataBaseData> getContactList() async {
           datalistcount: dataBaseData.datalistcount,
           database: _database,
           blockrightarrow: _blockrightarrow,
+          viewResume: 1,
        );
     } else {
       // If the server did not return a 200 OK response,
@@ -222,6 +226,7 @@ Future<DataBaseData> getContactList() async {
           datalistcount: 0,
           database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
           blockrightarrow: false,
+          viewResume: 0,
       );
     }
 
@@ -234,6 +239,7 @@ Future<DataBaseData> getContactList() async {
        //database: new ContactServer(countlist: 0, contacts: []),
        database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
        blockrightarrow: false,
+       viewResume: 0,
        );
 } on Error catch (e) {
     print('Caught error: $e');
@@ -241,6 +247,7 @@ Future<DataBaseData> getContactList() async {
         datalistcount: 0,
         database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
         blockrightarrow: false,
+        viewResume: 0,
         );
 }
 

@@ -62,7 +62,7 @@ class FiltersModel extends ChangeNotifier {
 
     void setviewResume(int val) {
       viewResume = val;
-      //setFilternotifyListeners();
+      notifyListeners();
     }
 
 
