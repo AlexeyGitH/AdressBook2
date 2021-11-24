@@ -72,7 +72,7 @@ class _DataViewList extends State<DataViewList> {
         blockrightarrow: false, viewResume: 0);
 
     return FutureBuilder(
-        future: getContactList(),
+        future: getContactList(filters),
         initialData: dataBaseData,
         builder: (BuildContext context, AsyncSnapshot<DataBaseData> snapshot) {
           switch (snapshot.connectionState) {
@@ -279,10 +279,27 @@ class _ListPageList extends State<ListPageList> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Image.network(
+                    child: Padding(
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: Image.network(
                       postPone.image.toString(),
                       fit: BoxFit.fitHeight,
-                    ),
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset('assets/progress.gif',
+                          height: 100,
+                          width: 100,);
+                          /*Container(
+                          color: Colors.amber,
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'Whoops!',
+                            style: TextStyle(fontSize: 30),
+                          ),
+                        );*/
+                      },
+                    )),
+
+
                   ),
                   Expanded(
                       flex: 5,
@@ -360,13 +377,15 @@ class _ListPageList extends State<ListPageList> {
 
           ),
 
-          Expanded(
-            child: Align(
+
+             Align(
               alignment: FractionalOffset.bottomCenter,
-              child: MaterialButton(
-                onPressed: () => {},
-                child: Text('LOGIN'),
-              ),
+              child: Row(
+    children: [
+    RightArrowBottomWidget(),
+    Spacer(),
+    RightArrowBottomWidget(),
+    ],
             ),
           ),
 
@@ -452,3 +471,26 @@ Widget _getIcon(sIcon) {
   else
     return Text(':', style: new TextStyle(fontSize: 14.0, color: Colors.black));
 }
+
+class RightArrowBottomWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Color? colorarrow;
+    //Waiting spiner ... ... ..
+    colorarrow = Colors.blueGrey[600];
+    return new SizedBox(
+      height: 40.0,
+      width: 40.0,
+      child: new IconButton(
+          padding: new EdgeInsets.all(0.0),
+          color: colorarrow,
+          icon: new Icon(Icons.arrow_right, size: 40.0),
+          onPressed: () {
+            /*if (modelDateBase.dataBaseData.blockrightarrow != true) {
+              modelDateBase.contactsForward();
+            }*/
+          }),
+    );
+  }
+}
+

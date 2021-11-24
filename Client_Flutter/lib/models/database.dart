@@ -8,61 +8,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:ad_book_2/models/filters.dart';
 
-//String ipLocalhost = "172.16.40.14:8000";
-//String ipLocalhost = "192.168.88.252:8000";
-//String ipLocalhost = "192.168.0.105:8000";
+String ipLocalhost = "192.168.34.86:8000";
 //String ipLocalhost = "192.168.88.253:8000";
-String ipLocalhost = "localhost:8000";
-
-/*
-class CorporationList {
-  Future<List> get getCorporation async {
-    List corporationlist;
-    //print('queryParameters $queryParameters');
-    var uri = Uri.http(ipLocalhost, '/corporation/');
-
-    final response = await http.get(uri);
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      corporationlist = jsonDecode(utf8.decode(response.bodyBytes));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      //throw Exception('Failed to load contacts');
-      corporationlist = [];
-    }
-    // notifyListeners();
-    return corporationlist.map((s) => s as String).toList();
-    //notifyListeners();
-  }
-}
-
-class DepartmentList {
-  Future<List> get getDepartment async {
-    List departmentlist;
-    //print('queryParameters $queryParameters');
-    var uri = Uri.http(ipLocalhost, '/department/');
-
-    final response = await http.get(uri).timeout(const Duration(seconds: 5));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      departmentlist = jsonDecode(utf8.decode(response.bodyBytes));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      //throw Exception('Failed to load contacts');
-      departmentlist = [];
-    }
-    // notifyListeners();
-    return departmentlist.map((s) => s as String).toList();
-    //notifyListeners();
-  }
-}
-*/
+//String ipLocalhost = "localhost:8000";
 
 Future getCorporationList(void settypeV(int _val), void setlistdata(List<String> _list)) async {
   var uri = Uri.http(ipLocalhost, '/corporation/');
@@ -170,7 +118,7 @@ class DataBaseData {
   });
 }
 
-Future<DataBaseData> getContactList() async {
+Future<DataBaseData> getContactList(FiltersModel valFilter) async {
 
 
   DataBaseData dataBaseData = new DataBaseData(
@@ -191,9 +139,9 @@ Future<DataBaseData> getContactList() async {
   try {
 
     var resBody = {};
-    resBody["Count"] = 0.toString();
+    resBody["Count"] = valFilter.datalistcount.toString();
     resBody["Limit"] = Limit_const.toString();
-    resBody["FIO"] = "";
+    resBody["FIO"] = valFilter.filters.controllerFIO;
     resBody["Corporation"] = "";
     resBody["Department"] = "";
     resBody["Phone"] = "";
@@ -201,7 +149,7 @@ Future<DataBaseData> getContactList() async {
 
     final response = await http.post(
       Uri.http(ipLocalhost, '/contacts_2/'),
-      headers: {"Access-Control-Allow-Origin": "*"},
+      /*headers: {"Access-Control-Allow-Origin": "*"},*/
       body: jsonEncode(resBody),
     ).timeout(const Duration(seconds: 3));
     if (response.statusCode == 200) {
