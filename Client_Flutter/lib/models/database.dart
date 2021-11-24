@@ -11,7 +11,8 @@ import 'package:ad_book_2/models/filters.dart';
 //String ipLocalhost = "172.16.40.14:8000";
 //String ipLocalhost = "192.168.88.252:8000";
 //String ipLocalhost = "192.168.0.105:8000";
-String ipLocalhost = "192.168.88.253:8000";
+//String ipLocalhost = "192.168.88.253:8000";
+String ipLocalhost = "localhost:8000";
 
 /*
 class CorporationList {
@@ -92,14 +93,16 @@ Future getCorporationList(void settypeV(int _val), void setlistdata(List<String>
       //print('CONTACTTS list server/ERROR-3');
     }
 
-  } on TimeoutException catch (e) {
-    listdate = [];
-    settypeV(4);
-    print('Timeout');
-  } on Error catch (e) {
-    listdate = [];
-    settypeV(4);
-    print('Error: $e');
+  }
+  catch (e) {
+    if (e is TimeoutException || e is http.ClientException)
+      {
+        listdate = [];
+        settypeV(4);
+        print('Error: $e');
+      }
+    else{
+    print('Error general: $e');rethrow;}
   }
 
   //print('CONTACTTS list server DONE');
@@ -135,14 +138,15 @@ Future getDepartmentList(void settypeV(int _val), void setlistdata(List<String> 
       //print('CONTACTTS list server/ERROR-3');
     }
 
-  } on TimeoutException catch (e) {
-    listdate = [];
-    settypeV(4);
-    print('Timeout');
-  } on Error catch (e) {
-    listdate = [];
-    settypeV(4);
-    print('Error: $e');
+  } catch (e) {
+    if (e is TimeoutException || e is http.ClientException)
+    {
+      listdate = [];
+      settypeV(4);
+      print('Error: $e');
+    }
+    else{
+      print('Error general: $e');rethrow;}
   }
 
   //print('CONTACTTS list server DONE');
@@ -185,20 +189,20 @@ Future<DataBaseData> getContactList() async {
   );
 
   try {
+
+    var resBody = {};
+    resBody["Count"] = 0.toString();
+    resBody["Limit"] = Limit_const.toString();
+    resBody["FIO"] = "";
+    resBody["Corporation"] = "";
+    resBody["Department"] = "";
+    resBody["Phone"] = "";
+    resBody["TypePhone"] = "";
+
     final response = await http.post(
       Uri.http(ipLocalhost, '/contacts_2/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'Count': 0.toString(),
-        'Limit': Limit_const.toString(),
-        'FIO': '',
-        'Corporation': '',
-        'Department': '',
-        'Phone': '',
-        'TypePhone': '',
-      }),
+      headers: {"Access-Control-Allow-Origin": "*"},
+      body: jsonEncode(resBody),
     ).timeout(const Duration(seconds: 3));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -250,7 +254,18 @@ Future<DataBaseData> getContactList() async {
         viewResume: 0,
         );
 }
-
+  on http.ClientException catch (e) {
+    dataBaseData = new DataBaseData(
+      datalistcount: 0,
+      database: new ContactServer(countlist: 0, contacts: new List<ContactItem>.empty()),
+      blockrightarrow: false,
+      viewResume: 0,
+    );
+  }
+  catch (e) {
+    print('Error general: $e');
+    rethrow;
+  }
 
   return dataBaseData;
 }
