@@ -66,6 +66,26 @@ class FiltersModel extends ChangeNotifier {
     }
 
 
+    void contactsChangeRange(int kindRange, int limit_const, int total_count) {
+      if (kindRange == 0) {
+        if (datalistcount - limit_const < 0) {
+          datalistcount = 0;
+        } else {
+          datalistcount = datalistcount - limit_const;
+        }
+        notifyListeners();
+      }
+      else {
+        if (datalistcount + limit_const >=
+            total_count) {
+        } else {
+          datalistcount = datalistcount + limit_const;
+        }
+        notifyListeners();
+
+      }
+    }
+
   }
 
 

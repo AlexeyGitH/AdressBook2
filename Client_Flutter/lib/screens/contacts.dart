@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:ad_book_2/models/filters.dart';
 import 'package:ad_book_2/models/database.dart';
 import 'package:ad_book_2/models/PostContact.dart';
+import 'package:ad_book_2/ConstSystemAD.dart';
 
 List<String> lisCorp = [];
 
@@ -28,7 +29,6 @@ class Contacts extends StatelessWidget {
       ),
       body: DataViewList(),
 
-
       /*
       Container(
         //color: Colors.yellow,
@@ -47,20 +47,16 @@ class Contacts extends StatelessWidget {
         ),
       ),
       */
-
-
     );
   }
 }
 
 class DataViewList extends StatefulWidget {
-
   @override
   _DataViewList createState() => _DataViewList();
 }
 
 class _DataViewList extends State<DataViewList> {
-
   @override
   Widget build(BuildContext context) {
     var filters = context.watch<FiltersModel>();
@@ -69,7 +65,8 @@ class _DataViewList extends State<DataViewList> {
         datalistcount: 0,
         database: new ContactServer(
             countlist: 0, contacts: new List<ContactItem>.empty()),
-        blockrightarrow: false, viewResume: 0);
+        blockrightarrow: false,
+        viewResume: 0);
 
     return FutureBuilder(
         future: getContactList(filters),
@@ -93,122 +90,39 @@ class _DataViewList extends State<DataViewList> {
             default:
               if (snapshot.hasError)
                 return RefreshWidget(changeValueView: filters.setviewResume);
-              else
-                if (snapshot.data == null){
+              else if (snapshot.data == null) {
+                return RefreshWidget(changeValueView: filters.setviewResume);
+              } else {
+                DataBaseData? vDBD = snapshot.data;
+                if (vDBD == null) {
                   return RefreshWidget(changeValueView: filters.setviewResume);
-                }
-                else{
-                  DataBaseData? vDBD = snapshot.data;
-                  if (vDBD==null){return RefreshWidget(changeValueView: filters.setviewResume);}
-                  else {
-                    if (vDBD.viewResume == 1)
-                    {return ListPageList(serverdata: vDBD.database.contacts);;}
-                    else
-                    {return RefreshWidget(changeValueView: filters.setviewResume);}
-                  }
-                  return Text('Result: ${snapshot.data}');
-                }
-
-
-
-          }
-
-          /*
-        if (snapshot.hasData) {
-          //return Text("non");
-          //return ListPageList(serverdata: snapshot.data);
-          DataBaseData? ret_value = snapshot.data;
-          if (ret_value != null) {
-            return Text('Address book');
-            /*           body: ListPageList(serverdata: snapshot.data),
-    //body: Text('body'),
-    bottomNavigationBar: BottomAppBar(
-    color: Colors.blue[700],
-    child: Row(
-    children: [
-    LeftArrowBottomWidget(),
-    Spacer(),
-    RightArrowBottomWidget(),
-    ],
-    ),
-    ),
-    );
-*/
-
-          }
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
-        }
-        else {
-          return Text("error");
-        }
-
-*/
-
-          /*
-    if (filters.viewResume != 0) {
-      return new Column(children: [
-        SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height / 1.3,
-          child: Center(
-            child: SizedBox(
-                width: 150, height: 150, child: CircularProgressIndicator()),
-          ),
-        ),
-        const Divider(height: 4, color: Colors.black),
-        Text('Loading..', style: Theme
-            .of(context)
-            .textTheme
-            .headline5),
-      ]);
-    }
-    else{
-      return Consumer<FiltersModel>(
-          builder: (context, myModel, child) =>
-          FutureBuilder<DataBaseData>(
-            future: getContactList(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                //return Text("non");
-                //return ListPageList(serverdata: snapshot.data);
-
-                if (snapshot.data!.database.contacts.length == 0) {
-                  return Text('ListPageError()');
                 } else {
-
-                  return Text('BodyList()');
+                  if (vDBD.viewResume == 1) {
+                    return ListPageList(
+                        serverdata: vDBD.database.contacts,
+                        blockrightarrow: vDBD.blockrightarrow,
+                        limit_const: Limit_const,
+                        count_data: vDBD.database.countlist,
+                        changeCount: filters.contactsChangeRange
+                    );
+                  } else {
+                    return RefreshWidget(
+                        changeValueView: filters.setviewResume);
+                  }
                 }
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+                return Text('Result: ${snapshot.data}');
               }
-              return Text('ListPageWaiting()');
-            },
-          ));
-    }
-    */
+          }
 
-          /*
-    return Column(children: [
-      Text(filters.filters.controllerFIO),
-      Text(filters.filters.controllerCorporation),
-      Text(filters.filters.controllerDepartament),
-      Text(filters.filters.controllerTypePhone),
-      Text(filters.filters.controllerPhone),
-    ]);
-
-     */
         });
   }
 }
-
 
 class RefreshWidget extends StatefulWidget {
   final Function(int) changeValueView;
 
   RefreshWidget({required this.changeValueView});
+
   @override
   _RefreshWidget createState() => _RefreshWidget();
 }
@@ -216,7 +130,6 @@ class RefreshWidget extends StatefulWidget {
 class _RefreshWidget extends State<RefreshWidget> {
   @override
   Widget build(BuildContext context) {
-
     return new Column(children: [
       SizedBox(
         height: MediaQuery.of(context).size.height / 1.3,
@@ -237,17 +150,21 @@ class _RefreshWidget extends State<RefreshWidget> {
         ),
       ),
     ]);
-
   }
 }
 
 class ListPageList extends StatefulWidget {
   List<ContactItem> serverdata;
-  ListPageList({required this.serverdata});
+  bool blockrightarrow;
+  int limit_const;
+  int count_data;
+  final Function(int,int,int) changeCount;
+
+  ListPageList({required this.serverdata, required this.blockrightarrow, required this.limit_const, required this.count_data, required this.changeCount});
+
   @override
   _ListPageList createState() => _ListPageList();
 }
-
 
 class _ListPageList extends State<ListPageList> {
   @override
@@ -257,38 +174,35 @@ class _ListPageList extends State<ListPageList> {
 
     //  return Text('22131231212');
 
-    return
-
-      Column(
-        children: <Widget>[
-          Expanded(
-            child:
-
-
-       ListView.builder(
-      itemCount: widget.serverdata.length,
-      itemBuilder: (context, index) {
-        var postPone = widget.serverdata[index];
-        return new Container(
-            decoration: myBoxDecoration(),
-            margin: const EdgeInsets.all(6.0),
-            padding: const EdgeInsets.all(3.0),
-            child: Column(children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Padding(
-                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: Image.network(
-                      postPone.image.toString(),
-                      fit: BoxFit.fitHeight,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset('assets/progress.gif',
-                          height: 100,
-                          width: 100,);
-                          /*Container(
+    return Column(
+      children: <Widget>[
+        Expanded(
+            child: ListView.builder(
+          itemCount: widget.serverdata.length,
+          itemBuilder: (context, index) {
+            var postPone = widget.serverdata[index];
+            return new Container(
+                decoration: myBoxDecoration(),
+                margin: const EdgeInsets.all(6.0),
+                padding: const EdgeInsets.all(3.0),
+                child: Column(children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                            child: Image.network(
+                              ipLocalhost + postPone.image.toString(),
+                              fit: BoxFit.fitHeight,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/NoPhoto.png',
+                                  height: 100,
+                                  width: 100,
+                                );
+                                /*Container(
                           color: Colors.amber,
                           alignment: Alignment.center,
                           child: const Text(
@@ -296,108 +210,96 @@ class _ListPageList extends State<ListPageList> {
                             style: TextStyle(fontSize: 30),
                           ),
                         );*/
-                      },
-                    )),
-
-
+                              },
+                            )),
+                      ),
+                      Expanded(
+                          flex: 5,
+                          child: Column(
+                            children: [
+                              Row(children: [
+                                Expanded(
+                                    child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: 'Статус: ',
+                                            style: new TextStyle(
+                                                fontSize: 12.0,
+                                                color: Colors.black),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                  text: postPone.status
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 12.0,
+                                                      color:
+                                                          Colors.green[900])),
+                                            ],
+                                          ),
+                                        ))),
+                              ]),
+                              Row(children: [
+                                Expanded(
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          postPone.firstname.toString() +
+                                              " " +
+                                              postPone.middlename.toString() +
+                                              " " +
+                                              postPone.lastname.toString(),
+                                          style: new TextStyle(
+                                            //backgroundColor: Colors.blue,
+                                            fontFamily: 'Quicksand',
+                                            fontSize: 20.0,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ))),
+                              ])
+                            ],
+                          )),
+                    ],
                   ),
-                  Expanded(
-                      flex: 5,
+                  Container(
+                      margin: const EdgeInsets.all(3.0),
                       child: Column(
                         children: [
-                          Row(children: [
-                            Expanded(
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        text: 'Статус: ',
-                                        style: new TextStyle(
-                                            fontSize: 12.0,
-                                            color: Colors.black),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                              text:
-                                              postPone.status.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 12.0,
-                                                  color: Colors.green[900])),
-                                        ],
-                                      ),
-                                    ))),
-                          ]),
-                          Row(children: [
-                            Expanded(
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      postPone.firstname.toString() +
-                                          " " +
-                                          postPone.middlename.toString() +
-                                          " " +
-                                          postPone.lastname.toString(),
-                                      style: new TextStyle(
-                                        //backgroundColor: Colors.blue,
-                                        fontFamily: 'Quicksand',
-                                        fontSize: 20.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ))),
-                          ])
+                          /////////
+                          widgetADPropertyValue('Организация',
+                              postPone.corporation.toString(), ''),
+                          widgetADPropertyValue(
+                              'Должность', postPone.position.toString(), ''),
+                          widgetADPropertyValue('Подразделение',
+                              postPone.department.toString(), ''),
+                          widgetADPropertyValue('Дата рождения',
+                              postPone.birthdate.toString(), ''),
+
+                          widgetADPropertyValue('Рабочий тел.',
+                              postPone.workphone.toString(), 'p'),
+                          widgetADPropertyValue('Мобильный тел.',
+                              postPone.mobilephone.toString(), 'p'),
+                          widgetADPropertyValue(
+                              'Почта', postPone.mail.toString(), 'e'),
                         ],
                       )),
-                ],
-              ),
-              Container(
-                  margin: const EdgeInsets.all(3.0),
-                  child: Column(
-                    children: [
-                      /////////
-                      widgetADPropertyValue(
-                          'Организация', postPone.corporation.toString(), ''),
-                      widgetADPropertyValue(
-                          'Должность', postPone.position.toString(), ''),
-                      widgetADPropertyValue('Подразделение',
-                          postPone.department.toString(), ''),
-                      widgetADPropertyValue(
-                          'Дата рождения', postPone.birthdate.toString(), ''),
-
-                      widgetADPropertyValue(
-                          'Рабочий тел.', postPone.workphone.toString(), 'p'),
-                      widgetADPropertyValue('Мобильный тел.',
-                          postPone.mobilephone.toString(), 'p'),
-                      widgetADPropertyValue(
-                          'Почта', postPone.mail.toString(), 'e'),
-                    ],
-                  )),
-            ]));
-      },
-    )
-
+                ]));
+          },
+        )),
+        Divider(height: 1, color: Colors.blueGrey),
+        Align(
+          alignment: FractionalOffset.bottomCenter,
+          child: Row(
+            children: [
+              ArrowBottomWidget(0, false, widget.limit_const, widget.count_data, widget.changeCount),
+              Spacer(),
+              ArrowBottomWidget(1, widget.blockrightarrow, widget.limit_const, widget.count_data, widget.changeCount),
+            ],
           ),
-
-
-             Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Row(
-    children: [
-    RightArrowBottomWidget(),
-    Spacer(),
-    RightArrowBottomWidget(),
-    ],
-            ),
-          ),
-
-
-        ],
-
-
-
-
-
-      );
-
+        ),
+      ],
+    );
   }
 }
 
@@ -448,7 +350,7 @@ widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
                 child: Text(
                   sValue,
                   style:
-                  new TextStyle(fontSize: 14.0, color: Colors.indigo[900]),
+                      new TextStyle(fontSize: 14.0, color: Colors.indigo[900]),
                 ),
               )),
         ],
@@ -472,25 +374,36 @@ Widget _getIcon(sIcon) {
     return Text(':', style: new TextStyle(fontSize: 14.0, color: Colors.black));
 }
 
-class RightArrowBottomWidget extends StatelessWidget {
+class ArrowBottomWidget extends StatelessWidget {
+  final int _kindButton;
+  final bool _blockArrow;
+  int limit_const;
+  int total_count;
+  final Function(int, int, int) changeCount;
+
+
+  ArrowBottomWidget(this._kindButton, this._blockArrow, this.limit_const, this.total_count, this.changeCount);
+
   @override
   Widget build(BuildContext context) {
     Color? colorarrow;
     //Waiting spiner ... ... ..
-    colorarrow = Colors.blueGrey[600];
+    colorarrow = _blockArrow == true ? Colors.blueGrey[600] : Colors.blue;
+
     return new SizedBox(
       height: 40.0,
       width: 40.0,
       child: new IconButton(
           padding: new EdgeInsets.all(0.0),
           color: colorarrow,
-          icon: new Icon(Icons.arrow_right, size: 40.0),
+          icon: _kindButton == 1
+              ? new Icon(Icons.arrow_right, size: 40.0)
+              : new Icon(Icons.arrow_left, size: 40.0),
           onPressed: () {
-            /*if (modelDateBase.dataBaseData.blockrightarrow != true) {
-              modelDateBase.contactsForward();
-            }*/
+            if (_blockArrow != true) {
+              changeCount(_kindButton, limit_const, total_count);
+            }
           }),
     );
   }
 }
-

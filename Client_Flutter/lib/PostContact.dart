@@ -35,7 +35,7 @@ class ContactItem {
       firstname: parsedJson['FirstName'],
       middlename: parsedJson['MiddleName'],
       lastname: parsedJson['LastName'],
-      image: parsedJson['LastName'],
+      image: parsedJson['Photo'],
       department: parsedJson['Department'],
       corporation: parsedJson['Corporation'],
       position: parsedJson['Position'],
@@ -61,7 +61,7 @@ class ContactServer {
     );
   }
 }
-
+/*
 class ParamFilter {
   String fio;
   String corporation;
@@ -76,3 +76,4 @@ class ParamFilter {
         required this.phone,
         required this.typephone});
 }
+*/

@@ -8,9 +8,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:ad_book_2/models/filters.dart';
 
-String ipLocalhost = "192.168.34.86:8000";
-//String ipLocalhost = "192.168.88.253:8000";
-//String ipLocalhost = "localhost:8000";
 
 Future getCorporationList(void settypeV(int _val), void setlistdata(List<String> _list)) async {
   var uri = Uri.http(ipLocalhost, '/corporation/');
@@ -142,10 +139,23 @@ Future<DataBaseData> getContactList(FiltersModel valFilter) async {
     resBody["Count"] = valFilter.datalistcount.toString();
     resBody["Limit"] = Limit_const.toString();
     resBody["FIO"] = valFilter.filters.controllerFIO;
-    resBody["Corporation"] = "";
-    resBody["Department"] = "";
-    resBody["Phone"] = "";
-    resBody["TypePhone"] = "";
+    resBody["Corporation"] = valFilter.filters.controllerCorporation;
+    resBody["Department"] = valFilter.filters.controllerDepartament;
+    resBody["Phone"] = valFilter.filters.controllerPhone;
+
+    String TypePhone = valFilter.filters.controllerTypePhone;
+    if (TypePhone =="Доб") {
+      resBody["TypePhone"] ="phone_additional";
+    } else if (TypePhone =="Раб") {
+      resBody["TypePhone"] = "phone_work";
+    } else if (TypePhone =="Моб") {
+      resBody["TypePhone"] = "phone_mobile";
+    } else  {
+      resBody["TypePhone"] = "";
+    }
+
+
+    //resBody["TypePhone"] = valFilter.filters.controllerTypePhone;
 
     final response = await http.post(
       Uri.http(ipLocalhost, '/contacts_2/'),
@@ -159,7 +169,7 @@ Future<DataBaseData> getContactList(FiltersModel valFilter) async {
       ContactServer.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       bool _blockrightarrow = false;
 
-      if (dataBaseData.datalistcount + Limit_const >= _database.countlist) {
+      if (valFilter.datalistcount + Limit_const >= _database.countlist) {
         _blockrightarrow = true;
       }
 
