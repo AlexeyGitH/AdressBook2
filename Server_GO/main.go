@@ -55,6 +55,15 @@ type Contact_data struct {
 }
 
 func MainPageHandler(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("static/web/index.html")
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	}
+	t.Execute(w, nil)
+
+}
+
+func MainPageWebBook(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("html/index.html")
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
@@ -124,9 +133,14 @@ func main() {
 	r.HandleFunc("/corporation/", getCorporations)
 	r.HandleFunc("/department/", getDepartaments)
 	r.HandleFunc("/searchcontacts/", getContacts)
+	r.HandleFunc("/ab/", MainPageWebBook)
 
 	staticDir := "/static/"
 	r.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
+
+	staticDir2 := "/"
+	r.PathPrefix(staticDir2).Handler(http.StripPrefix(staticDir2, http.FileServer(http.Dir("./static/web/"))))
+
 	// Bind to a port and pass our router in
 	log.Fatal(http.ListenAndServe(":8000", r))
 
