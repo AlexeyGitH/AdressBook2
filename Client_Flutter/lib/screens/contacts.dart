@@ -11,6 +11,7 @@ class Contacts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title:
             Text('Address book', style: Theme.of(context).textTheme.headline1),

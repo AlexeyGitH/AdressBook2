@@ -36,15 +36,13 @@ class Filters extends StatelessWidget {
     _controllerPhone.text = filters.filters.controllerPhone;
 
     return Scaffold(
+        //resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text('Search contact',
               style: Theme.of(context).textTheme.headline1),
           //backgroundColor: Colors.white,
         ),
-        body: SingleChildScrollView(
-          child: Container(
-              constraints: BoxConstraints(),
-              child: new Column(children: [
+        body: SingleChildScrollView(child:  Column(children: [
                 new Container(
                   margin: const EdgeInsets.only(top: 10.0),
                   child: ElevatedButton.icon(
@@ -66,6 +64,8 @@ class Filters extends StatelessWidget {
                       //Navigator.pushNamed(context, '/');
                       //Navigator.pop(context);
                       //Navigator.pushReplacementNamed(context, '/');
+
+                      filters.setStartContactsRange();
                       Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
                     },
                     style: ButtonStyle(
@@ -235,6 +235,6 @@ class Filters extends StatelessWidget {
                   ),
                 ]))
               ])),
-        ));
+        );
   }
 }

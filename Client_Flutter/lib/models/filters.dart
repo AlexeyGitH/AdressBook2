@@ -65,6 +65,9 @@ class FiltersModel extends ChangeNotifier {
       notifyListeners();
     }
 
+    void setStartContactsRange() {
+      datalistcount = 0;
+    }
 
     void contactsChangeRange(int kindRange, int limit_const, int total_count) {
       if (kindRange == 0) {

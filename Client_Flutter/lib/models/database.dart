@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:ad_book_2/models/filterWidget.dart';
-import 'package:flutter/material.dart';
 import 'package:ad_book_2/ConstSystemAD.dart';
 import 'PostContact.dart';
 import 'package:http/http.dart' as http;

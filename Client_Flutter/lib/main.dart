@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-//import 'DataBase.dart';
+
 import 'package:provider/provider.dart';
-//import 'SearchPage.dart';
+
 
 import 'common/theme.dart';
 import 'screens/contacts.dart';
 import 'screens/filters.dart';
-//import 'screens/test.dart';
-//import 'package:ad_book_2/models/contacts.dart';
+
 import 'package:ad_book_2/models/filters.dart';
 
 
