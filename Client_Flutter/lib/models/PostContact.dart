@@ -4,7 +4,7 @@ class ContactItem {
   final String firstname;
   final String middlename;
   final String lastname;
-  final String image;
+  final String photo;
   final String department;
   final String corporation;
   final String position;
@@ -19,7 +19,7 @@ class ContactItem {
         required this.firstname,
         required this.middlename,
         required this.lastname,
-        required this.image,
+        required this.photo,
         required this.department,
         required this.corporation,
         required this.position,
@@ -35,7 +35,7 @@ class ContactItem {
       firstname: parsedJson['FirstName'],
       middlename: parsedJson['MiddleName'],
       lastname: parsedJson['LastName'],
-      image: parsedJson['LastName'],
+      photo: parsedJson['Photo'],
       department: parsedJson['Department'],
       corporation: parsedJson['Corporation'],
       position: parsedJson['Position'],

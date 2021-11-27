@@ -42,7 +42,7 @@ class Filters extends StatelessWidget {
           //backgroundColor: Colors.white,
         ),
         body: SingleChildScrollView(
-          child: ConstrainedBox(
+          child: Container(
               constraints: BoxConstraints(),
               child: new Column(children: [
                 new Container(
@@ -59,10 +59,14 @@ class Filters extends StatelessWidget {
                       //print('controllerCorporation: $p');
                       //filters.setFilters(
                       //    _controllerFIO.text, _controllerCorporation.text);
-                      filters.setFilters(
+                      /*filters.setFilters(
                           _controllerFIO.text,
                           filters.filters.controllerCorporation,
-                          filters.filters.controllerDepartament);
+                          filters.filters.controllerDepartament);*/
+                      //Navigator.pushNamed(context, '/');
+                      //Navigator.pop(context);
+                      //Navigator.pushReplacementNamed(context, '/');
+                      Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
                     },
                     style: ButtonStyle(
                       backgroundColor:
@@ -211,14 +215,15 @@ class Filters extends StatelessWidget {
                                   filters.setFilterPhone(phone: text);
                                 },
                                 validator: (value) {
-                                  print('validator: ' + value.toString());
+                                  //print('validator: ' + value.toString());
 
-                                  RegExp regex =  RegExp(r'^[\d|\-| |\(|\)|\+]+$');
+                                  RegExp regex =  RegExp(r'^$|^[\d|\-| |\(|\)|\+]+$');
 
-                                  print('validator: ' + regex.hasMatch(value.toString()).toString());
+                                  //print('validator: ' + regex.hasMatch(value.toString()).toString());
+
                                   return regex.hasMatch(value.toString())
                                   ? null
-                                      : 'Use only the -, 0-9, char.';
+                                      : 'Use only the -, 0-9 char.';
 
 /*
                                   return value.toString().contains('@')

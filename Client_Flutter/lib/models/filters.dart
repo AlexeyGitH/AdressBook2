@@ -35,7 +35,7 @@ class FiltersModel extends ChangeNotifier {
       //filters.controllerFIO = fio;
       //filters.controllerCorporation = corporation;
       //filters.controllerDepartament = departament;
-      notifyListeners();
+      //notifyListeners();
     }
 
     void setFilterFio(String fio) {

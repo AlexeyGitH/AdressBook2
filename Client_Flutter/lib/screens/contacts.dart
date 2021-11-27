@@ -18,7 +18,9 @@ class Contacts extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () => Navigator.pushNamed(context, '/filters'),
+            onPressed: () =>
+                //Navigator.pushReplacementNamed(context, '/filters'),
+                Navigator.pushNamed(context, '/filters'),
           ),
           /*
           IconButton(
@@ -98,13 +100,36 @@ class _DataViewList extends State<DataViewList> {
                   return RefreshWidget(changeValueView: filters.setviewResume);
                 } else {
                   if (vDBD.viewResume == 1) {
-                    return ListPageList(
+                    return
+                      Column(
+                      //mainAxisSize: MainAxisSize.min,
+                        children: [
+                            Expanded(child :
+                            ListPageList(
+                                serverdata: vDBD.database.contacts,
+                            )),
+                          Divider(height: 1, color: Colors.blueGrey),
+                          Align(
+                            alignment: FractionalOffset.bottomCenter,
+                            child: Row(
+                              children: [
+                                ArrowBottomWidget(0, false, Limit_const, vDBD.database.countlist, filters.contactsChangeRange),
+                                Spacer(),
+                                ArrowBottomWidget(1, vDBD.blockrightarrow, Limit_const, vDBD.database.countlist, filters.contactsChangeRange),
+                              ],
+                            ),
+                          ),                    ]);
+
+
+
+
+                    /*return ListPageList(
                         serverdata: vDBD.database.contacts,
                         blockrightarrow: vDBD.blockrightarrow,
                         limit_const: Limit_const,
                         count_data: vDBD.database.countlist,
                         changeCount: filters.contactsChangeRange
-                    );
+                    );*/
                   } else {
                     return RefreshWidget(
                         changeValueView: filters.setviewResume);
@@ -155,12 +180,13 @@ class _RefreshWidget extends State<RefreshWidget> {
 
 class ListPageList extends StatefulWidget {
   List<ContactItem> serverdata;
-  bool blockrightarrow;
-  int limit_const;
-  int count_data;
-  final Function(int,int,int) changeCount;
+//  bool blockrightarrow;
+//  int limit_const;
+//  int count_data;
+//  final Function(int,int,int) changeCount;
 
-  ListPageList({required this.serverdata, required this.blockrightarrow, required this.limit_const, required this.count_data, required this.changeCount});
+  //ListPageList({required this.serverdata, required this.blockrightarrow, required this.limit_const, required this.count_data, required this.changeCount});
+  ListPageList({required this.serverdata});
 
   @override
   _ListPageList createState() => _ListPageList();
@@ -174,13 +200,19 @@ class _ListPageList extends State<ListPageList> {
 
     //  return Text('22131231212');
 
-    return Column(
+
+
+    return /*Column(
+      //mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Expanded(
-            child: ListView.builder(
+            child: */ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
           itemCount: widget.serverdata.length,
           itemBuilder: (context, index) {
             var postPone = widget.serverdata[index];
+            //print(ipLocalhost + postPone.photo.toString());
             return new Container(
                 decoration: myBoxDecoration(),
                 margin: const EdgeInsets.all(6.0),
@@ -189,29 +221,29 @@ class _ListPageList extends State<ListPageList> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
                       Expanded(
                         flex: 1,
                         child: Padding(
                             padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                            child: Image.network(
-                              ipLocalhost + postPone.image.toString(),
-                              fit: BoxFit.fitHeight,
+                            child:
+                            Image.network(
+                              'http://'+ipLocalhost + postPone.photo.toString(),
+                              //'',
+                              //fit: BoxFit.fitHeight,
                               errorBuilder: (context, error, stackTrace) {
+                                //print(error);
                                 return Image.asset(
                                   'assets/NoPhoto.png',
-                                  height: 100,
-                                  width: 100,
+                                  //fit: BoxFit.fitHeight,
                                 );
-                                /*Container(
-                          color: Colors.amber,
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Whoops!',
-                            style: TextStyle(fontSize: 30),
-                          ),
-                        );*/
                               },
-                            )),
+                            )
+
+
+
+
+                        ),
                       ),
                       Expanded(
                           flex: 5,
@@ -286,7 +318,9 @@ class _ListPageList extends State<ListPageList> {
                       )),
                 ]));
           },
-        )),
+        )
+
+        /*),
         Divider(height: 1, color: Colors.blueGrey),
         Align(
           alignment: FractionalOffset.bottomCenter,
@@ -299,7 +333,7 @@ class _ListPageList extends State<ListPageList> {
           ),
         ),
       ],
-    );
+    )*/;
   }
 }
 

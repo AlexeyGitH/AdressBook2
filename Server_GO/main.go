@@ -125,6 +125,8 @@ func main() {
 	r.HandleFunc("/department/", getDepartaments)
 	r.HandleFunc("/searchcontacts/", getContacts)
 
+	staticDir := "/static/"
+	r.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
 	// Bind to a port and pass our router in
 	log.Fatal(http.ListenAndServe(":8000", r))
 
@@ -182,7 +184,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		//panic(err)
 		//log.Println("search contacts without parametrs!")
-		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts ORDER BY l_FIO ASC LIMIT ?, ?"
+		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo as Photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts ORDER BY l_FIO ASC LIMIT ?, ?"
 		text_selection_count_contacts = "SELECT COUNT(*) as count FROM Contacts "
 
 	} else {
@@ -231,7 +233,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 				}
 			} else {
 				param_req = append(param_req, "%"+t.Phone+"%")
-				//param_req = append(param_req, "%"+t.Phone+"%")
+				param_req = append(param_req, "%"+t.Phone+"%")
 
 				if wheretext != "" {
 					wheretext += " and (additional_phone LIKE ? OR work_phone LIKE ? OR mobile_phone LIKE ?)"
@@ -244,9 +246,9 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 
 		//log.Println("FIO " + t.FIO)
 
-		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts " + wheretext + " ORDER BY l_FIO ASC LIMIT ?, ?"
+		text_selection_contacts = "SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo as Photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts " + wheretext + " ORDER BY l_FIO ASC LIMIT ?, ?"
 		text_selection_count_contacts = "SELECT COUNT(*) as count FROM Contacts " + wheretext
-
+		//log.Println("text: " + text_selection_contacts)
 	}
 
 	//param_req = append(param_req, count, limit)
@@ -334,12 +336,6 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 		Contacts = append(Contacts, p)
 	}
 
-	/*
-		for _, p := range data.ContactList {
-			fmt.Println("ContactList " + p.LastName)
-		}
-	*/
-
 	//fmt.Println(contacts_count)
 
 	data := Contact_data{
@@ -347,7 +343,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 		ContactList: Contacts,
 	}
 
-	//fmt.Printf("%+v\n", data)
+	//	fmt.Printf("%+v\n", data)
 
 	respondWithJSON(w, http.StatusOK, data)
 
@@ -434,7 +430,7 @@ func getContacts(w http.ResponseWriter, r *http.Request) {
 
 	/*
 		fmt.Println("r-request")
-		b, _ := ioutil.ReadAll(r.Body)
+		b, _ = ioutil.ReadAll(r.Body)
 	*/
 	fmt.Printf("%s \n", string(b))
 	fmt.Printf("%s \n", string(m.FIO))

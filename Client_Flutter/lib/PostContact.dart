@@ -35,7 +35,7 @@ class ContactItem {
       firstname: parsedJson['FirstName'],
       middlename: parsedJson['MiddleName'],
       lastname: parsedJson['LastName'],
-      image: parsedJson['Photo'],
+      image: parsedJson['LastName'],
       department: parsedJson['Department'],
       corporation: parsedJson['Corporation'],
       position: parsedJson['Position'],
