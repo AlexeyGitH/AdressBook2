@@ -179,6 +179,17 @@ class _RefreshWidget extends State<RefreshWidget> {
   }
 }
 
+class ItemCard{
+  String name;
+  String icon;
+  String value;
+  ItemCard({
+    required this.name,
+    required this.icon,
+    required this.value,
+  });
+}
+
 class ListPageList extends StatefulWidget {
   List<ContactItem> serverdata;
 //  bool blockrightarrow;
@@ -213,6 +224,16 @@ class _ListPageList extends State<ListPageList> {
           itemCount: widget.serverdata.length,
           itemBuilder: (context, index) {
             var postPone = widget.serverdata[index];
+
+            List<ItemCard> cardContact = [];
+            cardContact.add(ItemCard(name: "Организация", icon: '', value: postPone.corporation.toString()));
+            cardContact.add(ItemCard(name: "Должность", icon: '', value: postPone.position.toString()));
+            cardContact.add(ItemCard(name: "Подразделение", icon: '', value: postPone.department.toString()));
+            cardContact.add(ItemCard(name: "Дата рождения", icon: '', value: postPone.birthdate.toString()));
+            cardContact.add(ItemCard(name: "Рабочий тел.", icon: 'p', value: postPone.workphone.toString()));
+            cardContact.add(ItemCard(name: "Мобильный тел.", icon: 'p', value: postPone.mobilephone.toString()));
+            cardContact.add(ItemCard(name: "Почта", icon: 'e', value: postPone.mail.toString()));
+
             //print(ipLocalhost + postPone.photo.toString());
             return new Container(
                 decoration: myBoxDecoration(),
@@ -295,28 +316,8 @@ class _ListPageList extends State<ListPageList> {
                           )),
                     ],
                   ),
-                  Container(
-                      margin: const EdgeInsets.all(3.0),
-                      child: Column(
-                        children: [
-                          /////////
-                          widgetADPropertyValue('Организация',
-                              postPone.corporation.toString(), ''),
-                          widgetADPropertyValue(
-                              'Должность', postPone.position.toString(), ''),
-                          widgetADPropertyValue('Подразделение',
-                              postPone.department.toString(), ''),
-                          widgetADPropertyValue('Дата рождения',
-                              postPone.birthdate.toString(), ''),
+                  ContactValues(cardContact),
 
-                          widgetADPropertyValue('Рабочий тел.',
-                              postPone.workphone.toString(), 'p'),
-                          widgetADPropertyValue('Мобильный тел.',
-                              postPone.mobilephone.toString(), 'p'),
-                          widgetADPropertyValue(
-                              'Почта', postPone.mail.toString(), 'e'),
-                        ],
-                      )),
                 ]));
           },
         )
@@ -358,88 +359,52 @@ BoxDecoration myBoxDecoration() {
   );
 }
 
-/*
-widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
-  return Container(
-      padding: EdgeInsets.only(top: 3),
-      child: Row(
-        children: [
-          Expanded(
-              flex: 10,
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text(
-                  sProperty,
-                  style: new TextStyle(fontSize: 14.0, color: Colors.black),
-                ),
-              )),
-          Expanded(
-              flex: 2,
-              child: Align(
-                alignment: AlignmentDirectional.center,
-                child: _getIcon(sIcon),
-              )),
-          Expanded(
-              flex: 20,
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text(
-                  sValue,
-                  style:
-                      new TextStyle(fontSize: 14.0, color: Colors.indigo[900]),
-                ),
-              )),
-        ],
-      ));
+
+class ContactValues extends StatelessWidget {
+  List<ItemCard> cardContact;
+
+  ContactValues(this.cardContact);
+
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      // textDirection: TextDirection.rtl,
+      defaultVerticalAlignment: TableCellVerticalAlignment.top,
+      //border:TableBorder.all(width: 1.0,color: Colors.red),
+      columnWidths: {
+        0: FixedColumnWidth(110.0), // fixed to 100 width
+        1: FixedColumnWidth(25.0),
+        2: FlexColumnWidth(), //fixed to 100 width
+      },
+
+      children: cardContact
+          .map((itContact) => TableRow(
+          /*        decoration: BoxDecoration(
+                      border: Border(
+                    bottom: BorderSide(width: 0.1, color: Colors.blueGrey),
+                  )
+      ),*/
+                  children: [
+                    Container(
+                        padding: EdgeInsets.only(bottom: 3.0, top: 3.0),
+                        child: Text(itContact.name,
+                            style: new TextStyle(
+                                fontSize: 14.0, color: Colors.black))),
+                    TableCell(
+                        verticalAlignment: TableCellVerticalAlignment.top,
+                        child: Container(
+                            padding: EdgeInsets.only(bottom: 3.0, top: 3.0),
+                            child: Center(child: _getIcon(itContact.icon)))),
+                    Container(
+                        padding: EdgeInsets.only(bottom: 3.0, top: 3.0),
+                        child: Text(itContact.value,
+                            style: new TextStyle(
+                                fontSize: 14.0, color: Colors.indigo[900]))),
+                  ]))
+          .toList(),
+    );
+  }
 }
-*/
-
-widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
-  return Container(
-      padding: EdgeInsets.only(top: 3),
-      child: Row(
-        children: [
-        SizedBox(
-        width: 120.0,
-        child:
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child:
-
-                const DecoratedBox(
-                  decoration: const BoxDecoration(
-                      color: Colors.red
-                          child:
-                    Text(
-                    sProperty,
-                    style: new TextStyle(fontSize: 14.0, color: Colors.black),
-                  ),
-
-                  ),
-
-
-              )),
-      SizedBox(
-        width: 15.0,
-        child:
-
-               Align(
-                alignment: AlignmentDirectional.center,
-                child: _getIcon(sIcon),
-              )),
-               Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text(
-                  sValue,
-                  style:
-                  new TextStyle(fontSize: 14.0, color: Colors.indigo[900]),
-                ),
-              ),
-        ],
-      ));
-}
-
-
 
 Widget _getIcon(sIcon) {
   if (sIcon == 'p')
