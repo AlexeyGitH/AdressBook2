@@ -358,6 +358,7 @@ BoxDecoration myBoxDecoration() {
   );
 }
 
+/*
 widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
   return Container(
       padding: EdgeInsets.only(top: 3),
@@ -391,6 +392,54 @@ widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
         ],
       ));
 }
+*/
+
+widgetADPropertyValue(String sProperty, String sValue, String sIcon) {
+  return Container(
+      padding: EdgeInsets.only(top: 3),
+      child: Row(
+        children: [
+        SizedBox(
+        width: 120.0,
+        child:
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child:
+
+                const DecoratedBox(
+                  decoration: const BoxDecoration(
+                      color: Colors.red
+                          child:
+                    Text(
+                    sProperty,
+                    style: new TextStyle(fontSize: 14.0, color: Colors.black),
+                  ),
+
+                  ),
+
+
+              )),
+      SizedBox(
+        width: 15.0,
+        child:
+
+               Align(
+                alignment: AlignmentDirectional.center,
+                child: _getIcon(sIcon),
+              )),
+               Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(
+                  sValue,
+                  style:
+                  new TextStyle(fontSize: 14.0, color: Colors.indigo[900]),
+                ),
+              ),
+        ],
+      ));
+}
+
+
 
 Widget _getIcon(sIcon) {
   if (sIcon == 'p')
