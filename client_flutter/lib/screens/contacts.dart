@@ -5,6 +5,7 @@ import 'package:ad_book_2/models/database.dart';
 import 'package:ad_book_2/models/PostContact.dart';
 import 'package:ad_book_2/ConstSystemAD.dart';
 
+
 List<String> lisCorp = [];
 
 class Contacts extends StatelessWidget {
@@ -32,24 +33,6 @@ class Contacts extends StatelessWidget {
       ),
       body: DataViewList(),
 
-      /*
-      Container(
-        //color: Colors.yellow,
-        child: Column(
-          children: [
-            /*
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: DataViewList(),
-              ),
-            ),
-            */
-            DataViewList(),
-          ],
-        ),
-      ),
-      */
     );
   }
 }
@@ -77,9 +60,10 @@ class _DataViewList extends State<DataViewList> {
         builder: (BuildContext context, AsyncSnapshot<DataBaseData> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return new Column(children: [
+              return SingleChildScrollView(child:
+                Column(children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.3,
+                  height: MediaQuery.of(context).size.height / 1.3 - 20,
                   child: Center(
                     child: SizedBox(
                         width: 150,
@@ -89,7 +73,8 @@ class _DataViewList extends State<DataViewList> {
                 ),
                 const Divider(height: 4, color: Colors.black),
                 Text('Loading..', style: Theme.of(context).textTheme.headline5),
-              ]);
+              ])
+              );
             default:
               if (snapshot.hasError)
                 return RefreshWidget(changeValueView: filters.setviewResume);
@@ -114,23 +99,14 @@ class _DataViewList extends State<DataViewList> {
                             alignment: FractionalOffset.bottomCenter,
                             child: Row(
                               children: [
-                                ArrowBottomWidget(0, false, Limit_const, vDBD.database.countlist, filters.contactsChangeRange),
+                                ArrowBottomWidget(0, false, vDBD.datalistcount, vDBD.database.countlist, filters.contactsChangeRange),
                                 Spacer(),
-                                ArrowBottomWidget(1, vDBD.blockrightarrow, Limit_const, vDBD.database.countlist, filters.contactsChangeRange),
+                                ArrowBottomWidget(1, vDBD.blockrightarrow, vDBD.datalistcount, vDBD.database.countlist, filters.contactsChangeRange),
                               ],
                             ),
                           ),                    ]);
 
 
-
-
-                    /*return ListPageList(
-                        serverdata: vDBD.database.contacts,
-                        blockrightarrow: vDBD.blockrightarrow,
-                        limit_const: Limit_const,
-                        count_data: vDBD.database.countlist,
-                        changeCount: filters.contactsChangeRange
-                    );*/
                   } else {
                     return RefreshWidget(
                         changeValueView: filters.setviewResume);
@@ -214,11 +190,7 @@ class _ListPageList extends State<ListPageList> {
 
 
 
-    return /*Column(
-      //mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Expanded(
-            child: */ListView.builder(
+    return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
           itemCount: widget.serverdata.length,
@@ -246,7 +218,16 @@ class _ListPageList extends State<ListPageList> {
 
                       Expanded(
                         flex: 1,
-                        child: Padding(
+                        child:
+
+                        new ConstrainedBox(
+                            constraints: new BoxConstraints(
+                              maxHeight: 310.0,
+                            ),
+                            child:
+
+
+                        Padding(
                             padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                             child:
                             Image.network(
@@ -265,7 +246,7 @@ class _ListPageList extends State<ListPageList> {
 
 
 
-                        ),
+                        )),
                       ),
                       Expanded(
                           flex: 5,
@@ -320,22 +301,7 @@ class _ListPageList extends State<ListPageList> {
 
                 ]));
           },
-        )
-
-        /*),
-        Divider(height: 1, color: Colors.blueGrey),
-        Align(
-          alignment: FractionalOffset.bottomCenter,
-          child: Row(
-            children: [
-              ArrowBottomWidget(0, false, widget.limit_const, widget.count_data, widget.changeCount),
-              Spacer(),
-              ArrowBottomWidget(1, widget.blockrightarrow, widget.limit_const, widget.count_data, widget.changeCount),
-            ],
-          ),
-        ),
-      ],
-    )*/;
+        );
   }
 }
 
@@ -426,31 +392,34 @@ Widget _getIcon(sIcon) {
 class ArrowBottomWidget extends StatelessWidget {
   final int _kindButton;
   final bool _blockArrow;
-  int limit_const;
+  int datalistcount;
   int total_count;
-  final Function(int, int, int) changeCount;
+  final Function(int, int) changeCount;
 
 
-  ArrowBottomWidget(this._kindButton, this._blockArrow, this.limit_const, this.total_count, this.changeCount);
+  ArrowBottomWidget(this._kindButton, this._blockArrow, this.datalistcount, this.total_count, this.changeCount);
 
   @override
   Widget build(BuildContext context) {
-    Color? colorarrow;
+    Color? colorarrow_r;
+    Color? colorarrow_l;
     //Waiting spiner ... ... ..
-    colorarrow = _blockArrow == true ? Colors.blueGrey[600] : Colors.blue;
+    colorarrow_r = _blockArrow == true ? Colors.blueGrey[600] : Colors.blue;
+    colorarrow_l = total_count == 0 || datalistcount==0 ? Colors.blueGrey[600] : Colors.blue;
 
+    print('changeCount:'+ changeCount.toString());
     return new SizedBox(
       height: 40.0,
       width: 40.0,
       child: new IconButton(
           padding: new EdgeInsets.all(0.0),
-          color: colorarrow,
+          color: _kindButton == 1 ? colorarrow_r : colorarrow_l,
           icon: _kindButton == 1
               ? new Icon(Icons.arrow_right, size: 40.0)
               : new Icon(Icons.arrow_left, size: 40.0),
           onPressed: () {
             if (_blockArrow != true) {
-              changeCount(_kindButton, limit_const, total_count);
+              changeCount(_kindButton, total_count);
             }
           }),
     );

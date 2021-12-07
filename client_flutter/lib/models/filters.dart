@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:ad_book_2/ConstSystemAD.dart';
 
 class DataBaseFilter {
   String controllerFIO;
@@ -69,20 +69,20 @@ class FiltersModel extends ChangeNotifier {
       datalistcount = 0;
     }
 
-    void contactsChangeRange(int kindRange, int limit_const, int total_count) {
+    void contactsChangeRange(int kindRange, int total_count) {
       if (kindRange == 0) {
-        if (datalistcount - limit_const < 0) {
+        if (datalistcount - Limit_const < 0) {
           datalistcount = 0;
         } else {
-          datalistcount = datalistcount - limit_const;
+          datalistcount = datalistcount - Limit_const;
         }
         notifyListeners();
       }
       else {
-        if (datalistcount + limit_const >=
+        if (datalistcount + Limit_const >=
             total_count) {
         } else {
-          datalistcount = datalistcount + limit_const;
+          datalistcount = datalistcount + Limit_const;
         }
         notifyListeners();
 
