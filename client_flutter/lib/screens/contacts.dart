@@ -99,9 +99,9 @@ class _DataViewList extends State<DataViewList> {
                             alignment: FractionalOffset.bottomCenter,
                             child: Row(
                               children: [
-                                ArrowBottomWidget(0, false, vDBD.datalistcount, vDBD.database.countlist, filters.contactsChangeRange),
+                                ArrowBottomWidget(0, false, filters.datalistcount, vDBD.database.countlist, filters.contactsChangeRange),
                                 Spacer(),
-                                ArrowBottomWidget(1, vDBD.blockrightarrow, vDBD.datalistcount, vDBD.database.countlist, filters.contactsChangeRange),
+                                ArrowBottomWidget(1, vDBD.blockrightarrow, filters.datalistcount, vDBD.database.countlist, filters.contactsChangeRange),
                               ],
                             ),
                           ),                    ]);
@@ -216,40 +216,41 @@ class _ListPageList extends State<ListPageList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      Expanded(
-                        flex: 1,
-                        child:
-
+                      //Expanded(
+                        //child:
                         new ConstrainedBox(
                             constraints: new BoxConstraints(
                               maxHeight: 310.0,
                             ),
                             child:
 
-
                         Padding(
-                            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                            padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                             child:
-                            Image.network(
-                              'http://'+ipLocalhost + postPone.photo.toString(),
-                              //'',
-                              //fit: BoxFit.fitHeight,
-                              errorBuilder: (context, error, stackTrace) {
-                                //print(error);
-                                return Image.asset(
-                                  'assets/NoPhoto.png',
-                                  //fit: BoxFit.fitHeight,
-                                );
-                              },
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child:
+                              Image.network(
+                                'http://'+ipLocalhost + postPone.photo.toString(),
+                                //'',
+                                //fit: BoxFit.fitHeight,
+                                errorBuilder: (context, error, stackTrace) {
+                                  //print(error);
+                                  return Image.asset(
+                                    'assets/NoPhoto.png',
+                                    //fit: BoxFit.fitHeight,
+                                  );
+                                },
+                              )
+
                             )
 
 
 
-
                         )),
-                      ),
+                     // ),
                       Expanded(
-                          flex: 5,
+                          flex: 1,
                           child: Column(
                             children: [
                               Row(children: [
@@ -405,9 +406,8 @@ class ArrowBottomWidget extends StatelessWidget {
     Color? colorarrow_l;
     //Waiting spiner ... ... ..
     colorarrow_r = _blockArrow == true ? Colors.blueGrey[600] : Colors.blue;
-    colorarrow_l = total_count == 0 || datalistcount==0 ? Colors.blueGrey[600] : Colors.blue;
+    colorarrow_l = (total_count == 0 || datalistcount==0) ? Colors.blueGrey[600] : Colors.blue;
 
-    print('changeCount:'+ changeCount.toString());
     return new SizedBox(
       height: 40.0,
       width: 40.0,
@@ -418,7 +418,9 @@ class ArrowBottomWidget extends StatelessWidget {
               ? new Icon(Icons.arrow_right, size: 40.0)
               : new Icon(Icons.arrow_left, size: 40.0),
           onPressed: () {
-            if (_blockArrow != true) {
+            //print(total_count.toString() + "//" +  datalistcount.toString());
+            //if (_blockArrow != true) {
+            if (_kindButton == 1 ? colorarrow_r == Colors.blue : colorarrow_l== Colors.blue) {
               changeCount(_kindButton, total_count);
             }
           }),
