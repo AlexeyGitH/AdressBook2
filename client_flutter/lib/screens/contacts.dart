@@ -738,82 +738,167 @@ class GridPageList extends StatefulWidget {
 class _GridPageList extends State<GridPageList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: widget.serverdata.length,
-        itemBuilder: (context, index) {
-          var postPone = widget.serverdata[index];
 
-          List<ItemCard> cardContact = [];
-          cardContact.add(ItemCard(
-              name: "Организация",
-              icon: '',
-              value: postPone.corporation.toString()));
-          cardContact.add(ItemCard(
-              name: "Должность",
-              icon: '',
-              value: postPone.position.toString()));
-          cardContact.add(ItemCard(
-              name: "Подразделение",
-              icon: '',
-              value: postPone.department.toString()));
-          cardContact.add(ItemCard(
-              name: "Дата рождения",
-              icon: '',
-              value: postPone.birthdate.toString()));
-          cardContact.add(ItemCard(
-              name: "Рабочий тел.",
-              icon: 'p',
-              value: postPone.workphone.toString()));
-          cardContact.add(ItemCard(
-              name: "Мобильный тел.",
-              icon: 'p',
-              value: postPone.mobilephone.toString()));
-          cardContact.add(ItemCard(
-              name: "Почта", icon: 'e', value: postPone.mail.toString()));
+    bool scan = true;
+    bool allContacts = false;
+    int i = 0;
+    List<Widget> wDynGridRow = [];
+    int y = 0;
+    List<Widget> wDynGridRowElem = [];
 
-          //print(ipLocalhost + postPone.photo.toString());
-          if (index%widget.cardNumber==0) {
+    while(scan) {
+      if (i >= widget.serverdata.length)
+      {allContacts = true;
+      wDynGridRowElem.add(Expanded(child:Container(child:Text(''))));
+      }
+      else{
+        var vPostPone = widget.serverdata[i];
+        wDynGridRowElem.add(Expanded(child:ContainerCard(postPone: vPostPone)));
+      }
+      y++;
 
-          }
+      if (y== widget.cardNumber){
+        List<Widget> wDynGridRow2 = new List<Widget>.from(wDynGridRowElem);
 
-          List<Widget> wChildren = [];
-          for (var i = 0; i < 2; i++)
-            {
-              List<Widget> d = [];
-              for (var w = 0; w < 2; w++)
+        y=0;
+        wDynGridRow.add(Row(crossAxisAlignment: CrossAxisAlignment.start, children:wDynGridRow2));
+        wDynGridRowElem = [];
+      }
 
-                {
-     
-                  d.add(Text((w+i).toString()));
-                }
-              wChildren.add(Row(children: d));
-            }
+      i++;
+      if (y==0 && allContacts){scan = false;}
+    }
 
-return Column(children: wChildren);
+    return new SingleChildScrollView(
+        child:Column(children: wDynGridRow));
+  }
+}
 
 
-          //  return Text('ff');
+class ContainerCard extends StatefulWidget {
+  ContactItem postPone;
+  ContainerCard({required this.postPone});
 
-/*
-          new ListView.builder
-            (
-              itemCount: litems.length,
-              itemBuilder: (BuildContext ctxt, int index) {
-                return new Text(litems[index]);
-              }
+  @override
+  _ContainerCard createState() => _ContainerCard();
+}
+
+class _ContainerCard extends State<ContainerCard> {
+  @override
+  Widget build(BuildContext context) {
+    var postPone = widget.postPone;
+
+    List<ItemCard> cardContact = [];
+    cardContact.add(ItemCard(name: "Организация", icon: '', value: postPone.corporation.toString()));
+    cardContact.add(ItemCard(name: "Должность", icon: '', value: postPone.position.toString()));
+    cardContact.add(ItemCard(name: "Подразделение", icon: '', value: postPone.department.toString()));
+    cardContact.add(ItemCard(name: "Дата рождения", icon: '', value: postPone.birthdate.toString()));
+    cardContact.add(ItemCard(name: "Рабочий тел.", icon: 'p', value: postPone.workphone.toString()));
+    cardContact.add(ItemCard(name: "Мобильный тел.", icon: 'p', value: postPone.mobilephone.toString()));
+    cardContact.add(ItemCard(name: "Почта", icon: 'e', value: postPone.mail.toString()));
 
 
-*/
-        /*  return Column(
-            children: [Row(children:[Text('1'), Text('2')]), Row(children:[Text('3'), Text('4')])]
-          );*/
+
+    var screenSize = MediaQuery.of(context).size;
+    var cardNumber = (screenSize.width~/Width_card_const == 0) ? 1: screenSize.width~/Width_card_const;
+    var imgWidth = screenSize.width/cardNumber*0.4;
 
 
-        });
+    return Container(
+        decoration: myBoxDecoration(),
+        margin: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.all(3.0),
+        child: Column(children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              //Expanded(
+              //child:
+              new ConstrainedBox(
+                  constraints: new BoxConstraints(
+                    //maxHeight: 310.0,
+                    maxWidth: imgWidth,
+                  ),
+                  child:
+
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                      child:
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child:
+                          Image.network(
+                            'http://'+ipLocalhost + postPone.photo.toString(),
+                            //'',
+                            //fit: BoxFit.fitHeight,
+                            errorBuilder: (context, error, stackTrace) {
+                              //print(error);
+                              return Image.asset(
+                                'assets/NoPhoto.png',
+                                //fit: BoxFit.fitHeight,
+                              );
+                            },
+                          )
+
+                      )
 
 
+
+                  )),
+              // ),
+              Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      Row(children: [
+                        Expanded(
+                            child: Align(
+                                alignment: Alignment.centerRight,
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'Статус: ',
+                                    style: new TextStyle(
+                                        fontSize: 12.0,
+                                        color: Colors.black),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: postPone.status
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              color:
+                                              Colors.green[900])),
+                                    ],
+                                  ),
+                                ))),
+                      ]),
+                      Row(children: [
+                        Expanded(
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  postPone.firstname.toString() +
+                                      " " +
+                                      postPone.middlename.toString() +
+                                      " " +
+                                      postPone.lastname.toString(),
+                                  style: new TextStyle(
+                                    //backgroundColor: Colors.blue,
+                                    fontFamily: 'Quicksand',
+                                    fontSize: 20.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ))),
+                      ])
+                    ],
+                  )),
+            ],
+          ),
+          ContactValues(cardContact),
+
+        ]));
 
   }
 }
