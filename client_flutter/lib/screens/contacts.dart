@@ -4,7 +4,8 @@ import 'package:ad_book_2/models/filters.dart';
 import 'package:ad_book_2/models/database.dart';
 import 'package:ad_book_2/models/PostContact.dart';
 import 'package:ad_book_2/ConstSystemAD.dart';
-
+import 'package:url_launcher/url_launcher.dart';
+import 'package:clipboard/clipboard.dart';
 
 List<String> lisCorp = [];
 
@@ -61,106 +62,26 @@ class _DataViewList extends State<DataViewList> {
     print('cardNumber (500): '+ cardNumber.toString());
 
     if (screenSize.width > 1000) {
-      return DataViewListTwo(filters: filters, dataBaseData: dataBaseData, cardNumber: cardNumber);
+      return DataViewListGrid(filters: filters, dataBaseData: dataBaseData, cardNumber: cardNumber);
     }else
-    //{return DataViewListOne(filters: filters, dataBaseData: dataBaseData);}
-    {return DataViewListTwo(filters: filters, dataBaseData: dataBaseData, cardNumber: cardNumber);}
+    {return DataViewListGrid(filters: filters, dataBaseData: dataBaseData, cardNumber: cardNumber);}
 
   }
 }
 
-class DataViewListOne extends StatefulWidget {
-  FiltersModel filters;
-  DataBaseData dataBaseData;
 
-  DataViewListOne({required this.filters, required this.dataBaseData});
-
-  @override
-  _DataViewListOne createState() => _DataViewListOne();
-}
-
-class _DataViewListOne extends State<DataViewListOne> {
-  @override
-  Widget build(BuildContext context) {
-
-    return FutureBuilder(
-        future: getContactList(widget.filters),
-        initialData: widget.dataBaseData,
-        builder: (BuildContext context, AsyncSnapshot<DataBaseData> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return SingleChildScrollView(child:
-              Column(children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.3 - 20,
-                  child: Center(
-                    child: SizedBox(
-                        width: 150,
-                        height: 150,
-                        child: CircularProgressIndicator()),
-                  ),
-                ),
-                const Divider(height: 4, color: Colors.black),
-                Text('Loading..', style: Theme.of(context).textTheme.headline5),
-              ])
-              );
-            default:
-              if (snapshot.hasError)
-                return RefreshWidget(changeValueView: widget.filters.setviewResume);
-              else if (snapshot.data == null) {
-                return RefreshWidget(changeValueView: widget.filters.setviewResume);
-              } else {
-                DataBaseData? vDBD = snapshot.data;
-                if (vDBD == null) {
-                  return RefreshWidget(changeValueView: widget.filters.setviewResume);
-                } else {
-                  if (vDBD.viewResume == 1) {
-                    return
-                      Column(
-                        //mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Expanded(child :
-                            ListPageList(
-                              serverdata: vDBD.database.contacts,
-                            )),
-                            Divider(height: 1, color: Colors.blueGrey),
-                            Align(
-                              alignment: FractionalOffset.bottomCenter,
-                              child: Row(
-                                children: [
-                                  ArrowBottomWidget(0, false, widget.filters.datalistcount, vDBD.database.countlist, widget.filters.contactsChangeRange),
-                                  Spacer(),
-                                  ArrowBottomWidget(1, vDBD.blockrightarrow, widget.filters.datalistcount, vDBD.database.countlist, widget.filters.contactsChangeRange),
-                                ],
-                              ),
-                            ),                    ]);
-
-
-                  } else {
-                    return RefreshWidget(
-                        changeValueView: widget.filters.setviewResume);
-                  }
-                }
-                return Text('Result: ${snapshot.data}');
-              }
-          }
-
-        });
-  }
-}
-
-class DataViewListTwo extends StatefulWidget {
+class DataViewListGrid extends StatefulWidget {
   FiltersModel filters;
   DataBaseData dataBaseData;
   int cardNumber;
 
-  DataViewListTwo({required this.filters, required this.dataBaseData, required this.cardNumber});
+  DataViewListGrid({required this.filters, required this.dataBaseData, required this.cardNumber});
 
   @override
-  _DataViewListTwo createState() => _DataViewListTwo();
+  _DataViewListGrid createState() => _DataViewListGrid();
 }
 
-class _DataViewListTwo extends State<DataViewListTwo> {
+class _DataViewListGrid extends State<DataViewListGrid> {
   @override
   Widget build(BuildContext context) {
 
@@ -202,7 +123,6 @@ class _DataViewListTwo extends State<DataViewListTwo> {
                           children: [
                             Expanded(child :
                             GridPageList(
-                            //  GridPageListCopy(
                                 serverdata: vDBD.database.contacts, cardNumber:widget.cardNumber
                             ),
                             //ListPageList(serverdata: vDBD.database.contacts),
@@ -283,145 +203,6 @@ class ItemCard{
   });
 }
 
-class ListPageList extends StatefulWidget {
-  List<ContactItem> serverdata;
-//  bool blockrightarrow;
-//  int limit_const;
-//  int count_data;
-//  final Function(int,int,int) changeCount;
-
-  //ListPageList({required this.serverdata, required this.blockrightarrow, required this.limit_const, required this.count_data, required this.changeCount});
-  ListPageList({required this.serverdata});
-
-  @override
-  _ListPageList createState() => _ListPageList();
-}
-
-class _ListPageList extends State<ListPageList> {
-  @override
-  Widget build(BuildContext context) {
-    //print('12345');
-    // print('datalist  ;22; ${serverdata.database.contacts[0].firstname}');
-
-    //  return Text('22131231212');
-
-
-
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-          itemCount: widget.serverdata.length,
-          itemBuilder: (context, index) {
-            var postPone = widget.serverdata[index];
-
-            List<ItemCard> cardContact = [];
-            cardContact.add(ItemCard(name: "Организация", icon: '', value: postPone.corporation.toString()));
-            cardContact.add(ItemCard(name: "Должность", icon: '', value: postPone.position.toString()));
-            cardContact.add(ItemCard(name: "Подразделение", icon: '', value: postPone.department.toString()));
-            cardContact.add(ItemCard(name: "Дата рождения", icon: '', value: postPone.birthdate.toString()));
-            cardContact.add(ItemCard(name: "Рабочий тел.", icon: 'p', value: postPone.workphone.toString()));
-            cardContact.add(ItemCard(name: "Мобильный тел.", icon: 'p', value: postPone.mobilephone.toString()));
-            cardContact.add(ItemCard(name: "Почта", icon: 'e', value: postPone.mail.toString()));
-
-            //print(ipLocalhost + postPone.photo.toString());
-            return new Container(
-                decoration: myBoxDecoration(),
-                margin: const EdgeInsets.all(6.0),
-                padding: const EdgeInsets.all(3.0),
-                child: Column(children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      //Expanded(
-                        //child:
-                        new ConstrainedBox(
-                            constraints: new BoxConstraints(
-                              maxHeight: 310.0,
-                            ),
-                            child:
-
-                        Padding(
-                            padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                            child:
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child:
-                              Image.network(
-                                'http://'+ipLocalhost + postPone.photo.toString(),
-                                //'',
-                                //fit: BoxFit.fitHeight,
-                                errorBuilder: (context, error, stackTrace) {
-                                  //print(error);
-                                  return Image.asset(
-                                    'assets/NoPhoto.png',
-                                    //fit: BoxFit.fitHeight,
-                                  );
-                                },
-                              )
-
-                            )
-
-
-
-                        )),
-                     // ),
-                      Expanded(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              Row(children: [
-                                Expanded(
-                                    child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: RichText(
-                                          text: TextSpan(
-                                            text: 'Статус: ',
-                                            style: new TextStyle(
-                                                fontSize: 12.0,
-                                                color: Colors.black),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                  text: postPone.status
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 12.0,
-                                                      color:
-                                                          Colors.green[900])),
-                                            ],
-                                          ),
-                                        ))),
-                              ]),
-                              Row(children: [
-                                Expanded(
-                                    child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          postPone.firstname.toString() +
-                                              " " +
-                                              postPone.middlename.toString() +
-                                              " " +
-                                              postPone.lastname.toString(),
-                                          style: new TextStyle(
-                                            //backgroundColor: Colors.blue,
-                                            fontFamily: 'Quicksand',
-                                            fontSize: 20.0,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ))),
-                              ])
-                            ],
-                          )),
-                    ],
-                  ),
-                  ContactValues(cardContact),
-
-                ]));
-          },
-        );
-  }
-}
 
 BoxDecoration myBoxDecoration() {
   return BoxDecoration(
@@ -481,12 +262,163 @@ class ContactValues extends StatelessWidget {
                             child: Center(child: _getIcon(itContact.icon)))),
                     Container(
                         padding: EdgeInsets.only(bottom: 3.0, top: 3.0),
-                        child: Text(itContact.value,
-                            style: new TextStyle(
-                                fontSize: 14.0, color: Colors.indigo[900]))),
+                        child: getInteractiveText(itContact.icon, itContact.value),
+                        ),
                   ]))
           .toList(),
     );
+  }
+}
+
+class getInteractiveText extends StatelessWidget {
+  String sIcon;
+  String sText;
+
+  getInteractiveText(this.sIcon, this.sText);
+
+  @override
+  Widget build(BuildContext context) {
+//Widget _getInteractiveText(sIcon, sText) {
+    if (sIcon == 'p') if (sText != '') {
+      return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+              onDoubleTap: () async {
+                final Uri launchUri = Uri(
+                  scheme: 'tel',
+                  path: sText,
+                );
+                if (await canLaunch(launchUri.toString())) {
+                  launch(launchUri.toString());
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Long press to Added the clipboard..',
+                        style: new TextStyle(
+                            fontSize: 14.0, color: Colors.indigo[900])),
+                    duration: const Duration(milliseconds: 600),
+                    width: 160.0,
+                    // Width of the SnackBar.
+                    backgroundColor: Colors.blue[50],
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, // Inner padding for SnackBar content.
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ));
+                }
+              },
+              onLongPress: () {
+                FlutterClipboard.copy(sText).then((value) {});
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Added to clipboard..',
+                      style: new TextStyle(
+                          fontSize: 14.0, color: Colors.indigo[900])),
+                  duration: const Duration(milliseconds: 600),
+                  width: 160.0,
+                  // Width of the SnackBar.
+                  backgroundColor: Colors.blue[50],
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0, // Inner padding for SnackBar content.
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ));
+              },
+              child: Text(sText,
+                  style: new TextStyle(
+                      fontSize: 14.0, color: Colors.indigo[900]))));
+    } else {
+      return Text(sText,
+          style: new TextStyle(fontSize: 14.0, color: Colors.indigo[900]));
+    }
+    else if (sIcon == 'e') if (sText != '') {
+      return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+              onDoubleTap: () async {
+                if (await canLaunch('mailto:' + sText)) {
+                  launch('mailto:' + sText);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Long press to Added the clipboard..',
+                        style: new TextStyle(
+                            fontSize: 14.0, color: Colors.indigo[900])),
+                    duration: const Duration(milliseconds: 600),
+                    width: 160.0,
+                    // Width of the SnackBar.
+                    backgroundColor: Colors.blue[50],
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, // Inner padding for SnackBar content.
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ));
+                }
+              },
+              onLongPress: () {
+                FlutterClipboard.copy(sText).then((value) {});
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Added to clipboard..',
+                      style: new TextStyle(
+                          fontSize: 14.0, color: Colors.indigo[900])),
+                  duration: const Duration(milliseconds: 600),
+                  width: 160.0,
+                  // Width of the SnackBar.
+                  backgroundColor: Colors.blue[50],
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0, // Inner padding for SnackBar content.
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ));
+              },
+              child: Text(sText,
+                  style: new TextStyle(
+                      fontSize: 14.0, color: Colors.indigo[900]))));
+    } else {
+      return Text(sText,
+          style: new TextStyle(fontSize: 14.0, color: Colors.indigo[900]));
+    }
+    else {
+      if (sText != '') {
+        return MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+                onLongPress: () {
+                  FlutterClipboard.copy(sText).then((value) {});
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Added to clipboard..',
+                        style: new TextStyle(
+                            fontSize: 14.0, color: Colors.indigo[900])),
+                    duration: const Duration(milliseconds: 600),
+                    width: 160.0,
+                    // Width of the SnackBar.
+                    backgroundColor: Colors.blue[50],
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, // Inner padding for SnackBar content.
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ));
+                },
+                child: Text(sText,
+                    style: new TextStyle(
+                        fontSize: 14.0, color: Colors.indigo[900]))));
+      } else {
+        return Text(sText,
+            style: new TextStyle(fontSize: 14.0, color: Colors.indigo[900]));
+      }
+    }
   }
 }
 
@@ -544,184 +476,6 @@ class ArrowBottomWidget extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-class GridPageListCopy extends StatefulWidget {
-  List<ContactItem> serverdata;
-  int cardNumber;
-  GridPageListCopy({required this.serverdata, required this.cardNumber});
-
-  @override
-  _GridPageListCopy createState() => _GridPageListCopy();
-}
-
-class _GridPageListCopy extends State<GridPageListCopy> {
-  @override
-  Widget build(BuildContext context) {
-
-    return GridView.count(crossAxisCount: widget.cardNumber,
-
-        //childAspectRatio: MediaQuery.of(context).size.width /
-        //    (MediaQuery.of(context).size.height / 1),
-        childAspectRatio:1/2.5,
-
-        controller: new ScrollController(keepScrollOffset: false),
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-
-
-        children:
-
-
-        List.generate(widget.serverdata.length, (index) {
-          var postPone = widget.serverdata[index];
-
-          List<ItemCard> cardContact = [];
-          cardContact.add(ItemCard(name: "Организация", icon: '', value: postPone.corporation.toString()));
-          cardContact.add(ItemCard(name: "Должность", icon: '', value: postPone.position.toString()));
-          cardContact.add(ItemCard(name: "Подразделение", icon: '', value: postPone.department.toString()));
-          cardContact.add(ItemCard(name: "Дата рождения", icon: '', value: postPone.birthdate.toString()));
-          cardContact.add(ItemCard(name: "Рабочий тел.", icon: 'p', value: postPone.workphone.toString()));
-          cardContact.add(ItemCard(name: "Мобильный тел.", icon: 'p', value: postPone.mobilephone.toString()));
-          cardContact.add(ItemCard(name: "Почта", icon: 'e', value: postPone.mail.toString()));
-
-
-
-          return new
-
-
-
-
-          Container(
-              decoration: myBoxDecoration(),
-              margin: const EdgeInsets.all(6.0),
-              padding: const EdgeInsets.all(3.0),
-              child: Column(children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    //Expanded(
-                    //child:
-                    new ConstrainedBox(
-                        constraints: new BoxConstraints(
-                          maxHeight: 310.0,
-                        ),
-                        child:
-
-                        Padding(
-                            padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                            child:
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child:
-                                Image.network(
-                                  'http://'+ipLocalhost + postPone.photo.toString(),
-                                  //'',
-                                  //fit: BoxFit.fitHeight,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    //print(error);
-                                    return Image.asset(
-                                      'assets/NoPhoto.png',
-                                      //fit: BoxFit.fitHeight,
-                                    );
-                                  },
-                                )
-
-                            )
-
-
-
-                        )),
-                    // ),
-                    Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            Row(children: [
-                              Expanded(
-                                  child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: RichText(
-                                        text: TextSpan(
-                                          text: 'Статус: ',
-                                          style: new TextStyle(
-                                              fontSize: 12.0,
-                                              color: Colors.black),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                                text: postPone.status
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 12.0,
-                                                    color:
-                                                    Colors.green[900])),
-                                          ],
-                                        ),
-                                      ))),
-                            ]),
-                            Row(children: [
-                              Expanded(
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        postPone.firstname.toString() +
-                                            " " +
-                                            postPone.middlename.toString() +
-                                            " " +
-                                            postPone.lastname.toString(),
-                                        style: new TextStyle(
-                                          //backgroundColor: Colors.blue,
-                                          fontFamily: 'Quicksand',
-                                          fontSize: 20.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ))),
-                            ])
-                          ],
-                        )),
-                  ],
-                ),
-                ContactValues(cardContact),
-
-              ]))
-
-
-
-
-
-
-
-
-
-
-
-
-
-          ;
-        }
-
-
-
-        )
-
-    );
-  }
-}
-
-
-
-
-
-
-
-
-
 
 
 
@@ -875,22 +629,67 @@ class _ContainerCard extends State<ContainerCard> {
                       ]),
                       Row(children: [
                         Expanded(
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  postPone.firstname.toString() +
-                                      " " +
-                                      postPone.middlename.toString() +
-                                      " " +
-                                      postPone.lastname.toString(),
-                                  style: new TextStyle(
-                                    //backgroundColor: Colors.blue,
-                                    fontFamily: 'Quicksand',
-                                    fontSize: 20.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ))),
+                            child:
+
+
+                            MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: GestureDetector(
+                                    onLongPress: () {
+                                      String sText = postPone.firstname.toString() + " " +
+                                          postPone.middlename.toString() + " " +
+                                          postPone.lastname.toString();
+
+                                      FlutterClipboard.copy(sText).then((value) {});
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        content: Text('Added to clipboard..',
+                                            style: new TextStyle(
+                                                fontSize: 14.0, color: Colors.indigo[900])),
+                                        duration: const Duration(milliseconds: 600),
+                                        width: 160.0,
+                                        // Width of the SnackBar.
+                                        backgroundColor: Colors.blue[50],
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0, // Inner padding for SnackBar content.
+                                        ),
+                                        behavior: SnackBarBehavior.floating,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                      ));
+                                    },
+                                    child:
+                                    Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          postPone.firstname.toString() +
+                                              " " +
+                                              postPone.middlename.toString() +
+                                              " " +
+                                              postPone.lastname.toString(),
+                                          style: new TextStyle(
+                                            //backgroundColor: Colors.blue,
+                                            fontFamily: 'Quicksand',
+                                            fontSize: 20.0,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ))
+
+
+                                ))
+
+
+
+
+
+
+
+
+
+
+
+                        ),
                       ])
                     ],
                   )),
