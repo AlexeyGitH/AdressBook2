@@ -283,7 +283,8 @@ class getInteractiveText extends StatelessWidget {
       return MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
-              onDoubleTap: () async {
+              //onDoubleTap: () async {
+              onTap: () async {
                 final Uri launchUri = Uri(
                   scheme: 'tel',
                   path: sText,
@@ -339,7 +340,8 @@ class getInteractiveText extends StatelessWidget {
       return MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
-              onDoubleTap: () async {
+              //onDoubleTap: () async {
+                onTap: () async {
                 if (await canLaunch('mailto:' + sText)) {
                   launch('mailto:' + sText);
                 } else {
