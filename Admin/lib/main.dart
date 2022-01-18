@@ -5,7 +5,10 @@ import 'screens/LogIn.dart';
 import 'screens/MainAdminPage.dart';
 import 'package:admin/models/mainStatesModel.dart';
 
-https://github.com/carzacc/jwt-tutorial-flutter/blob/master/lib/main.dart
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:async';
+
+//https://github.com/carzacc/jwt-tutorial-flutter/blob/master/lib/main.dart
 
 void main() {
   runApp(const MyApp());
@@ -76,6 +79,34 @@ class BodyWidget extends StatefulWidget {
 class _BodyWidget extends State<BodyWidget> {
   Widget build(BuildContext context) {
     var mainConstModel = context.watch<MainConstModel>();
+
+    final _storage = const FlutterSecureStorage();
+
+    Future<String> _readValStorage() async {
+      String? val = await _storage.read(key: 'fff');
+      String v = val ?? '';
+      mainConstModel.setTokenAuth(v);
+      return v;
+
+    }
+
+    Future<void> _deleteValStorage() async {
+      await _storage.delete(key: 'fff');
+    }
+
+    Future<void> _writeValStorage() async {
+      await _storage.write(key: 'fff', value: 'value88');
+    }
+
+    _readValStorage();
+    if (mainConstModel.tokenAuth == '')
+      {print('token empty');}
+   else
+    {print('token ffff');
+    _writeValStorage();
+
+    }
+
 
     if (mainConstModel.authenticated == false) {
       return LoginPage();
