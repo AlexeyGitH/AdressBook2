@@ -82,12 +82,13 @@ class _BodyWidget extends State<BodyWidget> {
 
     final _storage = const FlutterSecureStorage();
 
-    Future<String> _readValStorage() async {
+    Future<void> _readValStorage() async {
       String? val = await _storage.read(key: 'fff');
       String v = val ?? '';
-      mainConstModel.setTokenAuth(v);
-      return v;
-
+      print('v: $v');
+      if (mainConstModel.tokenAuth != v)
+        {
+        mainConstModel.setTokenAuth(v);}
     }
 
     Future<void> _deleteValStorage() async {
@@ -100,10 +101,11 @@ class _BodyWidget extends State<BodyWidget> {
 
     _readValStorage();
     if (mainConstModel.tokenAuth == '')
-      {print('token empty');}
+      {_writeValStorage();
+        print('token empty');}
    else
     {print('token ffff');
-    _writeValStorage();
+
 
     }
 
