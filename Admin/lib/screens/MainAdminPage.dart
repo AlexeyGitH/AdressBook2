@@ -15,7 +15,7 @@ class _MainAdminPage extends State<MainAdminPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Admin"),
+          title: Text("Admin 2"),
         ),
         body: SingleChildScrollView(
             child: Row (children: [

@@ -82,13 +82,16 @@ class _BodyWidget extends State<BodyWidget> {
 
     final _storage = const FlutterSecureStorage();
 
-    Future<void> _readValStorage() async {
+    Future<String> _readValStorage() async {
       String? val = await _storage.read(key: 'fff');
+      String v = val ?? '';
+      return v;
+      /*String? val = await _storage.read(key: 'fff');
       String v = val ?? '';
       print('v: $v');
       if (mainConstModel.tokenAuth != v)
         {
-        mainConstModel.setTokenAuth(v);}
+        mainConstModel.setTokenAuth(v);}*/
     }
 
     Future<void> _deleteValStorage() async {
@@ -109,11 +112,33 @@ class _BodyWidget extends State<BodyWidget> {
 
     }
 
-
+/*
     if (mainConstModel.authenticated == false) {
       return LoginPage();
     } else {
       return MainAdminPage();
     }
+ */
+
+    return FutureBuilder(
+      future: _readValStorage(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          debugPrint('Step 3, build widget: ${snapshot.data}');
+          // Build the widget with data.
+          //return Center(child: Container(child: Text('hasData: ${snapshot.data}')));
+          if (snapshot.data == 'value88') {
+            return MainAdminPage();
+          } else {
+            return LoginPage();
+          }
+        } else {
+          // We can show the loading view until the data comes back.
+          debugPrint('Step 1, build loading widget');
+          return CircularProgressIndicator();
+        }
+      },
+    );
+
   }
 }
