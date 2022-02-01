@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:admin/models/mainStatesModel.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:async';
+
 class MainAdminPage extends StatefulWidget {
   @override
   _MainAdminPage createState() => _MainAdminPage();
@@ -12,6 +15,12 @@ class _MainAdminPage extends State<MainAdminPage> {
 
   Widget build(BuildContext context) {
     var mainConstModel = context.watch<MainConstModel>();
+
+    final _storage = const FlutterSecureStorage();
+    Future<void> _deleteValStorage() async {
+      await _storage.delete(key: 'fff');
+    }
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -65,7 +74,9 @@ class _MainAdminPage extends State<MainAdminPage> {
 
                   TextButton(
                     onPressed: () {
-                      mainConstModel.setAuthenticated(false);
+//                      mainConstModel.setAuthenticated(false);
+                      _deleteValStorage();
+                      debugPrint('Delete storage');
                       //String base64Auth = stringToBase64.encode("${login}:${password}");
                       //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyHomePage(title: 'fff'),), (route) => false);
 

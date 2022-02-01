@@ -1,24 +1,10 @@
 import 'package:flutter/foundation.dart';
 class MainConstModel extends ChangeNotifier {
-  bool authenticated = false;
-  String viewResume = 'Auth';
 
-  String tokenAuth = '';
+  String currentPage = 'MainPage';
 
-  void setAuthenticated(bool authenticated) {
-    this.authenticated = authenticated;
+  void setCurrentPage(String currentPage) {
+    this.currentPage = currentPage;
     notifyListeners();
   }
-
-  void setViewResume(String viewResume) {
-    this.viewResume = viewResume;
-    notifyListeners();
-  }
-
-  void setTokenAuth(String tokenAuth) {
-    this.tokenAuth = tokenAuth;
-    notifyListeners();
-  }
-
-
 }

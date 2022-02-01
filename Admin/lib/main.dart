@@ -48,20 +48,7 @@ class _MainWidget extends State<MainWidget> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        //Provider(create: (context) => DataBase()),
-        //Provider(create: (context) => DataBaseFilter()),
         Provider(create: (context) => MainConstModel()),
-
-        /*
-        ChangeNotifierProxyProvider<DataBase, FiltersModel>(
-          create: (context) => FiltersModel(),
-          update: (context, DataBase, DataBaseFilter) {
-            //if (DataBaseFilter == null) throw ArgumentError.notNull('DataBaseFilter');
-            //cart.catalog = catalog;
-            //return cart;
-          },
-        ),
-        */
         ChangeNotifierProvider<MainConstModel>(
           create: (context) => MainConstModel(),
         ),
@@ -83,42 +70,22 @@ class _BodyWidget extends State<BodyWidget> {
     final _storage = const FlutterSecureStorage();
 
     Future<String> _readValStorage() async {
-      String? val = await _storage.read(key: 'fff');
-      String v = val ?? '';
-      return v;
-      /*String? val = await _storage.read(key: 'fff');
-      String v = val ?? '';
-      print('v: $v');
-      if (mainConstModel.tokenAuth != v)
-        {
-        mainConstModel.setTokenAuth(v);}*/
+      String? val = await _storage.read(key: 'token_session');
+      String t_s = val ?? '';
+
+      debugPrint('before delay');
+      Future.delayed(const Duration(seconds: 5), () {
+        final f = t_s;
+        debugPrint('after delay 2');
+
+      });
+      debugPrint('after delay 1');
+
+      return t_s;
     }
 
-    Future<void> _deleteValStorage() async {
-      await _storage.delete(key: 'fff');
-    }
-
-    Future<void> _writeValStorage() async {
-      await _storage.write(key: 'fff', value: 'value88');
-    }
-
-    _readValStorage();
-    if (mainConstModel.tokenAuth == '')
-      {_writeValStorage();
-        print('token empty');}
-   else
-    {print('token ffff');
 
 
-    }
-
-/*
-    if (mainConstModel.authenticated == false) {
-      return LoginPage();
-    } else {
-      return MainAdminPage();
-    }
- */
 
     return FutureBuilder(
       future: _readValStorage(),

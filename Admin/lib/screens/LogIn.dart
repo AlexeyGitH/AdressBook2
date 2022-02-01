@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:admin/models/mainStatesModel.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:async';
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -26,7 +29,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
     super.dispose();
   }
 
+  final _storage = const FlutterSecureStorage();
+  Future<void> _writeValStorage() async {
+    await _storage.write(key: 'fff', value: 'value88');
+  }
 
+  Future<void> _deleteValStorage() async {
+    await _storage.delete(key: 'fff');
+  }
 
   Widget build(BuildContext context) {
     var mainConstModel = context.watch<MainConstModel>();
@@ -45,9 +55,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
                     padding: const EdgeInsets.fromLTRB(0.0, 60.0, 0.0, 30.0),
                     child: Center(
                       child: Container(
-                          width: 200,
-                          height: 150,
-                          child: Image.asset('logo.png')),
+                          width: 160,
+                          height: 120,
+                          child: Image.asset('assets/logo.png')),
                     ),
                   ),
                 ),
@@ -93,12 +103,16 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
                               color: _color.value, borderRadius: BorderRadius.circular(20)),
                           child: TextButton(
                             onPressed: () {
-                              mainConstModel.setAuthenticated(true);
+                              //mainConstModel.setAuthenticated(true);
                               //String base64Auth = stringToBase64.encode("${login}:${password}");
                               //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyHomePage(title: 'fff'),), (route) => false);
 
                               //Navigator.push(
                               //    context, MaterialPageRoute(builder: (_) => MyHomePage(title: 'fff',)));
+                              _writeValStorage();
+                              debugPrint('Write storage');
+
+
                             },
                             child: Text(
                               'Login',
