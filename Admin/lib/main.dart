@@ -74,7 +74,7 @@ class _BodyWidget extends State<BodyWidget> {
       String t_s = val ?? '';
 
       debugPrint('before delay');
-      Future.delayed(const Duration(seconds: 5), () {
+      await Future.delayed(const Duration(seconds: 5), () {
         final f = t_s;
         debugPrint('after delay 2');
 
@@ -102,7 +102,12 @@ class _BodyWidget extends State<BodyWidget> {
         } else {
           // We can show the loading view until the data comes back.
           debugPrint('Step 1, build loading widget');
-          return CircularProgressIndicator();
+          return  Center(
+            child: SizedBox(
+            width: 150,
+            height: 150,
+            child: CircularProgressIndicator()),
+        );
         }
       },
     );
