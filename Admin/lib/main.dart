@@ -73,13 +73,13 @@ class _BodyWidget extends State<BodyWidget> {
       String? val = await _storage.read(key: 'token_session');
       String t_s = val ?? '';
 
-      debugPrint('before delay');
-      await Future.delayed(const Duration(seconds: 5), () {
-        final f = t_s;
-        debugPrint('after delay 2');
+      //debugPrint('before delay');
+//      await Future.delayed(const Duration(seconds: 5), () {
+  //      final f = t_s;
+        //debugPrint('after delay 2');
 
-      });
-      debugPrint('after delay 1');
+//      });
+//      debugPrint('after delay 1');
 
       return t_s;
     }
@@ -101,7 +101,7 @@ class _BodyWidget extends State<BodyWidget> {
           }
         } else {
           // We can show the loading view until the data comes back.
-          debugPrint('Step 1, build loading widget');
+          //debugPrint('Step 1, build loading widget');
           return  Center(
             child: SizedBox(
             width: 150,
