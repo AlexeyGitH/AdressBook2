@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:admin/models/mainStatesModel.dart';
+import 'package:admin/models/database.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
@@ -106,7 +107,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
                               //mainConstModel.setAuthenticated(true);
                               //String base64Auth = stringToBase64.encode("${login}:${password}");
                               //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyHomePage(title: 'fff'),), (route) => false);
-
+                              getTokenAuth();
                               //Navigator.push(
                               //    context, MaterialPageRoute(builder: (_) => MyHomePage(title: 'fff',)));
                               _writeValStorage();

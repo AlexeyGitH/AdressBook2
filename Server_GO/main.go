@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/rand"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -8,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
 
@@ -134,6 +136,7 @@ func main() {
 	r.HandleFunc("/department/", getDepartaments)
 	r.HandleFunc("/searchcontacts/", getContacts)
 	r.HandleFunc("/ab/", MainPageWebBook)
+	r.HandleFunc("/auth/", getToken)
 
 	staticDir := "/static/"
 	r.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
@@ -448,5 +451,145 @@ func getContacts(w http.ResponseWriter, r *http.Request) {
 	*/
 	fmt.Printf("%s \n", string(b))
 	fmt.Printf("%s \n", string(m.FIO))
+
+}
+
+func getToken(w http.ResponseWriter, r *http.Request) {
+
+	type LoginPassword struct {
+		Login    string
+		Password string
+	}
+	type LoginId struct {
+		Login string
+		Id    string
+	}
+
+	type Login_data struct {
+		Auth bool
+		Msg  string
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	var t LoginPassword
+	err := decoder.Decode(&t)
+	var param_req []interface{}
+
+	data := Login_data{
+		Auth: false,
+		Msg:  "No data",
+	}
+
+	if err != nil {
+
+		selectionUserLogin := fmt.Sprintf("SELECT username, id FROM users WHERE username = ? AND password = ?")
+		param_req = append(param_req, "%"+t.Login+"%")
+		param_req = append(param_req, "%"+t.Password+"%")
+
+		db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
+		if err != nil {
+			panic(err)
+		}
+		defer db.Close()
+
+		rows, err := db.Query(selectionUserLogin, param_req...)
+		if err != nil {
+			fmt.Println(err)
+		}
+		defer rows.Close()
+
+		var LoginArray []LoginId
+		var xx int
+		for rows.Next() {
+			var p LoginId
+
+			err := rows.Scan(&p.Login, &p.Id)
+
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+			LoginArray = append(LoginArray, p)
+			xx++
+		}
+
+		if xx > 0 {
+			data = Login_data{
+				Auth: true,
+				Msg:  "",
+			}
+			selectionUserLogin := fmt.Sprintf("SELECT b.username, a.token, a.user FROM Tokens a inner join Users b On a.User = b.id where b.username = ?")
+			param_req = nil
+			param_req = append(param_req, "%"+LoginArray[0].Login+"%")
+
+			rows, err := db.Query(selectionUserLogin, param_req...)
+			if err != nil {
+				fmt.Println(err)
+			}
+			defer rows.Close()
+
+			var LoginArray []LoginId
+			var xx int
+			for rows.Next() {
+				var p LoginId
+
+				err := rows.Scan(&p.Login, &p.Id)
+
+				if err != nil {
+					fmt.Println(err)
+					continue
+				}
+				LoginArray = append(LoginArray, p)
+				xx++
+			}
+
+			/*---*/
+			var Token string
+			b := make([]byte, 4)
+			rand.Read(b)
+			Token = fmt.Sprintf("%x", b)
+			today := time.Now()
+			Token = Token + today.Format("20060102150405")
+			//fmt.Println(Token)
+
+			//respondWithJSON(w, http.StatusOK, Token)
+			/*---*/
+
+			if xx > 0 {
+				fmt.Println("Token is true")
+
+				stmt, err := db.Prepare("update Tokens set user=?, token=? where user=?")
+				result, err := stmt.Exec(LoginArray[0].Id, Token, LoginArray[0].Id)
+				if err != nil {
+					panic(err)
+				}
+				affect, err := result.RowsAffected()
+				fmt.Println(affect)
+
+			} else {
+				fmt.Println("Token is false")
+				stmt, err := db.Prepare("insert into Tokens (user, token) values (?,?)")
+				result, err := stmt.Exec(LoginArray[0].Id, Token)
+
+				if err != nil {
+					panic(err)
+				}
+				id, err := result.LastInsertId()
+				fmt.Println(id)
+			}
+
+			respondWithJSON(w, http.StatusOK, data)
+		} else {
+			data = Login_data{
+				Auth: false,
+				Msg:  "Wrong user or password",
+			}
+			respondWithJSON(w, http.StatusUnauthorized, data)
+		}
+	} else {
+		fmt.Println("No login and password")
+	}
+
+	respondWithJSON(w, http.StatusRequestTimeout, data)
 
 }
