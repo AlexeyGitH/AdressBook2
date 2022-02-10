@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
                               //mainConstModel.setAuthenticated(true);
                               //String base64Auth = stringToBase64.encode("${login}:${password}");
                               //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyHomePage(title: 'fff'),), (route) => false);
-                              getTokenAuth();
+                              getTokenAuth('login','pass');
                               //Navigator.push(
                               //    context, MaterialPageRoute(builder: (_) => MyHomePage(title: 'fff',)));
                               _writeValStorage();
