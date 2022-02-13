@@ -1,14 +1,33 @@
 import 'dart:async';
+//import 'dart:ffi';
 
 import 'package:admin/ConstSystemAD.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future getTokenAuth(String login, String password) async {
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+class AuthData {
+  bool Auth = false;
+  String Msg = '';
+
+  AuthData({
+    required this.Auth,
+    required this.Msg,
+  });
+}
+
+Future<AuthData> getTokenAuth(String login, String password) async {
   //List listdate;
-  late var listdate;
-  var now1 = new DateTime.now();
+//  late var listdate;
+//  var now1 = new DateTime.now();
 ////////////////////
+  AuthData authResponse = new AuthData(
+    Auth: false,
+    Msg: 'Server no connected',
+  );
+
+
 
   try {
 
@@ -20,17 +39,18 @@ Future getTokenAuth(String login, String password) async {
       Uri.http(ipLocalhost, '/auth/'),
       body: jsonEncode(resBody),
     ).timeout(const Duration(seconds: 3));
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 401) {
+      var AuthDataServer = AuthServer.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      //print('Response server: '+AuthData32.Auth.toString() +' ' +  AuthData32.Msg.toString() );
 
-      listdate = jsonDecode(utf8.decode(response.bodyBytes));
-      //listdate.map((s) => s as String).toList();
-      //setlistdata(listdate.map((s) => s as String).toList());
-
-      print('Response server: '+listdate.toString());
+      authResponse = new AuthData(
+        Auth: AuthDataServer.Auth,
+        Msg: AuthDataServer.Msg,
+      );
 ///////////////////////////////////////
 
     } else {
-      print('Response server: nil 22');
+      //print('Response server: nil 22');
 
     }
 
@@ -52,6 +72,26 @@ Future getTokenAuth(String login, String password) async {
   catch (e) {
     print('Error general: $e');
     rethrow;
+  }
+  return authResponse;
+}
+
+
+class AuthServer {
+  bool Auth = false;
+  String Msg = '';
+
+  AuthServer({
+    required this.Auth,
+    required this.Msg,
+  });
+
+  factory AuthServer.fromJson(Map<String, dynamic> parsedJson) {
+
+    return new AuthServer(
+      Auth: parsedJson['Auth'],
+      Msg: parsedJson['Msg'],
+    );
   }
 
 }

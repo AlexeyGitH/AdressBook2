@@ -465,6 +465,12 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 		Id    string
 	}
 
+	type LoginTokenId struct {
+		Login string
+		Token string
+		Id    int
+	}
+
 	type Login_data struct {
 		Auth bool
 		Msg  string
@@ -480,11 +486,13 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 		Msg:  "No data",
 	}
 
-	if err != nil {
+	//fmt.Printf("%+v\n", t)
+
+	if err == nil && !(t.Login == "" && t.Password == "") {
 
 		selectionUserLogin := fmt.Sprintf("SELECT username, id FROM users WHERE username = ? AND password = ?")
-		param_req = append(param_req, "%"+t.Login+"%")
-		param_req = append(param_req, "%"+t.Password+"%")
+		param_req = append(param_req, t.Login)
+		param_req = append(param_req, t.Password)
 
 		db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
 		if err != nil {
@@ -514,13 +522,16 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if xx > 0 {
+			user_id := LoginArray[0].Id
 			data = Login_data{
 				Auth: true,
 				Msg:  "",
 			}
 			selectionUserLogin := fmt.Sprintf("SELECT b.username, a.token, a.user FROM Tokens a inner join Users b On a.User = b.id where b.username = ?")
 			param_req = nil
-			param_req = append(param_req, "%"+LoginArray[0].Login+"%")
+			param_req = append(param_req, LoginArray[0].Login)
+
+			fmt.Printf("%+v\n", LoginArray)
 
 			rows, err := db.Query(selectionUserLogin, param_req...)
 			if err != nil {
@@ -528,12 +539,12 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 			}
 			defer rows.Close()
 
-			var LoginArray []LoginId
+			var LoginArray []LoginTokenId
 			var xx int
 			for rows.Next() {
-				var p LoginId
+				var p LoginTokenId
 
-				err := rows.Scan(&p.Login, &p.Id)
+				err := rows.Scan(&p.Login, &p.Token, &p.Id)
 
 				if err != nil {
 					fmt.Println(err)
@@ -543,6 +554,7 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 				xx++
 			}
 
+			fmt.Printf("%+v\n", LoginArray)
 			/*---*/
 			var Token string
 			b := make([]byte, 4)
@@ -552,7 +564,7 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 			Token = Token + today.Format("20060102150405")
 			//fmt.Println(Token)
 
-			//respondWithJSON(w, http.StatusOK, Token)
+			//respondWithJSON(w, htt p.StatusOK, Token)
 			/*---*/
 
 			if xx > 0 {
@@ -569,7 +581,7 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 			} else {
 				fmt.Println("Token is false")
 				stmt, err := db.Prepare("insert into Tokens (user, token) values (?,?)")
-				result, err := stmt.Exec(LoginArray[0].Id, Token)
+				result, err := stmt.Exec(user_id, Token)
 
 				if err != nil {
 					panic(err)
@@ -579,15 +591,23 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 			}
 
 			respondWithJSON(w, http.StatusOK, data)
+			return
 		} else {
 			data = Login_data{
 				Auth: false,
 				Msg:  "Wrong user or password",
 			}
 			respondWithJSON(w, http.StatusUnauthorized, data)
+			return
 		}
 	} else {
+		data = Login_data{
+			Auth: false,
+			Msg:  "No Login and Password",
+		}
 		fmt.Println("No login and password")
+		respondWithJSON(w, http.StatusUnauthorized, data)
+		return
 	}
 
 	respondWithJSON(w, http.StatusRequestTimeout, data)

@@ -15,13 +15,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
   late AnimationController _controller;
   late Animation<Color?> _color;
-
+  TextEditingController _svLogin = TextEditingController();
+  TextEditingController _svPassword = TextEditingController();
+  String msgText = '';
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(duration: Duration(seconds: 2),vsync: this,)..repeat(reverse: true);
     _color = ColorTween(begin: Colors.blue[400], end: Colors.blue[700]).animate(_controller);
+    msgText ='';
   }
 
   @override
@@ -67,6 +70,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
                       left: 15.0, right: 15.0, top: 15, bottom: 0),
                   //padding: EdgeInsets.symmetric(horizontal: 15),
                   child: TextField(
+                    controller: _svLogin,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Login',
@@ -78,7 +82,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
                       left: 15.0, right: 15.0, top: 15, bottom: 0),
                   //padding: EdgeInsets.symmetric(horizontal: 15),
                   child: TextField(
-
+                    controller: _svPassword,
                     obscureText: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -103,15 +107,22 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
                           decoration: BoxDecoration(
                               color: _color.value, borderRadius: BorderRadius.circular(20)),
                           child: TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               //mainConstModel.setAuthenticated(true);
                               //String base64Auth = stringToBase64.encode("${login}:${password}");
                               //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyHomePage(title: 'fff'),), (route) => false);
-                              getTokenAuth('login','pass');
-                              //Navigator.push(
-                              //    context, MaterialPageRoute(builder: (_) => MyHomePage(title: 'fff',)));
+                              var _resp = await getTokenAuth(_svLogin.text, _svPassword.text);
+                              if (_resp.Auth == true) {
+
                               _writeValStorage();
                               debugPrint('Write storage');
+
+                              } else {
+                                setState(() {msgText = _resp.Msg;});
+                              }
+
+
+
 
 
                             },
@@ -143,7 +154,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
 
                 ),
 
-                Text('ffff 444'),
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(msgText,
+                    style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red[300],
+                    decoration: TextDecoration.underline,
+                    ),),
+                ),
 
 
               ])),
@@ -155,4 +174,3 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
   }
 
 }
-
