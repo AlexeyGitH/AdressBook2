@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:admin/models/mainStatesModel.dart';
 import 'package:admin/models/database.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
 
 class LoginPage extends StatefulWidget {
@@ -31,15 +30,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  final _storage = const FlutterSecureStorage();
-  Future<void> _writeValStorage() async {
-    await _storage.write(key: 'fff', value: 'value88');
-  }
-
-  Future<void> _deleteValStorage() async {
-    await _storage.delete(key: 'fff');
   }
 
   Widget build(BuildContext context) {
@@ -113,15 +103,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin  {
                               //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyHomePage(title: 'fff'),), (route) => false);
                               var _resp = await getTokenAuth(_svLogin.text, _svPassword.text);
                               if (_resp.Auth == true) {
-
-                              _writeValStorage();
-                              debugPrint('Write storage');
-
+                                mainConstModel.setCurrentPage("MainPage");
+                                //debugPrint('Write storage');
                               } else {
                                 setState(() {msgText = _resp.Msg;});
                               }
-
-
 
 
 

@@ -137,6 +137,7 @@ func main() {
 	r.HandleFunc("/searchcontacts/", getContacts)
 	r.HandleFunc("/ab/", MainPageWebBook)
 	r.HandleFunc("/auth/", getToken)
+	r.HandleFunc("/checkToken/", checkToken)
 
 	staticDir := "/static/"
 	r.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
@@ -472,8 +473,9 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type Login_data struct {
-		Auth bool
-		Msg  string
+		Auth  bool
+		Msg   string
+		Token string
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -482,8 +484,9 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 	var param_req []interface{}
 
 	data := Login_data{
-		Auth: false,
-		Msg:  "No data",
+		Auth:  false,
+		Msg:   "No data",
+		Token: "",
 	}
 
 	//fmt.Printf("%+v\n", t)
@@ -523,10 +526,6 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 
 		if xx > 0 {
 			user_id := LoginArray[0].Id
-			data = Login_data{
-				Auth: true,
-				Msg:  "",
-			}
 			selectionUserLogin := fmt.Sprintf("SELECT b.username, a.token, a.user FROM Tokens a inner join Users b On a.User = b.id where b.username = ?")
 			param_req = nil
 			param_req = append(param_req, LoginArray[0].Login)
@@ -590,20 +589,28 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(id)
 			}
 
+			data = Login_data{
+				Auth:  true,
+				Msg:   "",
+				Token: Token,
+			}
+
 			respondWithJSON(w, http.StatusOK, data)
 			return
 		} else {
 			data = Login_data{
-				Auth: false,
-				Msg:  "Wrong user or password",
+				Auth:  false,
+				Msg:   "Wrong user or password",
+				Token: "",
 			}
 			respondWithJSON(w, http.StatusUnauthorized, data)
 			return
 		}
 	} else {
 		data = Login_data{
-			Auth: false,
-			Msg:  "No Login and Password",
+			Auth:  false,
+			Msg:   "No Login and Password",
+			Token: "",
 		}
 		fmt.Println("No login and password")
 		respondWithJSON(w, http.StatusUnauthorized, data)
@@ -611,5 +618,55 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusRequestTimeout, data)
+
+}
+
+func checkToken(w http.ResponseWriter, r *http.Request) {
+	var _token string
+	type Token_data struct {
+		Token string
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	var t Token_data
+	err := decoder.Decode(&t)
+	var param_req []interface{}
+
+	if err == nil && !(t.Token == "") {
+
+		param_req = append(param_req, t.Token)
+		selectionToken := fmt.Sprintf("SELECT token From Tokens  WHERE token = ?")
+
+		db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
+		if err != nil {
+			panic(err)
+		}
+		defer db.Close()
+
+		rows, err := db.Query(selectionToken, param_req...)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+
+			err := rows.Scan(&_token)
+
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+		}
+		if _token == t.Token {
+			respondWithJSON(w, http.StatusOK, true)
+		} else {
+			respondWithJSON(w, http.StatusUnauthorized, false)
+		}
+
+	} else {
+		respondWithJSON(w, http.StatusUnauthorized, false)
+	}
 
 }

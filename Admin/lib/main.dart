@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:admin/ConstSystemAD.dart';
 import 'screens/LogIn.dart';
 import 'screens/MainAdminPage.dart';
 import 'package:admin/models/mainStatesModel.dart';
-
+import 'package:admin/models/database.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
 
@@ -69,19 +69,11 @@ class _BodyWidget extends State<BodyWidget> {
 
     final _storage = const FlutterSecureStorage();
 
-    Future<String> _readValStorage() async {
-      String? val = await _storage.read(key: 'token_session');
+    Future<bool> _readValStorage() async {
+      String? val = await _storage.read(key: session_token_name);
       String t_s = val ?? '';
-
-      //debugPrint('before delay');
-//      await Future.delayed(const Duration(seconds: 5), () {
-  //      final f = t_s;
-        //debugPrint('after delay 2');
-
-//      });
-//      debugPrint('after delay 1');
-
-      return t_s;
+      var _resp = await checkTokenAuth(t_s);
+      return _resp;
     }
 
 
@@ -91,11 +83,16 @@ class _BodyWidget extends State<BodyWidget> {
       future: _readValStorage(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          debugPrint('Step 3, build widget: ${snapshot.data}');
+         // debugPrint('Step 3, build widget: ${snapshot.data}');
           // Build the widget with data.
           //return Center(child: Container(child: Text('hasData: ${snapshot.data}')));
-          if (snapshot.data == 'value88') {
+          if (snapshot.data == true) {
+            if (mainConstModel.currentPage != "MainPage") {
+              return MainAdminPage();
+            } else {
             return MainAdminPage();
+            }
+
           } else {
             return LoginPage();
           }
