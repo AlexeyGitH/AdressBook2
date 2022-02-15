@@ -70,9 +70,14 @@ class _BodyWidget extends State<BodyWidget> {
     final _storage = const FlutterSecureStorage();
 
     Future<bool> _readValStorage() async {
+      debugPrint('Step 1, build widget:');
       String? val = await _storage.read(key: session_token_name);
+      debugPrint('Step 2, build widget:');
       String t_s = val ?? '';
+      debugPrint('Step 3, build widget:');
       var _resp = await checkTokenAuth(t_s);
+      debugPrint('Step 4, build widget:');
+      debugPrint('Step 5, build widget:${_resp}');
       return _resp;
     }
 

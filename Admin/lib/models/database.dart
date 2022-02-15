@@ -2,6 +2,7 @@ import 'dart:async';
 //import 'dart:ffi';
 
 import 'package:admin/ConstSystemAD.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -153,5 +154,6 @@ Future<bool> checkTokenAuth(String token) async {
     print('Error general: $e');
     rethrow;
   }
+  debugPrint('Step 6, build base:');
   return result;
 }
