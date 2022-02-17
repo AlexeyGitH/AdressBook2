@@ -133,7 +133,7 @@ Future<bool> checkTokenAuth(String token) async {
 
     final response = await http.post(
       Uri.http(ipLocalhost, '/checkToken/'),
-      body: jsonEncode(resBody),);
+      body: jsonEncode(resBody),).timeout(const Duration(seconds: 3));
     if (response.statusCode == 200) {
       result = true;
     }

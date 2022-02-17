@@ -87,32 +87,84 @@ class _BodyWidget extends State<BodyWidget> {
     return FutureBuilder(
       future: _readValStorage(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-         // debugPrint('Step 3, build widget: ${snapshot.data}');
-          // Build the widget with data.
-          //return Center(child: Container(child: Text('hasData: ${snapshot.data}')));
-          if (snapshot.data == true) {
-            if (mainConstModel.currentPage != "MainPage") {
-              return MainAdminPage();
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return  Center(
+              child: SizedBox(
+                  width: 150,
+                  height: 150,
+                  child: CircularProgressIndicator()),
+            );
+          default:
+            if (snapshot.hasData) {
+              // debugPrint('Step 3, build widget: ${snapshot.data}');
+              // Build the widget with data.
+              //return Center(child: Container(child: Text('hasData: ${snapshot.data}')));
+              if (snapshot.data == true) {
+                if (mainConstModel.currentPage != "MainPage") {
+                  return MainAdminPage();
+                } else {
+                  return MainAdminPage();
+                }
+
+              } else {
+                return LoginPage();
+              }
             } else {
-            return MainAdminPage();
+              return RefreshWidget();
             }
 
-          } else {
-            return LoginPage();
-          }
-        } else {
-          // We can show the loading view until the data comes back.
-          //debugPrint('Step 1, build loading widget');
-          return  Center(
-            child: SizedBox(
-            width: 150,
-            height: 150,
-            child: CircularProgressIndicator()),
-        );
         }
-      },
-    );
+      }
 
+    );
+ }
+}
+
+
+class RefreshWidget extends StatefulWidget {
+
+
+  @override
+  _RefreshWidget createState() => _RefreshWidget();
+}
+
+class _RefreshWidget extends State<RefreshWidget> {
+  @override
+  Widget build(BuildContext context) {
+    var mainConstModel = context.watch<MainConstModel>();
+    return new Column(children: [
+      SizedBox(
+        height: MediaQuery.of(context).size.height / 1.3,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+          TextButton(
+            style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+            ),
+            onPressed: () {
+              mainConstModel.setCurrentPage("MainPage");
+            },
+            child: Icon(
+              Icons.refresh,
+              size: 150,
+            ),
+          ),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text('Try to update..',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.blue[800],
+                  decoration: TextDecoration.none,
+                ),),
+            ),
+          ],)
+        ),
+      ),
+    ]);
   }
 }
