@@ -143,11 +143,11 @@ Future<bool> checkTokenAuth(String token) async {
     print('Timeout:');
     rethrow;
   } on Error catch (e) {
-    print('Caught error: $e');
+    print('Caught error 1: $e');
     rethrow;
   }
   on http.ClientException catch (e) {
-    print('Caught error: $e');
+    print('Caught error 2: $e');
     rethrow;
   }
   catch (e) {

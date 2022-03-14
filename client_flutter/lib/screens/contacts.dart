@@ -553,8 +553,6 @@ class _ContainerCard extends State<ContainerCard> {
     cardContact.add(ItemCard(name: "Мобильный тел.", icon: 'p', value: postPone.mobilephone.toString()));
     cardContact.add(ItemCard(name: "Почта", icon: 'e', value: postPone.mail.toString()));
 
-
-
     var screenSize = MediaQuery.of(context).size;
     var cardNumber = (screenSize.width~/Width_card_const == 0) ? 1: screenSize.width~/Width_card_const;
     var imgWidth = screenSize.width/cardNumber*0.4;
