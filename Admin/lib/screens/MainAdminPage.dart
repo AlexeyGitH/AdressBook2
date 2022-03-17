@@ -19,239 +19,6 @@ class _MainAdminPage extends State<MainAdminPage> {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
 
-
-
- /*   return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text("Main page"),
-        ),
-        body:
-Column(children: [
-        Scrollbar(
-        isAlwaysShown: screenSize.width <= 600 ? true:false,
-        controller: _firstController,
-        child:
-
-        SingleChildScrollView(
-        scrollDirection: Axis. horizontal,
-        controller: _firstController,
-        child:
-Column(children: [
-    Table(
-
-      columnWidths: const <int, TableColumnWidth>{
-        0: FixedColumnWidth(600),
-        1: FixedColumnWidth(300),
-        2: FixedColumnWidth(300),
-        3: FixedColumnWidth(300),
-      },
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: <TableRow>[
-        TableRow(
-          children: <Widget>[
-            TableCell(
-              //decoration: BoxDecoration(color: Colors.grey[200]),
-              child: Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blueAccent)
-                  ),
-                  child: Center(child:Text('ФИО'))),
-            ),
-              TableCell(
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                      top: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      bottom: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      right: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                    )),
-                    child: Center(child: Text('Организация'))),
-              ),
-              TableCell(
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                      top: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      bottom: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      right: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                    )),
-                    child: Center(child: Text('Подразделение'))),
-              ),
-            TableCell(
-              child: Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                            width: 1.0, color: Colors.blueAccent),
-                        bottom: BorderSide(
-                            width: 1.0, color: Colors.blueAccent),
-                        right: BorderSide(
-                            width: 1.0, color: Colors.blueAccent),
-                      )),
-                  child: Center(child: Text('Должность'))),
-            ),
-          ],
-        ),
-      ],
-    ),
-  Table(
-
-    columnWidths: const <int, TableColumnWidth>{
-      0: FixedColumnWidth(600),
-      1: FixedColumnWidth(300),
-      2: FixedColumnWidth(300),
-      3: FixedColumnWidth(300),
-    },
-    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-    children: <TableRow>[
-      TableRow(
-        children: <Widget>[
-          TableCell(
-            //decoration: BoxDecoration(color: Colors.grey[200]),
-            child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent)
-                ),
-                child: Center(child:Text('ФИО'))),
-          ),
-          TableCell(
-            child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      bottom: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      right: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                    )),
-                child: Center(child: Text('Организация'))),
-          ),
-          TableCell(
-            child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      bottom: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      right: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                    )),
-                child: Center(child: Text('Подразделение'))),
-          ),
-          TableCell(
-            child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      bottom: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      right: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                    )),
-                child: Center(child: Text('Должность'))),
-          ),
-        ],
-      ),
-    ],
-  ) ,
-  Table(
-
-    columnWidths: const <int, TableColumnWidth>{
-      0: FixedColumnWidth(600),
-      1: FixedColumnWidth(300),
-      2: FixedColumnWidth(300),
-      3: FixedColumnWidth(300),
-    },
-    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-    children: <TableRow>[
-      TableRow(
-        children: <Widget>[
-          TableCell(
-            //decoration: BoxDecoration(color: Colors.grey[200]),
-            child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent)
-                ),
-                child: Center(child:Text('ФИО'))),
-          ),
-          TableCell(
-            child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      bottom: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      right: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                    )),
-                child: Center(child: Text('Организация'))),
-          ),
-          TableCell(
-            child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      bottom: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      right: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                    )),
-                child: Center(child: Text('Подразделение'))),
-          ),
-          TableCell(
-            child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      bottom: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                      right: BorderSide(
-                          width: 1.0, color: Colors.blueAccent),
-                    )),
-                child: Center(child: Text('Должность'))),
-          ),
-        ],
-      ),
-    ],
-  ),
-],)
-
-        )),
-
-
-
-
-]
-  ,)
-
-
-    );
-*/
     final _appBar = AppBar(
       title: Text("Contact list"),
     );
@@ -263,152 +30,74 @@ Column(children: [
         backgroundColor: Colors.white,
         appBar: _appBar,
         body:
-            Column(children: [
-            Container(
-            height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-35,
-      child:
-      Scrollbar(
-          thumbVisibility: screenSize.width <= 600 ? true:false,
-          controller: _firstController,
-          child:
+        Column(children: [
+          Container(
+              height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-35,
+              child:
+              Scrollbar(
+                //thumbVisibility: screenSize.width <= 600 ? true:false,
+                  trackVisibility: screenSize.width <= 600 ? true:false,
+                  controller: _firstController,
+                  child:
 
-          SingleChildScrollView(
-            scrollDirection: Axis. horizontal,
-            controller: _firstController,
-
-
-               child: Expanded(child:
-               Column(children: [
-
-                 _TableHeader,
+                  SingleChildScrollView(
+                      scrollDirection: Axis. horizontal,
+                      controller: _firstController,
 
 
+                      child:
+                      Column(children: [
 
-
-    //Expanded(child:
-                 Container(
-                     height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-70,
-                     child:
-
-                     Scrollbar(
-                         thumbVisibility: true,
-                         controller: _firstControllerV,
-                         child:
-    SingleChildScrollView(
-    scrollDirection: Axis.vertical,
-        controller: _firstControllerV,
-    child:
-
-                   Column(
-    children: [
-      _TableBody,
-      //Text('fffffffffffffffff ffff a'),
-    ])
-
-               )
-          //)
-
-    )
-    )
-
-                 ,
-
-
-/*
-
-                 Container(
-                     height: 100,
-                     color: Colors.red,
-                     child:
-                     SingleChildScrollView(
-                       scrollDirection: Axis.vertical,
-                       child: Column(
-                         children: <Widget>[
-
-                           Container(
-                             color: Colors.green, // Yellow
-                             height: 200.0,
-                             width: 200.0,
-                           ),
-
-                           Image.network('https://flutter-examples.com/wp-content/uploads/2019/09/blossom.jpg',
-                               width: 300, height: 200, fit: BoxFit.contain),
-
-                           Image.network('https://flutter-examples.com/wp-content/uploads/2019/09/sample_img.png',
-                               width: 200, fit: BoxFit.contain),
-
-                           Container(
-                             color: Colors.pink, // Yellow
-                             height: 200.0,
-                             width: 200.0,
-                           ),
-
-                           Text('Some Sample Text - 1', style: TextStyle(fontSize: 28)),
-
-                           Container(
-                             color: Colors.redAccent, // Yellow
-                             height: 200.0,
-                             width: 200.0,
-                           ),
-
-                           Image.network('https://flutter-examples.com/wp-content/uploads/2019/09/blossom.jpg',
-                               width: 300, height: 200, fit: BoxFit.contain),
-
-                         ],
-                       ),
-                     )),
-*/
+                        _TableHeader,
+                        //Text('Table header'),
 
 
 
 
+                        //Expanded(child:
+                        Container(
+                            height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-70,
+                            child:
+
+                            Scrollbar(
+                              //thumbVisibility: true,
+                                trackVisibility: true,
+                                controller: _firstControllerV,
+                                child:
+                                SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    controller: _firstControllerV,
+                                    child:
+
+                                    Column(
+                                        children: [
+                                          _TableBody,
+                                          //Text('Table body'),
+                                        ])
+
+                                )
+                              //)
+
+                            )
+                        )
+
+                        ,
+
+                      ],)
+
+                  ))),
 
 
-               ],))
 
-           ))),
+          _TableFooter,
 
-
-
-              _TableFooter,
-
-            ],)
-
-/*
-   Container(
-   height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round(),
-      child:
-    Scrollbar(
-    isAlwaysShown: screenSize.width <= 600 ? true:false,
-    controller: _firstController,
-    child:
-
-    SingleChildScrollView(
-    scrollDirection: Axis. horizontal,
-    controller: _firstController,
-    child:
-    Expanded(child:
-    Column(children: [
-      Text('ff'),
-      Expanded(child: Container(child: Text('ff'),)),
-      Text('ff'),
-
-  ]))))),
-*/
+        ],)
 
 
-/*
-    Text('ff'),
-    Expanded(child: Container(child: Text('ff'),)),
-    Text('ff'),
-*/
-
-
-);
+    );
 
   }
 }
-
 
 class TableHeader extends StatefulWidget {
   @override
@@ -424,84 +113,92 @@ class _TableHeader extends State<TableHeader> {
           alignment: Alignment.center,
           child:
 
-      Table(
+          Table(
 
-        columnWidths: const <int, TableColumnWidth>{
-          0: FixedColumnWidth(600),
-          1: FixedColumnWidth(300),
-          2: FixedColumnWidth(300),
-          3: FixedColumnWidth(300),
-        },
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: <TableRow>[
-          TableRow(
-            children: <Widget>[
-              TableCell(
-      child:
-      Container(
-                decoration: BoxDecoration(color: Colors.grey[300]),
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey)
-                    ),
-                    child: Center(child:Text('ФИО',style: TextStyle(fontWeight: FontWeight.bold),)))),
-              ),
-              TableCell(
-              child:
-              Container(
-              decoration: BoxDecoration(color: Colors.grey[300]),
-              child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                              width: 1.0, color: Colors.grey),
-                          bottom: BorderSide(
-                              width: 1.0, color: Colors.grey),
-                          right: BorderSide(
-                              width: 1.0, color: Colors.grey),
-                        )),
-                    child: Center(child: Text('Организация', style: TextStyle(fontWeight: FontWeight.bold),)))),
-              ),
-              TableCell(
-              child:
-              Container(
-              decoration: BoxDecoration(color: Colors.grey[300]),
-    child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                              width: 1.0, color: Colors.grey),
-                          bottom: BorderSide(
-                              width: 1.0, color: Colors.grey),
-                          right: BorderSide(
-                              width: 1.0, color: Colors.grey),
-                        )),
-                    child: Center(child: Text('Подразделение', style: TextStyle(fontWeight: FontWeight.bold),)))),
-              ),
-              TableCell(
-              child:
-              Container(
-              decoration: BoxDecoration(color: Colors.grey[300]),
-    child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                              width: 1.0, color: Colors.grey),
-                          bottom: BorderSide(
-                              width: 1.0, color: Colors.grey),
-                          right: BorderSide(
-                              width: 1.0, color: Colors.grey),
-                        )),
-                    child: Center(child: Text('Должность', style: TextStyle(fontWeight: FontWeight.bold),)))),
+            columnWidths: const <int, TableColumnWidth>{
+              0: FixedColumnWidth(100),
+              1: FixedColumnWidth(600),
+              2: FixedColumnWidth(300),
+              3: FixedColumnWidth(300),
+              4: FixedColumnWidth(300),
+            },
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            children: <TableRow>[
+              TableRow(
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(color: Colors.grey, width: 1.0),
+                ),
+                children: <Widget>[
+
+                  TableCell(
+                      verticalAlignment: TableCellVerticalAlignment.middle,
+                      child:
+
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.all(5),
+                        child:
+                        new IconButton(
+                          iconSize: 20,
+                          padding: new EdgeInsets.all(0.0),
+                          constraints: BoxConstraints(
+                            minHeight: 15.0,
+                            minWidth: 15.0,
+                          ),
+                          //color: themeData.primaryColor,
+                          icon: new Icon(Icons.add_circle_outline),
+                          onPressed: () {
+                          },
+                        )
+
+                        ,)),
+
+                  TableCell(
+                      child:
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        child:  Center(child:Text('ФИО',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      )),
+                  TableCell(
+                      child:
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                              left: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                            )
+                        ),
+
+                        padding: const EdgeInsets.all(5),
+                        child:  Center(child:Text('Организация',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      )),
+                  TableCell(
+                      child:
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                            )
+                        ),
+                        padding: const EdgeInsets.all(5),
+                        child:  Center(child:Text('Подразделение',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      )),
+                  TableCell(
+                      child:
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        child:  Center(child:Text('Должность',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      )),
+
+
+                ],
               ),
             ],
-          ),
-        ],
-      ));
+          ));
   }
 }
 
@@ -519,73 +216,73 @@ class _TableFooter extends State<TableFooter> {
           alignment: Alignment.center,
           child:
 
-      Table(
+          Table(
 
-        columnWidths: const <int, TableColumnWidth>{
-          0: FixedColumnWidth(600),
-          1: FixedColumnWidth(300),
-          2: FixedColumnWidth(300),
-          3: FixedColumnWidth(300),
-        },
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: <TableRow>[
-          TableRow(
-            children: <Widget>[
-              TableCell(
-                //decoration: BoxDecoration(color: Colors.grey[200]),
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blueAccent)
-                    ),
-                    child: Center(child:Text('ФИО'))),
-              ),
-              TableCell(
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                              width: 1.0, color: Colors.blueAccent),
-                          bottom: BorderSide(
-                              width: 1.0, color: Colors.blueAccent),
-                          right: BorderSide(
-                              width: 1.0, color: Colors.blueAccent),
-                        )),
-                    child: Center(child: Text('Организация'))),
-              ),
-              TableCell(
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                              width: 1.0, color: Colors.blueAccent),
-                          bottom: BorderSide(
-                              width: 1.0, color: Colors.blueAccent),
-                          right: BorderSide(
-                              width: 1.0, color: Colors.blueAccent),
-                        )),
-                    child: Center(child: Text('Подразделение'))),
-              ),
-              TableCell(
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                              width: 1.0, color: Colors.blueAccent),
-                          bottom: BorderSide(
-                              width: 1.0, color: Colors.blueAccent),
-                          right: BorderSide(
-                              width: 1.0, color: Colors.blueAccent),
-                        )),
-                    child: Center(child: Text('Должность'))),
+            columnWidths: const <int, TableColumnWidth>{
+              0: FixedColumnWidth(600),
+              1: FixedColumnWidth(300),
+              2: FixedColumnWidth(300),
+              3: FixedColumnWidth(300),
+            },
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            children: <TableRow>[
+              TableRow(
+                children: <Widget>[
+                  TableCell(
+                    //decoration: BoxDecoration(color: Colors.grey[200]),
+                    child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent)
+                        ),
+                        child: Center(child:Text('ФИО'))),
+                  ),
+                  TableCell(
+                    child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                  width: 1.0, color: Colors.blueAccent),
+                              bottom: BorderSide(
+                                  width: 1.0, color: Colors.blueAccent),
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.blueAccent),
+                            )),
+                        child: Center(child: Text('Организация'))),
+                  ),
+                  TableCell(
+                    child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                  width: 1.0, color: Colors.blueAccent),
+                              bottom: BorderSide(
+                                  width: 1.0, color: Colors.blueAccent),
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.blueAccent),
+                            )),
+                        child: Center(child: Text('Подразделение'))),
+                  ),
+                  TableCell(
+                    child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                  width: 1.0, color: Colors.blueAccent),
+                              bottom: BorderSide(
+                                  width: 1.0, color: Colors.blueAccent),
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.blueAccent),
+                            )),
+                        child: Center(child: Text('Должность'))),
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
-      ));
+          ));
 
   }
 }
@@ -604,6 +301,7 @@ class _TableBody extends State<TableBody> {
   Widget build(BuildContext context) {
 
     final rows = <TableRow>[];
+    var color = Colors.transparent;
 
     //for (var rowData in myRowDataList) {
 
@@ -611,58 +309,83 @@ class _TableBody extends State<TableBody> {
     for (i = 0; i < 50; i++) {
       rows.add(
 
-          TableRow(
+        TableRow(
+            decoration: BoxDecoration(
+                color: i % 2 == 0 ? Colors.white: Colors.grey[100],
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.grey, width: 0.5,),
+                )),
+
             children: [
+
+              TableCell(
+                verticalAlignment: TableCellVerticalAlignment.middle,
+                child:
+                Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.all(5),
+                    child:
+
+
+                    Row(children: [
+                      new Material(
+                          child:
+                      new IconButton(
+                        splashRadius: 8,
+                        splashColor: Colors.transparent,
+                        hoverColor: Colors.amberAccent,
+                        highlightColor: Colors.transparent,
+                        iconSize: 15,
+                        padding: new EdgeInsets.all(2.0),
+                        constraints: BoxConstraints(
+                          minHeight: 15.0,
+                          minWidth: 15.0,
+                        ),
+                        //color: themeData.primaryColor,
+                        icon: new Icon(Icons.create),
+                        onPressed: () {
+                        },
+                      )),
+                      new IconButton(
+                        iconSize: 15,
+                        padding: new EdgeInsets.all(2.0),
+                        constraints: BoxConstraints(
+                          minHeight: 15.0,
+                          minWidth: 15.0,
+                        ),
+                        //color: themeData.primaryColor,
+                        icon: new Icon(Icons.delete_forever),
+                        onPressed: () {
+                        },
+                      ),
+                    ],))
+
+                ,),
+
+
               TableCell(
                 //decoration: BoxDecoration(color: Colors.grey[200]),
                 child: Container(
                     padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey, width: 0.1,),
-                        color:  i % 2 == 0 ? Colors.white: Colors.grey[100]
-                    ),
                     child: Align( alignment: Alignment.centerLeft,child:Text('ФИО'+i.toString()))),
-                    ),
+              ),
               TableCell(
-                    child:Container(
+                child:Container(
                     padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color:  i % 2 == 0 ? Colors.white: Colors.grey[100],
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                          right: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                        )),
                     child: Center(child: Text('Организация'))),
               ),
               TableCell(
                 child: Container(
                     padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color:  i % 2 == 0 ? Colors.white: Colors.grey[100],
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                          right: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                        )),
                     child: Center(child: Text('Подразделение'))),
               ),
               TableCell(
                 child: Container(
                     padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color:  i % 2 == 0 ? Colors.white: Colors.grey[100],
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                          right: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                        )),
                     child: Center(child: Text('Должность'+i.toString()))),
               ),]
-            ),
+        ),
 
       );
     };
@@ -672,272 +395,16 @@ class _TableBody extends State<TableBody> {
     return
       Table(
         columnWidths: const <int, TableColumnWidth>{
-          0: FixedColumnWidth(600),
-          1: FixedColumnWidth(300),
+          0: FixedColumnWidth(100),
+          1: FixedColumnWidth(600),
           2: FixedColumnWidth(300),
           3: FixedColumnWidth(300),
+          4: FixedColumnWidth(300),
         },
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        //children: rows,
-        children:
-        [TableRow(
-            children: [
-              TableCell(
-                  verticalAlignment: TableCellVerticalAlignment.fill,
-                  child: Container(
-                      color: Colors.grey[300],
-                      child: Text('b')
-                  )
-              ),
-              TableCell(
-                  verticalAlignment: TableCellVerticalAlignment.fill,
-                  child: Container(
-                      color: Colors.grey[300],
-                      child: Text('b')
-                  )
-              ),
-              TableCell(
-                  verticalAlignment: TableCellVerticalAlignment.fill,
-                  child: Container(
-                      color: Colors.grey[300],
-                      child: Text('b')
-                  )
-              ),
-              TableCell(
-                  verticalAlignment: TableCellVerticalAlignment.fill,
-                  child: Container(
-                      color: Colors.grey[300],
-                      child: Text('b')
-                  )
-              ),
-
-
-              /*
-              TableCell(
-                //decoration: BoxDecoration(color: Colors.grey[200]),
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey, width: 0.1,),
-                        color:  i % 2 == 0 ? Colors.white: Colors.grey[100]
-                    ),
-                    child: Align( alignment: Alignment.centerLeft,child:Text('ФИО'+i.toString()))),
-              ),
-              TableCell(
-                child:Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color:  i % 2 == 0 ? Colors.white: Colors.grey[100],
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                          right: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                        )),
-                    child: Center(child: Text('Организация'))),
-              ),
-              TableCell(
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color:  i % 2 == 0 ? Colors.white: Colors.grey[100],
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                          right: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                        )),
-                    child: Center(child: Text('Подразделение'))),
-              ),
-              TableCell(
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color:  i % 2 == 0 ? Colors.white: Colors.grey[100],
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                          right: BorderSide(
-                            color: Colors.grey, width: 0.1,),
-                        )),
-                    child: Center(child: Text('Должность'+i.toString()))),
-              ),*/]
-        ),]
-
-
-
+        children: rows,
 
       );
   }
 
 }
-
-/*
-<TableRow>[
-TableRow(
-children:
-<Widget>[
-TableCell(
-//decoration: BoxDecoration(color: Colors.grey[200]),
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border.all(color: Colors.blueAccent)
-),
-child: Center(child:Text('ФИО1'))),
-),
-TableCell(
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border(
-top: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-bottom: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-right: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-)),
-child: Center(child: Text('Организация'))),
-),
-TableCell(
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border(
-top: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-bottom: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-right: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-)),
-child: Center(child: Text('Подразделение'))),
-),
-TableCell(
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border(
-top: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-bottom: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-right: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-)),
-child: Center(child: Text('Должность1'))),
-),
-],
-),                     TableRow(
-children: <Widget>[
-TableCell(
-//decoration: BoxDecoration(color: Colors.grey[200]),
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border.all(color: Colors.blueAccent)
-),
-child: Center(child:Text('ФИО2'))),
-),
-TableCell(
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border(
-top: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-bottom: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-right: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-)),
-child: Center(child: Text('Организация'))),
-),
-TableCell(
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border(
-top: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-bottom: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-right: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-)),
-child: Center(child: Text('Подразделение'))),
-),
-TableCell(
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border(
-top: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-bottom: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-right: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-)),
-child: Center(child: Text('Должность2'))),
-),
-],
-),
-TableRow(
-children: <Widget>[
-TableCell(
-//decoration: BoxDecoration(color: Colors.grey[200]),
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border.all(color: Colors.blueAccent)
-),
-child: Center(child:Text('ФИО3'))),
-),
-TableCell(
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border(
-top: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-bottom: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-right: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-)),
-child: Center(child: Text('Организация'))),
-),
-TableCell(
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border(
-top: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-bottom: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-right: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-)),
-child: Center(child: Text('Подразделение'))),
-),
-TableCell(
-child: Container(
-padding: const EdgeInsets.all(5),
-decoration: BoxDecoration(
-border: Border(
-top: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-bottom: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-right: BorderSide(
-width: 1.0, color: Colors.blueAccent),
-)),
-child: Center(child: Text('Должность3'))),
-),
-],
-),
-],
-*/
