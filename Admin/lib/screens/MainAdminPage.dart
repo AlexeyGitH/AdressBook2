@@ -14,11 +14,13 @@ class MainAdminPage extends StatefulWidget {
 }
 
 class _MainAdminPage extends State<MainAdminPage> {
+  /*
   final ScrollController _firstController = ScrollController();
   final ScrollController _firstControllerV = ScrollController();
-
+*/
 
   Widget build(BuildContext context) {
+    /*
     var screenSize = MediaQuery.of(context).size;
 
     final _appBar = AppBar(
@@ -27,6 +29,7 @@ class _MainAdminPage extends State<MainAdminPage> {
     final _TableHeader = TableHeader();
     final _TableBody = TableBody();
     final _TableFooter = TableFooter();
+    */
 /*
     return Scaffold(
         backgroundColor: Colors.white,
@@ -132,7 +135,25 @@ class _MainAdminPage extends State<MainAdminPage> {
                   return RefreshWidget();
                 } else {
                   if (vDBD.authServer == true) {
-                  return Text('Good');
+
+                    bool scan = true;
+                    int i = 0;
+                    final rows = <Text>[];
+
+                    while(scan) {
+
+                      rows.add(
+                        Text('Row' + i.toString() + ' // ' + vDBD.contacts[i].firstname)
+                      );
+
+                      i++;
+                      if (i >= vDBD.contacts.length)
+                        {
+                          scan = false;
+                        }
+                    }
+                  //return Column(children: rows,);
+                    return TableMainArea(dataServer: vDBD);
                   } else {return RefreshWidget();}
           }}
         }}
@@ -493,4 +514,80 @@ class _TableBody extends State<TableBody> {
       );
   }
 
+}
+
+
+
+class TableMainArea extends StatefulWidget {
+  ContactServer dataServer;
+  TableMainArea({required this.dataServer});
+
+  @override
+  _TableMainArea createState() => _TableMainArea();
+}
+
+class _TableMainArea extends State<TableMainArea> {
+
+  final ScrollController _firstController = ScrollController();
+  final ScrollController _firstControllerV = ScrollController();
+
+  @override
+  Widget build(BuildContext context) {
+
+    var screenSize = MediaQuery.of(context).size;
+
+    final _appBar = AppBar(
+      title: Text("Contact list"),
+    );
+    final _TableHeader = TableHeader();
+    final _TableBody = TableBody();
+    final _TableFooter = TableFooter();
+
+    var postPone = widget.dataServer;
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _appBar,
+        body:
+        Column(children: [
+          Container(
+            //width: 1400,
+              height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-35,
+              child:
+              Scrollbar(
+                //thumbVisibility: screenSize.width <= 600 ? true:false,
+                  trackVisibility: screenSize.width <= 600 ? true:false,
+                  controller: _firstController,
+                  child:
+
+                  SingleChildScrollView(
+                      scrollDirection: Axis. horizontal,
+                      controller: _firstController,
+                      child:
+                      Column(children: [
+                        _TableHeader,
+                        Container(
+                            height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-70,
+                            child:
+                            Scrollbar(
+                              //thumbVisibility: true,
+                                trackVisibility: true,
+                                controller: _firstControllerV,
+                                child:
+                                SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    controller: _firstControllerV,
+                                    child:
+                                    Column(
+                                        children: [
+                                          _TableBody,
+                                        ])
+                                )
+                            )
+                        ),
+                      ],)
+                  ))),
+          _TableFooter,
+        ],)
+    );
+  }
 }
