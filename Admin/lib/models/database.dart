@@ -21,6 +21,73 @@ class AuthData {
 }
 
 
+class ContactItem {
+  final int id;
+  final String status;
+  final String firstname;
+  final String middlename;
+  final String lastname;
+  final String photo;
+  final String department;
+  final String corporation;
+  final String position;
+  final String workphone;
+  final String mobilephone;
+  final String birthdate;
+  final String mail;
+
+  ContactItem(
+      { required this.id,
+        required this.status,
+        required this.firstname,
+        required this.middlename,
+        required this.lastname,
+        required this.photo,
+        required this.department,
+        required this.corporation,
+        required this.position,
+        required this.workphone,
+        required this.mobilephone,
+        required this.birthdate,
+        required this.mail});
+
+  factory ContactItem.fromJson(Map<String, dynamic> parsedJson) {
+    return new ContactItem(
+      id: parsedJson['Id'],
+      status: parsedJson['Status'],
+      firstname: parsedJson['FirstName'],
+      middlename: parsedJson['MiddleName'],
+      lastname: parsedJson['LastName'],
+      photo: parsedJson['Photo'],
+      department: parsedJson['Department'],
+      corporation: parsedJson['Corporation'],
+      position: parsedJson['Position'],
+      workphone: parsedJson['WorkPhone'],
+      mobilephone: parsedJson['MobilePhone'],
+      birthdate: parsedJson['BirthDate'],
+      mail: parsedJson['Mail'],
+    );
+  }
+}
+
+class ContactServer {
+  bool authServer;
+  List<ContactItem> contacts;
+  ContactServer({required this.authServer, required  this.contacts});
+
+  factory ContactServer.fromJson(Map<String, dynamic> parsedJson) {
+    var list = parsedJson['ContactList'] as List;
+
+    return new ContactServer(
+      authServer: parsedJson['AuthServer'],
+      contacts: list.map((i) => ContactItem.fromJson(i)).toList(),
+    );
+  }
+}
+
+
+
+
 Future<AuthData> getTokenAuth(String login, String password) async {
   //List listdate;
 //  late var listdate;
@@ -136,6 +203,43 @@ Future<bool> checkTokenAuth(String token) async {
       body: jsonEncode(resBody),).timeout(const Duration(seconds: 3));
     if (response.statusCode == 200) {
       result = true;
+    }
+  }
+
+  on TimeoutException catch (e) {
+    print('Timeout:');
+    rethrow;
+  } on Error catch (e) {
+    print('Caught error 1: $e');
+    rethrow;
+  }
+  on http.ClientException catch (e) {
+    print('Caught error 2: $e');
+    rethrow;
+  }
+  catch (e) {
+    print('Error general: $e');
+    rethrow;
+  }
+  debugPrint('Step 6, build base:');
+  return result;
+}
+
+
+Future<ContactServer> getContacts(String token) async {
+
+  ContactServer result = new ContactServer(authServer: false, contacts:[]);
+
+  try {
+    var resBody = {};
+    resBody["Token"] = token;
+
+    final response = await http.post(
+      Uri.http(ipLocalhost, '/getAllContacts/'),
+      body: jsonEncode(resBody),).timeout(const Duration(seconds: 3));
+    if (response.statusCode == 200) {
+      result =
+      ContactServer.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     }
   }
 

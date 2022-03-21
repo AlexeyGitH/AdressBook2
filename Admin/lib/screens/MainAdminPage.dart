@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:admin/models/mainStatesModel.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
+import 'package:admin/models/database.dart';
+import 'package:admin/ConstSystemAD.dart';
+import 'package:admin/main.dart';
 
 class MainAdminPage extends StatefulWidget {
   @override
@@ -24,13 +27,14 @@ class _MainAdminPage extends State<MainAdminPage> {
     final _TableHeader = TableHeader();
     final _TableBody = TableBody();
     final _TableFooter = TableFooter();
-
+/*
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: _appBar,
         body:
         Column(children: [
           Container(
+              //width: 1400,
               height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-35,
               child:
               Scrollbar(
@@ -94,6 +98,55 @@ class _MainAdminPage extends State<MainAdminPage> {
 
 
     );
+*/
+
+    final _storage = const FlutterSecureStorage();
+
+    Future<ContactServer> _readContactsData() async {
+      String? val = await _storage.read(key: session_token_name);
+      String t_s = val ?? '';
+      var _resp = await getContacts(t_s);
+      return _resp;
+    }
+
+
+    return FutureBuilder(
+        future: _readContactsData(),
+        builder: (context, AsyncSnapshot<ContactServer> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return  Center(
+                child: SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: CircularProgressIndicator()),
+              );
+            default:
+              if (snapshot.hasError)
+                return RefreshWidget();
+              else if (snapshot.data == null) {
+                return RefreshWidget();
+              } else {
+                ContactServer? vDBD = snapshot.data;
+                if (vDBD == null) {
+                  return RefreshWidget();
+                } else {
+                  if (vDBD.authServer == true) {
+                  return Text('Good');
+                  } else {return RefreshWidget();}
+          }}
+        }}
+
+    );
+
+
+
+
+
+
+
+
+
 
   }
 }
@@ -120,6 +173,7 @@ class _TableHeader extends State<TableHeader> {
               2: FixedColumnWidth(300),
               3: FixedColumnWidth(300),
               4: FixedColumnWidth(300),
+              5: FixedColumnWidth(300),
             },
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: <TableRow>[
@@ -138,20 +192,26 @@ class _TableHeader extends State<TableHeader> {
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.all(5),
                         child:
-                        new IconButton(
-                          iconSize: 20,
-                          padding: new EdgeInsets.all(0.0),
-                          constraints: BoxConstraints(
-                            minHeight: 15.0,
-                            minWidth: 15.0,
-                          ),
-                          //color: themeData.primaryColor,
-                          icon: new Icon(Icons.add_circle_outline),
-                          onPressed: () {
-                          },
-                        )
-
-                        ,)),
+                        new Material(
+                            color: Colors.transparent,
+                            child:
+                            new IconButton(
+                              splashRadius: 10,
+                              splashColor: Colors.lightBlue[300],
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              iconSize: 20,
+                              padding: new EdgeInsets.all(0.0),
+                              constraints: BoxConstraints(
+                                minHeight: 20.0,
+                                minWidth: 20.0,
+                              ),
+                              //color: themeData.primaryColor,
+                              icon: new Icon(Icons.add_circle_outline),
+                              onPressed: () {
+                              },
+                            )),
+                        )),
 
                   TableCell(
                       child:
@@ -189,10 +249,21 @@ class _TableHeader extends State<TableHeader> {
                   TableCell(
                       child:
                       Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                            )
+                        ),
                         padding: const EdgeInsets.all(5),
                         child:  Center(child:Text('Должность',style: TextStyle(fontWeight: FontWeight.bold),)),
                       )),
-
+                  TableCell(
+                      child:
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        child:  Center(child:Text('Телефон',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      )),
 
                 ],
               ),
@@ -278,6 +349,7 @@ class _TableFooter extends State<TableFooter> {
                             )),
                         child: Center(child: Text('Должность'))),
                   ),
+
                 ],
               ),
             ],
@@ -329,11 +401,12 @@ class _TableBody extends State<TableBody> {
 
                     Row(children: [
                       new Material(
+                          color: Colors.transparent,
                           child:
                       new IconButton(
-                        splashRadius: 8,
-                        splashColor: Colors.transparent,
-                        hoverColor: Colors.amberAccent,
+                        splashRadius: 10,
+                        splashColor: Colors.lightBlue[300],
+                        hoverColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         iconSize: 15,
                         padding: new EdgeInsets.all(2.0),
@@ -346,18 +419,26 @@ class _TableBody extends State<TableBody> {
                         onPressed: () {
                         },
                       )),
-                      new IconButton(
-                        iconSize: 15,
-                        padding: new EdgeInsets.all(2.0),
-                        constraints: BoxConstraints(
-                          minHeight: 15.0,
-                          minWidth: 15.0,
-                        ),
-                        //color: themeData.primaryColor,
-                        icon: new Icon(Icons.delete_forever),
-                        onPressed: () {
-                        },
-                      ),
+                      new Material(
+                          color: Colors.transparent,
+                          child:
+                          new IconButton(
+                            splashRadius: 10,
+                            splashColor: Colors.lightBlue[300],
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            iconSize: 15,
+                            padding: new EdgeInsets.all(2.0),
+                            constraints: BoxConstraints(
+                              minHeight: 15.0,
+                              minWidth: 15.0,
+                            ),
+                            //color: themeData.primaryColor,
+                            icon: new Icon(Icons.delete_forever),
+                            onPressed: () {
+                            },
+                          )),
+
                     ],))
 
                 ,),
@@ -383,6 +464,11 @@ class _TableBody extends State<TableBody> {
                 child: Container(
                     padding: const EdgeInsets.all(5),
                     child: Center(child: Text('Должность'+i.toString()))),
+              ),
+              TableCell(
+                child: Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Center(child: Text('Телефон '+i.toString()))),
               ),]
         ),
 
@@ -399,6 +485,7 @@ class _TableBody extends State<TableBody> {
           2: FixedColumnWidth(300),
           3: FixedColumnWidth(300),
           4: FixedColumnWidth(300),
+          5: FixedColumnWidth(300),
         },
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         children: rows,

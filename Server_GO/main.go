@@ -138,6 +138,7 @@ func main() {
 	r.HandleFunc("/ab/", MainPageWebBook)
 	r.HandleFunc("/auth/", getToken)
 	r.HandleFunc("/checkToken/", checkToken)
+	r.HandleFunc("/getAllContacts/", getAllContacts)
 
 	staticDir := "/static/"
 	r.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
@@ -617,8 +618,6 @@ func getToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	respondWithJSON(w, http.StatusRequestTimeout, data)
-
 }
 
 func checkToken(w http.ResponseWriter, r *http.Request) {
@@ -668,5 +667,115 @@ func checkToken(w http.ResponseWriter, r *http.Request) {
 	} else {
 		respondWithJSON(w, http.StatusUnauthorized, false)
 	}
+
+}
+
+func checkToken_sql(Token string) bool {
+	var param_req []interface{}
+	var _token string
+	var resFunc bool
+
+	resFunc = false
+
+	if !(Token == "") {
+
+		param_req = append(param_req, Token)
+		selectionToken := fmt.Sprintf("SELECT token From Tokens  WHERE token = ?")
+
+		db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
+		if err != nil {
+			panic(err)
+		}
+		defer db.Close()
+
+		rows, err := db.Query(selectionToken, param_req...)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+
+			err := rows.Scan(&_token)
+
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+		}
+		if _token == Token {
+			resFunc = true
+		}
+	}
+	return resFunc
+}
+
+func getAllContacts(w http.ResponseWriter, r *http.Request) {
+
+	type Token_data struct {
+		Token string
+	}
+
+	type Contacts_data struct {
+		AuthServer  bool
+		ContactList []Contact
+	}
+
+	Contacts := []Contact{}
+
+	data := Contacts_data{
+		AuthServer:  false,
+		ContactList: Contacts,
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	var t Token_data
+	err := decoder.Decode(&t)
+
+	var _validToken bool
+	_validToken = false
+
+	if err == nil && !(t.Token == "") {
+		_validToken = checkToken_sql(t.Token)
+	}
+
+	if !_validToken {
+		respondWithJSON(w, http.StatusOK, data)
+		return
+	}
+
+	selectionContacts := fmt.Sprintf("SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo as Photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts ORDER BY l_FIO")
+
+	db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query(selectionContacts)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		p := Contact{}
+		err := rows.Scan(&p.FirstName, &p.MiddleName, &p.LastName, &p.Department, &p.Corporation, &p.WorkPhone, &p.MobilePhone, &p.Mail, &p.Photo, &p.Gender, &p.Status, &p.StatusBegin, &p.StatusEnd, &p.Position, &p.Id, &p.ServiceNumber, &p.CodeNumber, &p.Additionals, &p.Base, &p.LFIO, &p.LDepartment, &p.LCorporation, &p.BirthDate, &p.IdMan, &p.AdditionalPhone)
+
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		Contacts = append(Contacts, p)
+	}
+
+	//	fmt.Printf("%+v\n", data)
+	data = Contacts_data{
+		AuthServer:  true,
+		ContactList: Contacts,
+	}
+
+	respondWithJSON(w, http.StatusOK, data)
 
 }
