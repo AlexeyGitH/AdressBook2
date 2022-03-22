@@ -35,6 +35,7 @@ class ContactItem {
   final String mobilephone;
   final String birthdate;
   final String mail;
+  final String additionalphone;
 
   ContactItem(
       { required this.id,
@@ -49,7 +50,8 @@ class ContactItem {
         required this.workphone,
         required this.mobilephone,
         required this.birthdate,
-        required this.mail});
+        required this.mail,
+        required this.additionalphone});
 
   factory ContactItem.fromJson(Map<String, dynamic> parsedJson) {
     return new ContactItem(
@@ -66,6 +68,7 @@ class ContactItem {
       mobilephone: parsedJson['MobilePhone'],
       birthdate: parsedJson['BirthDate'],
       mail: parsedJson['Mail'],
+      additionalphone: parsedJson['AdditionalPhone'],
     );
   }
 }

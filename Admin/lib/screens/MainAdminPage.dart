@@ -381,142 +381,166 @@ class _TableFooter extends State<TableFooter> {
 
 
 class TableBody extends StatefulWidget {
+  ContactServer dataServer;
+
+  TableBody({required this.dataServer});
+
   @override
   _TableBody createState() => _TableBody();
 }
 
 class _TableBody extends State<TableBody> {
-
-
-
   @override
   Widget build(BuildContext context) {
-
     final rows = <TableRow>[];
     var color = Colors.transparent;
+    var getData = widget.dataServer;
 
-    //for (var rowData in myRowDataList) {
 
+    bool scan = true;
     int i = 0;
-    for (i = 0; i < 50; i++) {
+
+    while (scan) {
+      String _phone_str1 = 'Раб.:' + getData.contacts[i].workphone;
+      String _phone_str2 = getData.contacts[i].additionalphone=='' ? '': ' доб.' + getData.contacts[i].additionalphone;
+      String _phone_str3 = getData.contacts[i].mobilephone=='' ? '': '\n'+'Моб.:' + getData.contacts[i].mobilephone;
+      int _idRow = getData.contacts[i].id;
+
       rows.add(
 
         TableRow(
             decoration: BoxDecoration(
-                color: i % 2 == 0 ? Colors.white: Colors.grey[100],
+                color: i % 2 == 0 ? Colors.white : Colors.grey[100],
                 border: Border(
                   bottom: BorderSide(
-                    color: Colors.grey, width: 0.5,),
+                    color: Colors.grey,
+                    width: 0.5,
+                  ),
                 )),
-
             children: [
-
               TableCell(
                 verticalAlignment: TableCellVerticalAlignment.middle,
-                child:
-                Container(
+                child: Container(
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.all(5),
-                    child:
-
-
-                    Row(children: [
-                      new Material(
-                          color: Colors.transparent,
-                          child:
-                      new IconButton(
-                        splashRadius: 10,
-                        splashColor: Colors.lightBlue[300],
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        iconSize: 15,
-                        padding: new EdgeInsets.all(2.0),
-                        constraints: BoxConstraints(
-                          minHeight: 15.0,
-                          minWidth: 15.0,
-                        ),
-                        //color: themeData.primaryColor,
-                        icon: new Icon(Icons.create),
-                        onPressed: () {
-                        },
-                      )),
-                      new Material(
-                          color: Colors.transparent,
-                          child:
-                          new IconButton(
-                            splashRadius: 10,
-                            splashColor: Colors.lightBlue[300],
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            iconSize: 15,
-                            padding: new EdgeInsets.all(2.0),
-                            constraints: BoxConstraints(
-                              minHeight: 15.0,
-                              minWidth: 15.0,
-                            ),
-                            //color: themeData.primaryColor,
-                            icon: new Icon(Icons.delete_forever),
-                            onPressed: () {
-                            },
-                          )),
-
-                    ],))
-
-                ,),
-
-
+                    child: Row(
+                      children: [
+                        new Material(
+                            color: Colors.transparent,
+                            child: new IconButton(
+                              splashRadius: 10,
+                              splashColor: Colors.lightBlue[300],
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              iconSize: 15,
+                              padding: new EdgeInsets.all(2.0),
+                              constraints: BoxConstraints(
+                                minHeight: 15.0,
+                                minWidth: 15.0,
+                              ),
+                              //color: themeData.primaryColor,
+                              icon: new Icon(Icons.create),
+                              onPressed: () {
+                                debugPrint('Crate button. ID:' + _idRow.toString());
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return Wrap(
+                                      children: [
+                                        ListTile(
+                                          leading: Icon(Icons.share),
+                                          title: Text('Share'),
+                                        ),
+                                        ListTile(
+                                          leading: Icon(Icons.copy),
+                                          title: Text('Copy Link'),
+                                        ),
+                                        ListTile(
+                                          leading: Icon(Icons.edit),
+                                          title: Text('Edit'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            )),
+                        new Material(
+                            color: Colors.transparent,
+                            child: new IconButton(
+                              splashRadius: 10,
+                              splashColor: Colors.lightBlue[300],
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              iconSize: 15,
+                              padding: new EdgeInsets.all(2.0),
+                              constraints: BoxConstraints(
+                                minHeight: 15.0,
+                                minWidth: 15.0,
+                              ),
+                              //color: themeData.primaryColor,
+                              icon: new Icon(Icons.delete_forever),
+                              onPressed: () {},
+                            )),
+                      ],
+                    )),
+              ),
               TableCell(
                 //decoration: BoxDecoration(color: Colors.grey[200]),
                 child: Container(
                     padding: const EdgeInsets.all(5),
-                    child: Align( alignment: Alignment.centerLeft,child:Text('ФИО'+i.toString()))),
-              ),
-              TableCell(
-                child:Container(
-                    padding: const EdgeInsets.all(5),
-                    child: Center(child: Text('Организация'))),
-              ),
-              TableCell(
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    child: Center(child: Text('Подразделение'))),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(getData.contacts[i].firstname.toString() + " " +
+                            getData.contacts[i].middlename.toString() + " " +
+                            getData.contacts[i].lastname.toString()))),
               ),
               TableCell(
                 child: Container(
                     padding: const EdgeInsets.all(5),
-                    child: Center(child: Text('Должность'+i.toString()))),
+                    child: Center(child: Text(getData.contacts[i].corporation))),
               ),
               TableCell(
                 child: Container(
                     padding: const EdgeInsets.all(5),
-                    child: Center(child: Text('Телефон '+i.toString()))),
-              ),]
-        ),
+                    child: Center(child: Text(getData.contacts[i].department))),
+              ),
+              TableCell(
+                child: Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Center(child: Text(getData.contacts[i].position))),
+              ),
+              TableCell(
+                child: Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Center(child: Text(_phone_str1+_phone_str2+_phone_str3))),
 
+
+
+              ),
+            ]),
       );
+
+      i++;
+      if (i >= getData.contacts.length) {
+        scan = false;
+      }
     };
 
-
-
-    return
-      Table(
-        columnWidths: const <int, TableColumnWidth>{
-          0: FixedColumnWidth(100),
-          1: FixedColumnWidth(600),
-          2: FixedColumnWidth(300),
-          3: FixedColumnWidth(300),
-          4: FixedColumnWidth(300),
-          5: FixedColumnWidth(300),
-        },
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: rows,
-
-      );
+    return Table(
+      columnWidths: const <int, TableColumnWidth>{
+        0: FixedColumnWidth(100),
+        1: FixedColumnWidth(600),
+        2: FixedColumnWidth(300),
+        3: FixedColumnWidth(300),
+        4: FixedColumnWidth(300),
+        5: FixedColumnWidth(300),
+      },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: rows,
+    );
   }
-
 }
-
-
 
 class TableMainArea extends StatefulWidget {
   ContactServer dataServer;
@@ -535,15 +559,16 @@ class _TableMainArea extends State<TableMainArea> {
   Widget build(BuildContext context) {
 
     var screenSize = MediaQuery.of(context).size;
+    var postPone = widget.dataServer;
 
     final _appBar = AppBar(
       title: Text("Contact list"),
     );
     final _TableHeader = TableHeader();
-    final _TableBody = TableBody();
+    final _TableBody = TableBody(dataServer: postPone);
     final _TableFooter = TableFooter();
 
-    var postPone = widget.dataServer;
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: _appBar,
@@ -591,3 +616,4 @@ class _TableMainArea extends State<TableMainArea> {
     );
   }
 }
+
