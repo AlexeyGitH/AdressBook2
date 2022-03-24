@@ -392,6 +392,7 @@ class TableBody extends StatefulWidget {
 class _TableBody extends State<TableBody> {
   @override
   Widget build(BuildContext context) {
+    var mainConstModel = context.watch<MainConstModel>();
     final rows = <TableRow>[];
     var color = Colors.transparent;
     var getData = widget.dataServer;
@@ -442,27 +443,8 @@ class _TableBody extends State<TableBody> {
                               icon: new Icon(Icons.create),
                               onPressed: () {
                                 debugPrint('Crate button. ID:' + _idRow.toString());
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return Wrap(
-                                      children: [
-                                        ListTile(
-                                          leading: Icon(Icons.share),
-                                          title: Text('Share'),
-                                        ),
-                                        ListTile(
-                                          leading: Icon(Icons.copy),
-                                          title: Text('Copy Link'),
-                                        ),
-                                        ListTile(
-                                          leading: Icon(Icons.edit),
-                                          title: Text('Edit'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
+                                mainConstModel.setCurrentPage("CardContact");
+
                               },
                             )),
                         new Material(

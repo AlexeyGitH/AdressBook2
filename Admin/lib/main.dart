@@ -70,14 +70,14 @@ class _BodyWidget extends State<BodyWidget> {
     final _storage = const FlutterSecureStorage();
 
     Future<bool> _readValStorage() async {
-      debugPrint('Step 1, build widget:');
+      //debugPrint('Step 1, build widget:');
       String? val = await _storage.read(key: session_token_name);
-      debugPrint('Step 2, build widget:');
+      //debugPrint('Step 2, build widget:');
       String t_s = val ?? '';
-      debugPrint('Step 3, build widget:');
+     //debugPrint('Step 3, build widget:');
       var _resp = await checkTokenAuth(t_s);
-      debugPrint('Step 4, build widget:');
-      debugPrint('Step 5, build widget:${_resp}');
+      //debugPrint('Step 4, build widget:');
+      //debugPrint('Step 5, build widget:${_resp}');
       return _resp;
     }
 
@@ -101,8 +101,8 @@ class _BodyWidget extends State<BodyWidget> {
               // Build the widget with data.
               //return Center(child: Container(child: Text('hasData: ${snapshot.data}')));
               if (snapshot.data == true) {
-                if (mainConstModel.currentPage != "MainPage") {
-                  return MainAdminPage();
+                if (mainConstModel.currentPage == "CardContact") {
+                  return CardContact();
                 } else {
                   return MainAdminPage();
                 }
