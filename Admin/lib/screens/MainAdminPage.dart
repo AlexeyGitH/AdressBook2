@@ -135,7 +135,7 @@ class _MainAdminPage extends State<MainAdminPage> {
                   return RefreshWidget();
                 } else {
                   if (vDBD.authServer == true) {
-
+                    /*
                     bool scan = true;
                     int i = 0;
                     final rows = <Text>[];
@@ -152,6 +152,7 @@ class _MainAdminPage extends State<MainAdminPage> {
                           scan = false;
                         }
                     }
+                    */
                   //return Column(children: rows,);
                     return TableMainArea(dataServer: vDBD);
                   } else {return RefreshWidget();}
@@ -442,7 +443,8 @@ class _TableBody extends State<TableBody> {
                               //color: themeData.primaryColor,
                               icon: new Icon(Icons.create),
                               onPressed: () {
-                                debugPrint('Crate button. ID:' + _idRow.toString());
+                                //debugPrint('Crate button. ID:' + _idRow.toString());
+                                mainConstModel.setCurrentIdContact(_idRow.toString());
                                 mainConstModel.setCurrentPage("CardContact");
 
                               },

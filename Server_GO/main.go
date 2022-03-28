@@ -714,7 +714,8 @@ func checkToken_sql(Token string) bool {
 func getAllContacts(w http.ResponseWriter, r *http.Request) {
 
 	type Token_data struct {
-		Token string
+		Token     string
+		IdContact string
 	}
 
 	type Contacts_data struct {
@@ -745,7 +746,10 @@ func getAllContacts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	selectionContacts := fmt.Sprintf("SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo as Photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts ORDER BY l_FIO")
+	selectionContacts := fmt.Sprintf("SELECT first_name as FirstName, middle_name as MiddleName, last_name as LastName, department, corporation, work_phone, mobile_phone, mail, photo as Photo, gender, status, status_begin, status_end, position, id, service_number, code_number, additionals, base, l_FIO, l_department, l_corporation, birth_date, id_man, additional_phone FROM Contacts")
+
+	var param_req []interface{}
+	var wheretext string
 
 	db, err := sql.Open("sqlite3", "data_base/database.sqlite3")
 	if err != nil {
@@ -753,7 +757,17 @@ func getAllContacts(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	rows, err := db.Query(selectionContacts)
+	if t.IdContact != "" {
+		param_req = append(param_req, t.IdContact)
+		wheretext = " where id = ?"
+		selectionContacts = selectionContacts + wheretext + " ORDER BY l_FIO"
+
+	} else {
+		selectionContacts = selectionContacts + " ORDER BY l_FIO"
+	}
+
+	rows, err := db.Query(selectionContacts, param_req...)
+
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -229,13 +229,14 @@ Future<bool> checkTokenAuth(String token) async {
 }
 
 
-Future<ContactServer> getContacts(String token) async {
+Future<ContactServer> getContacts(String token, {String id_contact = ''}) async {
 
   ContactServer result = new ContactServer(authServer: false, contacts:[]);
 
   try {
     var resBody = {};
     resBody["Token"] = token;
+    resBody["IdContact"] = id_contact;
 
     final response = await http.post(
       Uri.http(ipLocalhost, '/getAllContacts/'),
