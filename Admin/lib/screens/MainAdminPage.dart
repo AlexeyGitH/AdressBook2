@@ -181,6 +181,7 @@ class TableHeader extends StatefulWidget {
 class _TableHeader extends State<TableHeader> {
   @override
   Widget build(BuildContext context) {
+    var mainConstModel = context.watch<MainConstModel>();
     return
       Container(
           height: 35,
@@ -231,6 +232,8 @@ class _TableHeader extends State<TableHeader> {
                               //color: themeData.primaryColor,
                               icon: new Icon(Icons.add_circle_outline),
                               onPressed: () {
+                                mainConstModel.setCurrentIdContact('create card');
+                                mainConstModel.setCurrentPage("CardContact");
                               },
                             )),
                         )),

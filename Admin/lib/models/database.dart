@@ -86,6 +86,19 @@ class ContactServer {
       contacts: list.map((i) => ContactItem.fromJson(i)).toList(),
     );
   }
+
+  factory ContactServer.EmptyContact() {
+    List<ContactItem> listv = [];
+    ContactItem varl = new ContactItem(id: 0, status:'', firstname: '', middlename: '', lastname: '', photo: '', department: '', corporation: '', position: '', workphone: '',  mobilephone: '', birthdate: '', mail: '', additionalphone: '');
+    listv.add(varl);
+
+    return new ContactServer(
+      authServer: true,
+      contacts: listv,
+    );
+  }
+
+
 }
 
 
@@ -190,6 +203,14 @@ class AuthServer {
     );
   }
 
+  void setFilters(String fio, String corporation, String departament) {
+    //filters.controllerFIO = fio;
+    //filters.controllerCorporation = corporation;
+    //filters.controllerDepartament = departament;
+    //notifyListeners();
+  }
+
+
 }
 
 
@@ -231,6 +252,12 @@ Future<bool> checkTokenAuth(String token) async {
 
 Future<ContactServer> getContacts(String token, {String id_contact = ''}) async {
 
+  if (id_contact == 'create card') {
+    return ContactServer.EmptyContact();
+  }
+
+
+
   ContactServer result = new ContactServer(authServer: false, contacts:[]);
 
   try {
@@ -262,6 +289,6 @@ Future<ContactServer> getContacts(String token, {String id_contact = ''}) async 
     print('Error general: $e');
     rethrow;
   }
-  debugPrint('Step 6, build base:');
+  //debugPrint('Step 6, build base:');
   return result;
 }
