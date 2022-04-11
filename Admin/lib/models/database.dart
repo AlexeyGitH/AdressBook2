@@ -145,15 +145,15 @@ Future<AuthData> getTokenAuth(String login, String password) async {
         Token: AuthDataServer.Token,
       );
       if (response.statusCode == 200) {
-        _writeValStorage(AuthDataServer.Token);
+        await _writeValStorage(AuthDataServer.Token);
       } else {
-        _deleteValStorage();
+        await _deleteValStorage();
       }
 ///////////////////////////////////////
 
     } else {
       //print('Response server: nil 22');
-      _deleteValStorage();
+      await _deleteValStorage();
     }
 
   }

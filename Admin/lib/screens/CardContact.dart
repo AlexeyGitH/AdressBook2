@@ -221,14 +221,43 @@ class _BodyCard extends State<BodyCard> {
     ));
 
     _data.add(
-      new IconButton(
-        iconSize: 15,
-        padding: new EdgeInsets.all(2.0),
-        icon: new Icon(Icons.create),
-        onPressed: () {
-          mainConstModel.setCurrentPage("MainPage");
-        },
-      ),
+
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+
+          ElevatedButton.icon(
+            icon: Icon(
+              Icons.save,
+              color: Colors.green[200],
+              size: 40.0,
+            ),
+            label: Text('Сохранить'),
+            onPressed: () {
+              mainConstModel.setCurrentPage("MainPage");
+            },
+
+          ),
+          Container(
+            width: 20,
+          ),
+          ElevatedButton.icon(
+            icon: Icon(
+              Icons.cancel,
+              color: Colors.red[200],
+              size: 40.0,
+            ),
+            label: Text('Отменить'),
+            onPressed: () {
+              mainConstModel.setCurrentPage("MainPage");
+            },
+
+          ),
+
+      ],),
+
+
+
     );
 
     for (var element in widget.dataServer) {

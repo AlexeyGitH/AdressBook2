@@ -500,7 +500,7 @@ class _TableBody extends State<TableBody> {
               TableCell(
                 child: Container(
                     padding: const EdgeInsets.all(5),
-                    child: Center(child: Text(_phone_str1+_phone_str2+_phone_str3))),
+                    child: Text(_phone_str1+_phone_str2+_phone_str3)),
 
 
 
