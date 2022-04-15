@@ -244,7 +244,7 @@ class _BodyCard extends State<BodyCard> {
           ElevatedButton.icon(
             icon: Icon(
               Icons.cancel,
-              color: Colors.red[200],
+              color: Colors.red[50],
               size: 40.0,
             ),
             label: Text('Отменить'),
