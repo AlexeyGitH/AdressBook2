@@ -24,7 +24,7 @@ class AuthData {
 class ContactItem {
   final int id;
   final String status;
-  final String firstname;
+  late final String firstname;
   final String middlename;
   final String lastname;
   final String photo;

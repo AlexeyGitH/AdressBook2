@@ -11,11 +11,15 @@ class DataContactParams {
   String nameParam;
   String valParam;
   bool readOnly;
+  void changeVoid;
+  final Function(String) changeFunction;
 
   DataContactParams(
       {required this.nameParam,
       required this.valParam,
-      required this.readOnly});
+      required this.readOnly,
+      required this.changeFunction
+      });
 }
 
 class CardContact extends StatefulWidget {
@@ -24,6 +28,28 @@ class CardContact extends StatefulWidget {
 }
 
 class _CardContact extends State<CardContact> {
+
+  String firstName = '';
+  String middleName = '';
+  String lastName = '';
+  ContactItem contactItemData =
+    new ContactItem(
+        id: 0,
+        status:'',
+        firstname: '',
+        middlename: '',
+        lastname: '',
+        photo: '',
+        department: '',
+        corporation: '',
+        position: '',
+        workphone: '',
+        mobilephone: '',
+        birthdate: '',
+        mail: '',
+        additionalphone: '');
+
+
   Widget build(BuildContext context) {
     var mainConstModel = context.watch<MainConstModel>();
 
@@ -61,12 +87,18 @@ class _CardContact extends State<CardContact> {
                   if (vDBD.authServer == true) {
                     List<DataContactParams> Data = [];
 
+                    contactItemData.firstname = vDBD.contacts[0].firstname;
+
                     for (var element in vDBD.contacts) {
                       Data.add(DataContactParams(
                           nameParam: 'First name',
                           valParam: element.firstname.toString(),
+                          changeFunction: (String val) {
+                            firstName = val;
+                            //debugPrint('First Name:' + firstName);
+                          },
                           readOnly: false));
-
+/*
                       Data.add(DataContactParams(
                           nameParam: 'Middle name',
                           valParam: element.middlename.toString(),
@@ -116,9 +148,12 @@ class _CardContact extends State<CardContact> {
                           nameParam: 'E-mail',
                           valParam: element.mail.toString(),
                           readOnly: false));
+                    */
+
                     }
 
-                    return BodyCard(dataServer: Data);
+                    return BodyCard(dataServer: Data,
+                    );
                   } else {
                     return RefreshWidget();
                   }
@@ -133,11 +168,14 @@ class ElementCardContact extends StatefulWidget {
   String nameElement;
   String valueElement;
   bool readOnlyElement;
+  final Function(String) changeFunction;
 
   ElementCardContact(
       {required this.nameElement,
       required this.valueElement,
-      required this.readOnlyElement});
+      required this.readOnlyElement,
+      required this.changeFunction
+      });
 
   @override
   _ElementCardContact createState() => _ElementCardContact();
@@ -194,6 +232,8 @@ class _ElementCardContact extends State<ElementCardContact> {
             ),
           ),
           onChanged: (text) {
+            widget.changeFunction(text);
+
             //filterModelV.setFilterValueonlyset(text);
             //widget.changeParentValue(text);
             //print('widget text field: $text');
@@ -234,7 +274,26 @@ class _BodyCard extends State<BodyCard> {
             ),
             label: Text('Сохранить'),
             onPressed: () {
-              mainConstModel.setCurrentPage("MainPage");
+              //mainConstModel.setCurrentPage("MainPage");
+
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: new Text("Alert!!"),
+                    content: new Text('firstname'),
+                    actions: <Widget>[
+                      new FlatButton(
+                        child: new Text("OK"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+
             },
 
           ),
@@ -264,7 +323,9 @@ class _BodyCard extends State<BodyCard> {
       _data.add(ElementCardContact(
           nameElement: element.nameParam,
           valueElement: element.valParam,
-          readOnlyElement: element.readOnly));
+          readOnlyElement: element.readOnly,
+          changeFunction: element.changeFunction
+      ));
     }
 
     return Scaffold(
@@ -278,3 +339,4 @@ class _BodyCard extends State<BodyCard> {
         )));
   }
 }
+
