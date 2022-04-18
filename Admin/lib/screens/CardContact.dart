@@ -6,6 +6,7 @@ import 'package:admin/models/database.dart';
 import 'package:admin/ConstSystemAD.dart';
 import 'package:admin/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 
 class DataContactParams {
   String nameParam;
@@ -29,10 +30,8 @@ class CardContact extends StatefulWidget {
 
 class _CardContact extends State<CardContact> {
 
-  String firstName = '';
-  String middleName = '';
-  String lastName = '';
-  ContactItem contactItemData =
+  ContactItem contactItemData
+  =
     new ContactItem(
         id: 0,
         status:'',
@@ -87,17 +86,31 @@ class _CardContact extends State<CardContact> {
                   if (vDBD.authServer == true) {
                     List<DataContactParams> Data = [];
 
-                    contactItemData.firstname = vDBD.contacts[0].firstname;
+                    //contactItemData.firstname = vDBD.contacts[0].firstname;
+                    //debugPrint('First Name:' + vDBD.contacts[0].firstname);
 
                     for (var element in vDBD.contacts) {
                       Data.add(DataContactParams(
                           nameParam: 'First name',
                           valParam: element.firstname.toString(),
                           changeFunction: (String val) {
-                            firstName = val;
+                            contactItemData.firstname = (val==null) ? '': val;
                             //debugPrint('First Name:' + firstName);
                           },
                           readOnly: false));
+
+                      Data.add(DataContactParams(
+                          nameParam: 'Last name',
+                          valParam: element.firstname.toString(),
+                          changeFunction: (String val) {
+                            contactItemData.firstname = (val==null) ? '': val;
+                            //debugPrint('First Name:' + firstName);
+                          },
+                          readOnly: false));
+
+
+
+
 /*
                       Data.add(DataContactParams(
                           nameParam: 'Middle name',
@@ -153,6 +166,28 @@ class _CardContact extends State<CardContact> {
                     }
 
                     return BodyCard(dataServer: Data,
+                                    saveFunction: (){
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: new Text("Alert!!"),
+                              //content: new Text(firstName),//new Text('firstname'),
+                                content: new Text(contactItemData.firstname),
+                                actions: <Widget>[
+                                new TextButton(
+                                  child: new Text("OK"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );   }
+
+
                     );
                   } else {
                     return RefreshWidget();
@@ -244,14 +279,16 @@ class _ElementCardContact extends State<ElementCardContact> {
 
 class BodyCard extends StatefulWidget {
   List<DataContactParams> dataServer;
+  final Function() saveFunction;
 
-  BodyCard({required this.dataServer});
+  BodyCard({required this.dataServer, required this.saveFunction,});
 
   @override
   _BodyCard createState() => _BodyCard();
 }
 
 class _BodyCard extends State<BodyCard> {
+  TextEditingController dateinput = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var mainConstModel = context.watch<MainConstModel>();
@@ -266,6 +303,53 @@ class _BodyCard extends State<BodyCard> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
 
+      Container(
+      margin: const EdgeInsets.all(10.0),
+      width: MediaQuery.of(context).size.width,
+      child:
+          TextField
+            (
+            controller: dateinput, //editing controller of this TextField
+            decoration: InputDecoration
+              (
+                icon: Icon
+                  (
+                    Icons.calendar_today), //icon of text field
+                labelText: 'Enter Date'
+              //label text of field
+            )
+            ,
+            readOnly: true
+            , //set it true, so that user will not able to edit text
+            onTap: () async {
+              var pickedDate = await showDatePicker(
+                  context: context, initialDate: DateTime.now(),
+                  firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
+                  lastDate: DateTime(2101)
+              );
+
+              if (pickedDate != null) {
+                print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                print(formattedDate); //formatted date output using intl package =>  2021-03-16
+//you can implement different kind of Date Format here according to your requirement
+                /*
+                setState(() {
+                  dateinput.text =
+                      formattedDate; //set output date to TextField value.
+                });
+                */
+              } else {
+                print("Date is not selected");
+              }
+            }
+            ,
+          )),
+
+
+
+
+
           ElevatedButton.icon(
             icon: Icon(
               Icons.save,
@@ -273,28 +357,9 @@ class _BodyCard extends State<BodyCard> {
               size: 40.0,
             ),
             label: Text('Сохранить'),
-            onPressed: () {
+            onPressed: () {widget.saveFunction();
               //mainConstModel.setCurrentPage("MainPage");
-
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: new Text("Alert!!"),
-                    content: new Text('firstname'),
-                    actions: <Widget>[
-                      new FlatButton(
-                        child: new Text("OK"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-
-            },
+         },
 
           ),
           Container(
@@ -339,4 +404,5 @@ class _BodyCard extends State<BodyCard> {
         )));
   }
 }
+
 

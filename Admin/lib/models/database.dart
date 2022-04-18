@@ -22,20 +22,20 @@ class AuthData {
 
 
 class ContactItem {
-  final int id;
-  final String status;
-  late final String firstname;
-  final String middlename;
-  final String lastname;
-  final String photo;
-  final String department;
-  final String corporation;
-  final String position;
-  final String workphone;
-  final String mobilephone;
-  final String birthdate;
-  final String mail;
-  final String additionalphone;
+  int id;
+  String status;
+  String firstname;
+  String middlename;
+  String lastname;
+  String photo;
+  String department;
+  String corporation;
+  String position;
+  String workphone;
+  String mobilephone;
+  String birthdate;
+  String mail;
+  String additionalphone;
 
   ContactItem(
       { required this.id,
