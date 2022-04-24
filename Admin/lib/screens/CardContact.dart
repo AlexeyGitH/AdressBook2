@@ -7,6 +7,7 @@ import 'package:admin/ConstSystemAD.dart';
 import 'package:admin/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:hovering/hovering.dart';
 
 class DataContactParams {
   String nameParam;
@@ -338,61 +339,207 @@ class _BodyCard extends State<BodyCard> {
       ],),
     );
 
+
+
     _data.add(
- /*
 
-      Container(
-          margin: const EdgeInsets.all(10.0),
-          width: MediaQuery.of(context).size.width,
-          child:
-          TextField
-            (
-            controller: dateinput, //editing controller of this TextField
-            decoration: InputDecoration
-              (
-                icon: Icon
-                  (
-                    Icons.calendar_today), //icon of text field
-                labelText: 'Enter Date'
-              //label text of field
-            )
-            ,
-            readOnly: true
-            , //set it true, so that user will not able to edit text
-            onTap: () async {
-              var pickedDate = await showDatePicker(
-                  context: context, initialDate: DateTime.now(),
-                  firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
-                  lastDate: DateTime(2101)
-              );
+                  Container(
+                      margin: const EdgeInsets.all(10.0),
+                      width: MediaQuery.of(context).size.width,
+                      child: TextFormField(
+                        readOnly: true,
+                        controller: dateinput,
 
-              if (pickedDate != null) {
-                print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                print(formattedDate); //formatted date output using intl package =>  2021-03-16
+
+                        onTap: () async {
+                          var pickedDate = await showDatePicker(
+                              context: context, initialDate: DateTime.now(),
+                              firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
+                              lastDate: DateTime(2101)
+                          );
+
+                          if (pickedDate != null) {
+                            print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                            String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                            print(formattedDate); //formatted date output using intl package =>  2021-03-16
 //you can implement different kind of Date Format here according to your requirement
 
-                setState(() {
-                  dateinput.text =
-                      formattedDate; //set output date to TextField value.
-                });
+                            setState(() {
+                              dateinput.text =
+                                  formattedDate; //set output date to TextField value.
+                            });
 
-              } else {
-                print("Date is not selected");
-              }
-            }
-            ,
-          )),
-*/
+                          } else {
+                            print("Date is not selected");
+                          }
+                        },
+
+
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w200,
+                        ),
+                        decoration: new InputDecoration(
+                          fillColor: true ? Colors.grey[50] : Colors.white,
+                          filled: true,
+                          hoverColor: Colors.grey[200],
+
+                          labelText: 'widget.nameElement',
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+
+
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1.0, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+
+                          prefixIcon: IconButton(
+                            icon: const Icon(Icons.calendar_today),
+                            onPressed: () async {
+                              var pickedDate = await showDatePicker(
+                                  context: context, initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
+                                  lastDate: DateTime(2101)
+                              );
+
+                              if (pickedDate != null) {
+                                print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                                print(formattedDate); //formatted date output using intl package =>  2021-03-16
+//you can implement different kind of Date Format here according to your requirement
+
+                                setState(() {
+                                  dateinput.text =
+                                      formattedDate; //set output date to TextField value.
+                                });
+
+                              } else {
+                                print("Date is not selected");
+                              }
+
+
+
+                            },
+                          ),
+
+
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              dateinput.text = '';
+                              // widget.changeParentValue('');
+                            },
+                          ),
+                        ),
+
+                      ))
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    _data.add(
 
         Container(
-            margin: const EdgeInsets.all(10.0),
-            width: MediaQuery.of(context).size.width,
-            child: TextFormField(
-              readOnly: true,
+            margin: const EdgeInsets.all(5.0),
+            child:
+
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+
+          Text(
+            'fffffffffff',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+
+
+
+              HoverContainer(
+                  //color: Colors.white,
+                  //hoverColor: Colors.grey[200],
+                  margin: const EdgeInsets.only(top: 2.0),
+                  padding: const EdgeInsets.all(3.0),
+
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10.0)),
+
+                  hoverDecoration: BoxDecoration(
+                    //border: Border.all(color: Colors.blueAccent, width: 1.0),
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.grey[200]
+                  ),
+
+                  child:
+
+
+                Row(children: [
+
+                  IconButton(
+                    icon: const Icon(Icons.calendar_today),
+                    onPressed: () async {
+                      var pickedDate = await showDatePicker(
+                          context: context, initialDate: DateTime.now(),
+                          firstDate: DateTime(1900), //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2150)
+                      );
+
+                      if (pickedDate != null) {
+                        print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                        print(formattedDate); //formatted date output using intl package =>  2021-03-16
+//you can implement different kind of Date Format here according to your requirement
+
+                        setState(() {
+                          dateinput.text =
+                              formattedDate; //set output date to TextField value.
+                        });
+
+                      } else {
+                        //print("Date is not selected");
+                      }
+
+
+
+                    },
+                  ),
+
+
+                  Expanded( child: Focus(
+                      onFocusChange: (f){if (f) {print("focus true");} else{print("focus false");}},
+                      child: TextFormField(
+             // readOnly: true,
               controller: dateinput,
 
-
+/*
               onTap: () async {
                 var pickedDate = await showDatePicker(
                     context: context, initialDate: DateTime.now(),
@@ -402,7 +549,7 @@ class _BodyCard extends State<BodyCard> {
 
                 if (pickedDate != null) {
                   print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                  String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                  String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
                   print(formattedDate); //formatted date output using intl package =>  2021-03-16
 //you can implement different kind of Date Format here according to your requirement
 
@@ -415,7 +562,7 @@ class _BodyCard extends State<BodyCard> {
                   print("Date is not selected");
                 }
               },
-
+*/
 
               style: TextStyle(
                 fontSize: 18,
@@ -423,57 +570,12 @@ class _BodyCard extends State<BodyCard> {
                 fontWeight: FontWeight.w200,
               ),
               decoration: new InputDecoration(
-                fillColor: true ? Colors.grey[50] : Colors.white,
-                filled: true,
-                hoverColor: Colors.grey[200],
-
-                 labelText: 'widget.nameElement',
-                labelStyle: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-
-
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 1.0, color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(width: 0.0, color: Colors.transparent),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2.0, color: Colors.blue),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(width: 0.0, color: Colors.transparent),
                 ),
-
-                prefixIcon: IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () async {
-                    var pickedDate = await showDatePicker(
-                        context: context, initialDate: DateTime.now(),
-                        firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
-                        lastDate: DateTime(2101)
-                    );
-
-                    if (pickedDate != null) {
-                      print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(formattedDate); //formatted date output using intl package =>  2021-03-16
-//you can implement different kind of Date Format here according to your requirement
-
-                      setState(() {
-                        dateinput.text =
-                            formattedDate; //set output date to TextField value.
-                      });
-
-                    } else {
-                      print("Date is not selected");
-                    }
-
-
-
-                  },
-                ),
-
 
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
@@ -484,9 +586,13 @@ class _BodyCard extends State<BodyCard> {
                 ),
               ),
 
-            ))
+            )))
+  ])
 
 
+    )
+
+  ]))
 
 
     );
