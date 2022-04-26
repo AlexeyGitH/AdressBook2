@@ -459,85 +459,134 @@ class _BodyCard extends State<BodyCard> {
 
 
 
-
     _data.add(
-
-        Container(
-            margin: const EdgeInsets.all(5.0),
-            child:
-
-        Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        ElementCardWidget(
+                  nameElement: 'Birth date',
+                  valueElement: '12-12-2020',
+                  readOnlyElement: false,
+                  changeFunction: (f){f;}
+              ));
 
 
+    for (var element in widget.dataServer) {
+      _data.add(ElementCardContact(
+          nameElement: element.nameParam,
+          valueElement: element.valParam,
+          readOnlyElement: element.readOnly,
+          changeFunction: element.changeFunction
+      ));
+    }
+
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text("Contact card"),
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+          children: _data,
+        )));
+  }
+}
+
+
+
+
+
+
+class ElementCardWidget extends StatefulWidget {
+  String nameElement;
+  String valueElement;
+  bool readOnlyElement;
+  final Function(String) changeFunction;
+
+  ElementCardWidget(
+      {required this.nameElement,
+        required this.valueElement,
+        required this.readOnlyElement,
+        required this.changeFunction
+      });
+
+  @override
+  _ElementCardWidget createState() => _ElementCardWidget();
+}
+
+class _ElementCardWidget extends State<ElementCardWidget> {
+  TextEditingController _valController = TextEditingController();
+
+
+  Widget build(BuildContext context) {
+
+    _valController.text = widget.valueElement;
+
+    bool _readOnly;
+    _readOnly = widget.readOnlyElement;
+
+    return Container(
+        margin: const EdgeInsets.all(5.0),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            'fffffffffff',
+            widget.nameElement,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
           ),
+          HoverContainer(
+              //color: Colors.white,
+              //hoverColor: Colors.grey[200],
+              margin: const EdgeInsets.only(top: 2.0),
+              padding: const EdgeInsets.all(3.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10.0)),
+              hoverDecoration: BoxDecoration(
+                  //border: Border.all(color: Colors.blueAccent, width: 1.0),
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.grey[200]),
+              child: Row(children: [
+                IconButton(
+                  icon: const Icon(Icons.calendar_today),
+                  onPressed: () async {
+                    var pickedDate = await showDatePicker(
+                        context: context,
+                        //initialDate: DateTime.now(),
+                        initialDate: (widget.valueElement=='') ? DateTime.now() : DateFormat('dd-MM-yyyy').parse(widget.valueElement),
+                        firstDate: DateTime(1900),
+                        //DateTime.now() - not to allow to choose before today.
+                        lastDate: DateTime(2150));
 
-
-
-              HoverContainer(
-                  //color: Colors.white,
-                  //hoverColor: Colors.grey[200],
-                  margin: const EdgeInsets.only(top: 2.0),
-                  padding: const EdgeInsets.all(3.0),
-
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10.0)),
-
-                  hoverDecoration: BoxDecoration(
-                    //border: Border.all(color: Colors.blueAccent, width: 1.0),
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.grey[200]
-                  ),
-
-                  child:
-
-
-                Row(children: [
-
-                  IconButton(
-                    icon: const Icon(Icons.calendar_today),
-                    onPressed: () async {
-                      var pickedDate = await showDatePicker(
-                          context: context, initialDate: DateTime.now(),
-                          firstDate: DateTime(1900), //DateTime.now() - not to allow to choose before today.
-                          lastDate: DateTime(2150)
-                      );
-
-                      if (pickedDate != null) {
-                        print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-                        print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                    if (pickedDate != null) {
+                      print(
+                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                      print(
+                          formattedDate); //formatted date output using intl package =>  2021-03-16
 //you can implement different kind of Date Format here according to your requirement
 
-                        setState(() {
-                          dateinput.text =
-                              formattedDate; //set output date to TextField value.
-                        });
-
-                      } else {
-                        //print("Date is not selected");
-                      }
-
-
-
-                    },
-                  ),
-
-
-                  Expanded( child: Focus(
-                      onFocusChange: (f){if (f) {print("focus true");} else{print("focus false");}},
-                      child: TextFormField(
-             // readOnly: true,
-              controller: dateinput,
+                      setState(() {
+                        widget.valueElement =
+                            formattedDate; //set output date to TextField value.
+                      });
+                    } else {
+                      //print("Date is not selected");
+                    }
+                  },
+                ),
+                Expanded(
+                    child: Focus(
+                        onFocusChange: (f) {
+                          if (f) {
+                            print('focus true');
+                          } else {
+                            print('focus false');
+                          }
+                        },
+                        child: TextFormField(
+                          // readOnly: true,
+                          controller: _valController,
 
 /*
               onTap: () async {
@@ -564,58 +613,35 @@ class _BodyCard extends State<BodyCard> {
               },
 */
 
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.blue,
-                fontWeight: FontWeight.w200,
-              ),
-              decoration: new InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0.0, color: Colors.transparent),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0.0, color: Colors.transparent),
-                ),
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.w200,
+                          ),
+                          decoration: new InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 0.0, color: Colors.transparent),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 0.0, color: Colors.transparent),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  widget.valueElement = '';
+                                       //set output date to TextField value.
+                                });
 
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    dateinput.text = '';
-                    // widget.changeParentValue('');
-                  },
-                ),
-              ),
-
-            )))
-  ])
-
-
-    )
-
-  ]))
-
-
-    );
-
-    for (var element in widget.dataServer) {
-      _data.add(ElementCardContact(
-          nameElement: element.nameParam,
-          valueElement: element.valParam,
-          readOnlyElement: element.readOnly,
-          changeFunction: element.changeFunction
-      ));
-    }
-
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text("Contact card"),
-        ),
-        body: SingleChildScrollView(
-            child: Column(
-          children: _data,
-        )));
+                                //_valController.text = '';
+                                // widget.changeParentValue('');
+                              },
+                            ),
+                          ),
+                        )))
+              ]))
+        ]));
   }
 }
-
-
