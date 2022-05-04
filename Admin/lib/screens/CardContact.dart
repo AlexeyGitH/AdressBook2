@@ -94,6 +94,12 @@ class _CardContact extends State<CardContact> {
                   return RefreshWidget();
                 } else {
                   if (vDBD.authServer == true) {
+
+                    var DataContact = vDBD.contacts[0];
+                    Widget _firstNameW = new ElementCardWidget(nameElement: 'First name',valueElement: DataContact.firstname, readOnlyElement: false);
+
+                    return _firstNameW;
+  /*
                     List<DataContactParams> Data = [];
 
                     //contactItemData.firstname = vDBD.contacts[0].firstname;
@@ -200,7 +206,7 @@ class _CardContact extends State<CardContact> {
                         );   }
 
 
-                    );
+                    );*/
                   } else {
                     return RefreshWidget();
                   }
@@ -759,5 +765,172 @@ class _ElementCardWidgetNumerial extends State<ElementCardWidgetNumerial> {
                                 })))
                   ])))
         ]));
+  }
+}
+
+class ElementCardWidget extends StatefulWidget {
+  String nameElement;
+  String valueElement;
+  bool readOnlyElement;
+  String typeWidget;
+
+  ElementCardWidget(
+      {required this.nameElement,
+        required this.valueElement,
+        required this.readOnlyElement,
+        this.typeWidget = 'TypeString'});
+
+  @override
+  _ElementCardWidget createState() => _ElementCardWidget();
+}
+
+class _ElementCardWidget extends State<ElementCardWidget> {
+  TextEditingController _valController = TextEditingController();
+
+  MaterialColor colorBord = Colors.grey;
+  Color colorFocus = Colors.white;
+
+  String getValue(){
+    return _valController.text;
+  }
+
+  Widget build(BuildContext context) {
+    _valController.text = widget.valueElement;
+
+    bool _readOnly;
+    _readOnly = widget.readOnlyElement;
+
+
+    var _inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'^\*+')),];
+    var _TextType = TextInputType.multiline;
+    int _minLines = 1;
+    int _maxLines = 5;
+
+    if(widget.typeWidget == 'TypeDecimal')
+      {_inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),];
+       _TextType = TextInputType.numberWithOptions(decimal:true);
+       _maxLines = 1;
+      }
+    else if(widget.typeWidget == 'TypeInteger')
+      {_inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'^\d+')),];
+       _TextType = TextInputType.numberWithOptions(decimal:true);
+       _maxLines = 1;
+      }
+
+    return Container(
+        margin: EdgeInsets.all(5.0),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            widget.nameElement,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: colorBord,
+            ),
+          ),
+          Container(
+              margin: const EdgeInsets.only(top: 2.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: colorFocus, width: 2.0),
+                  borderRadius: BorderRadius.circular(12.0)),
+              child: HoverContainer(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: colorBord),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  hoverDecoration: BoxDecoration(
+                      border: Border.all(color: colorBord, width: 1.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.grey[200]),
+                  child: Row(children: [
+                    (widget.typeWidget == 'TypeDate') ? new ElementButtonData(valueElement: _valController.text) : new Container(),
+                    Expanded(
+                        child: Focus(
+                            onFocusChange: (f) {
+                              if (f) {
+                                setState(() {
+                                  colorFocus = Colors.blue;
+                                  colorBord = Colors.blue;
+                                  widget.valueElement = _valController.text;
+                                });
+                              } else {
+                                setState(() {
+                                  colorFocus = Colors.white;
+                                  colorBord = Colors.grey;
+                                  widget.valueElement = _valController.text;
+                                });
+                              }
+                            },
+                            child: TextFormField(
+                                readOnly: widget.readOnlyElement,
+                                controller: _valController,
+                                keyboardType: _TextType,
+                                minLines: _minLines,
+                                maxLines: _maxLines,
+                                inputFormatters: _inputFormatters,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                decoration: new InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 0.0, color: Colors.transparent),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 0.0, color: Colors.transparent),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(Icons.clear),
+                                    onPressed: () {
+                                      setState(() {
+                                        widget.valueElement = '';
+                                      });
+                                    },
+                                  ),
+                                ),
+
+                            )))
+                  ])))
+        ]));
+  }
+}
+
+class ElementButtonData extends StatefulWidget {
+
+  String valueElement;
+
+  ElementButtonData(
+      { required this.valueElement});
+
+  @override
+  _ElementButtonData createState() => _ElementButtonData();
+}
+
+class _ElementButtonData extends State<ElementButtonData> {
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.calendar_today),
+      onPressed: () async {
+        var pickedDate = await showDatePicker(
+            context: context,
+            initialDate: (widget.valueElement == '')
+                ? DateTime.now()
+                : DateFormat('dd-MM-yyyy').parse(widget.valueElement),
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2150));
+
+        if (pickedDate != null) {
+          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+          setState(() {
+            widget.valueElement =
+                formattedDate; //set output date to TextField value.
+          });
+        } else {
+          //print("Date is not selected");
+        }
+      },
+    );
   }
 }
