@@ -96,9 +96,62 @@ class _CardContact extends State<CardContact> {
                   if (vDBD.authServer == true) {
 
                     var DataContact = vDBD.contacts[0];
-                    Widget _firstNameW = new ElementCardWidget(nameElement: 'First name',valueElement: DataContact.firstname, readOnlyElement: false);
+                    Widget _firstNameW = new ElementCardWidget(nameElement: 'First name', valueElement: DataContact.firstname, readOnlyElement: false);
 
-                    return _firstNameW;
+                    return
+                      GestureDetector(
+                          onTap: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          child: Scaffold(
+                              backgroundColor: Colors.white,
+                              appBar: AppBar(
+                                title: Text("Contact card"),
+                              ),
+                              body: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          ElevatedButton.icon(
+                                            icon: Icon(
+                                              Icons.save,
+                                              color: Colors.green[200],
+                                              size: 40.0,
+                                            ),
+                                            label: const Text('Сохранить'),
+                                            onPressed: () {
+                                              //widget.saveFunction();
+                                              //mainConstModel.setCurrentPage("MainPage");
+                                            },
+                                          ),
+                                          Container(
+                                            width: 20,
+                                          ),
+                                          ElevatedButton.icon(
+                                            icon: Icon(
+                                              Icons.cancel,
+                                              color: Colors.red[50],
+                                              size: 40.0,
+                                            ),
+                                            label: const Text('Отменить'),
+                                            onPressed: () {
+                                              mainConstModel.setCurrentPage("MainPage");
+                                            },
+                                          ),
+                                        ],
+                                      ),
+
+                                      _firstNameW
+                                    ],
+                                  ))));
+
+
+
   /*
                     List<DataContactParams> Data = [];
 
