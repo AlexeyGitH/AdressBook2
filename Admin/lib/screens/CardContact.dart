@@ -96,7 +96,9 @@ class _CardContact extends State<CardContact> {
                   if (vDBD.authServer == true) {
 
                     var DataContact = vDBD.contacts[0];
-                    Widget _firstNameW = new ElementCardWidget(nameElement: 'First name', valueElement: DataContact.firstname, readOnlyElement: false);
+                    Widget _firstNameW = new ElementCardWidget(nameElement: 'Имя', valueElement: DataContact.firstname, readOnlyElement: false);
+                    Widget _birthDateW = new ElementCardWidget(nameElement: 'День рождения', valueElement: DataContact.birthdate, readOnlyElement: false, typeWidget: 'TypeDate');
+                    Widget _numW = new ElementCardWidget(nameElement: 'День рождения', valueElement: '11.22', readOnlyElement: false, typeWidget: 'TypeDecimal');
 
                     return
                       GestureDetector(
@@ -146,7 +148,9 @@ class _CardContact extends State<CardContact> {
                                         ],
                                       ),
 
-                                      _firstNameW
+                                      _firstNameW,
+                                      _birthDateW,
+                                      _numW
                                     ],
                                   ))));
 
