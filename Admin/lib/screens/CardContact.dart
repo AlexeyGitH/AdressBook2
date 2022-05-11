@@ -9,7 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:hovering/hovering.dart';
 import 'package:flutter/services.dart';
-import  'package:keyboard_actions/keyboard_actions.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 
 class DataContactParams {
   String nameParam;
@@ -18,16 +18,16 @@ class DataContactParams {
   String valType;
   void Function(String val) changeFunctionHandler;
 
-  DataContactParams(
-      {required this.nameParam,
-      required this.valParam,
-      required this.readOnly,
-      this.valType = 'String',
-      required this.changeFunctionHandler
-      });
+  DataContactParams({required this.nameParam,
+    required this.valParam,
+    required this.readOnly,
+    this.valType = 'String',
+    required this.changeFunctionHandler
+  });
 }
 
 class CardContact extends StatefulWidget {
+
   @override
   _CardContact createState() => _CardContact();
 }
@@ -36,21 +36,21 @@ class _CardContact extends State<CardContact> {
 
   ContactItem contactItemData
   =
-    new ContactItem(
-        id: 0,
-        status:'',
-        firstname: '',
-        middlename: '',
-        lastname: '',
-        photo: '',
-        department: '',
-        corporation: '',
-        position: '',
-        workphone: '',
-        mobilephone: '',
-        birthdate: '',
-        mail: '',
-        additionalphone: '');
+  ContactItem(
+      id: 0,
+      status: '',
+      firstname: '',
+      middlename: '',
+      lastname: '',
+      photo: '',
+      department: '',
+      corporation: '',
+      position: '',
+      workphone: '',
+      mobilephone: '',
+      birthdate: '',
+      mail: '',
+      additionalphone: '');
 
 
   Widget build(BuildContext context) {
@@ -62,15 +62,9 @@ class _CardContact extends State<CardContact> {
       String? val = await _storage.read(key: session_token_name);
       String t_s = val ?? '';
       var _resp =
-          await getContacts(t_s, id_contact: mainConstModel.currentIdContact);
+      await getContacts(t_s, id_contact: mainConstModel.currentIdContact);
       return _resp;
     }
-
-   void changeFunctionHandler(String val,String text){
-     val = (text==null) ? '': text;
-    };
-
-
 
     return FutureBuilder(
         future: _readContactsData(),
@@ -94,11 +88,55 @@ class _CardContact extends State<CardContact> {
                   return RefreshWidget();
                 } else {
                   if (vDBD.authServer == true) {
-
                     var DataContact = vDBD.contacts[0];
-                    Widget _firstNameW = new ElementCardWidget(nameElement: 'Имя', valueElement: DataContact.firstname, readOnlyElement: false);
-                    Widget _birthDateW = new ElementCardWidget(nameElement: 'День рождения', valueElement: DataContact.birthdate, readOnlyElement: false, typeWidget: 'TypeDate');
-                    Widget _numW = new ElementCardWidget(nameElement: 'День рождения', valueElement: '11.22', readOnlyElement: false, typeWidget: 'TypeDecimal');
+                    ElementCardWidget _firstNameW = new ElementCardWidget(
+                        nameElement: 'Имя',
+                        valueElement: DataContact.firstname,
+                        readOnlyElement: false);
+                    ElementCardWidget _middleNameW = new ElementCardWidget(
+                        nameElement: 'Отчество',
+                        valueElement: DataContact.middlename,
+                        readOnlyElement: false);
+                    ElementCardWidget _lastNameW = new ElementCardWidget(
+                        nameElement: 'Фамилия',
+                        valueElement: DataContact.lastname,
+                        readOnlyElement: false);
+                    ElementCardWidget _corporationW = new ElementCardWidget(
+                        nameElement: 'Организация',
+                        valueElement: DataContact.corporation,
+                        readOnlyElement: false,
+                        typeWidget: 'TypeCorpotarion');
+                    ElementCardWidget _departmentW = new ElementCardWidget(
+                        nameElement: 'Подразделение',
+                        valueElement: DataContact.department,
+                        readOnlyElement: false);
+                    ElementCardWidget _positionW = new ElementCardWidget(
+                        nameElement: 'Должность',
+                        valueElement: DataContact.position,
+                        readOnlyElement: false);
+                    ElementCardWidget _workphoneW = new ElementCardWidget(
+                        nameElement: 'Раб. телефон',
+                        valueElement: DataContact.workphone,
+                        readOnlyElement: false);
+                    ElementCardWidget _additionalphoneW = new ElementCardWidget(
+                        nameElement: 'Доп. телефон',
+                        valueElement: DataContact.additionalphone,
+                        readOnlyElement: false);
+                    ElementCardWidget _mobilephoneW = new ElementCardWidget(
+                        nameElement: 'Моб. телефон',
+                        valueElement: DataContact.mobilephone,
+                        readOnlyElement: false);
+                    ElementCardWidget _mailW = new ElementCardWidget(
+                        nameElement: 'Почта',
+                        valueElement: DataContact.mail,
+                        readOnlyElement: false);
+                    ElementCardWidget _birthDateW = new ElementCardWidget(
+                        nameElement: 'День рождения',
+                        valueElement: DataContact.birthdate,
+                        readOnlyElement: true,
+                        typeWidget: 'TypeDate');
+
+                    ///ElementCardWidget _numW = new ElementCardWidget(nameElement: 'День рождения', valueElement: '11.22', readOnlyElement: false, typeWidget: 'TypeDecimal');
 
                     return
                       GestureDetector(
@@ -117,7 +155,8 @@ class _CardContact extends State<CardContact> {
                                         height: 10,
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center,
                                         children: [
                                           ElevatedButton.icon(
                                             icon: Icon(
@@ -127,8 +166,7 @@ class _CardContact extends State<CardContact> {
                                             ),
                                             label: const Text('Сохранить'),
                                             onPressed: () {
-                                              //widget.saveFunction();
-                                              //mainConstModel.setCurrentPage("MainPage");
+                                              print(_firstNameW.valueElement);
                                             },
                                           ),
                                           Container(
@@ -142,128 +180,29 @@ class _CardContact extends State<CardContact> {
                                             ),
                                             label: const Text('Отменить'),
                                             onPressed: () {
-                                              mainConstModel.setCurrentPage("MainPage");
+                                              mainConstModel.setCurrentPage(
+                                                  "MainPage");
                                             },
                                           ),
                                         ],
                                       ),
 
                                       _firstNameW,
+                                      _middleNameW,
+                                      _lastNameW,
+                                      _corporationW,
+                                      _corporationW,
                                       _birthDateW,
-                                      _numW
+                                      _departmentW,
+                                      _positionW,
+                                      _workphoneW,
+                                      _additionalphoneW,
+                                      _mobilephoneW,
+                                      _mailW,
+                                      _birthDateW,
                                     ],
                                   ))));
 
-
-
-  /*
-                    List<DataContactParams> Data = [];
-
-                    //contactItemData.firstname = vDBD.contacts[0].firstname;
-                    //debugPrint('First Name:' + vDBD.contacts[0].firstname);
-
-                    for (var element in vDBD.contacts) {
-                      Data.add(DataContactParams(
-                          nameParam: 'First name',
-                          valParam: element.firstname.toString(),
-                          //changeFunctionHandler: changeFunctionHandler,
-                          changeFunctionHandler: (String val) {
-                            element.firstname = (val==null) ? '': val;
-                          },
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'Last name',
-                          valParam: element.lastname.toString(),
-                          changeFunctionHandler: (String val) {
-                          element.lastname = (val==null) ? '': val;
-                          },
-                          readOnly: false));
-
-
-
-/*
-                      Data.add(DataContactParams(
-                          nameParam: 'Middle name',
-                          valParam: element.middlename.toString(),
-                          changeFunction: (String val) {
-                            contactItemData.firstname = (val==null) ? '': val;
-                          },
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'Last name',
-                          valParam: element.lastname.toString(),
-                          
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'Corporation',
-                          valParam: element.corporation.toString(),
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'Department',
-                          valParam: element.department.toString(),
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'Position',
-                          valParam: element.position.toString(),
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'Work phone',
-                          valParam: element.workphone.toString(),
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'Additional phone',
-                          valParam: element.additionalphone.toString(),
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'Mobile phone',
-                          valParam: element.mobilephone.toString(),
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'Birth date',
-                          valParam: element.birthdate.toString(),
-                          readOnly: false));
-
-                      Data.add(DataContactParams(
-                          nameParam: 'E-mail',
-                          valParam: element.mail.toString(),
-                          readOnly: false));
-*/
-
-                    }
-
-                    return BodyCard(dataServer: Data,
-                                    saveFunction: (){
-
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: new Text("Alert!!"),
-                              //content: new Text(firstName),//new Text('firstname'),
-                                content: new Text(contactItemData.firstname),
-                                actions: <Widget>[
-                                new TextButton(
-                                  child: new Text("OK"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );   }
-
-
-                    );*/
                   } else {
                     return RefreshWidget();
                   }
@@ -274,568 +213,17 @@ class _CardContact extends State<CardContact> {
   }
 }
 
-class ElementCardContact extends StatefulWidget {
-  String nameElement;
-  String valueElement;
-  bool readOnlyElement;
-  final Function(String) changeFunction;
-
-  ElementCardContact(
-      {required this.nameElement,
-      required this.valueElement,
-      required this.readOnlyElement,
-      required this.changeFunction
-      });
-
-  @override
-  _ElementCardContact createState() => _ElementCardContact();
-}
-
-class _ElementCardContact extends State<ElementCardContact> {
-  Widget build(BuildContext context) {
-    var _valController = TextEditingController();
-
-    _valController.text = widget.valueElement;
-
-    bool _readOnly;
-    _readOnly = widget.readOnlyElement;
-    //_readOnly = true;
-
-    return Container(
-        margin: const EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width,
-        child: TextFormField(
-          readOnly: _readOnly,
-         // textInputAction: TextInputAction.done,
-          controller: _valController,
-          keyboardType: TextInputType.multiline,
-          minLines: 1,
-          maxLines: 5,
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.blue,
-            fontWeight: FontWeight.w200,
-          ),
-          decoration: new InputDecoration(
-            fillColor: _readOnly ? Colors.grey[50] : Colors.white,
-            filled: true,
-            hoverColor: Colors.grey[200],
-
-            labelText: widget.nameElement,
-            labelStyle: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-            ),
-
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1.0, color: Colors.grey),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2.0, color: Colors.blue),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.clear),
-              onPressed: () {
-                _valController.text = '';
-                // widget.changeParentValue('');
-              },
-            ),
-          ),
-          onChanged: (text) {
-            widget.changeFunction(text);
-
-            //filterModelV.setFilterValueonlyset(text);
-            //widget.changeParentValue(text);
-            //print('widget text field: $text');
-          },
-        ));
-  }
-}
-
-class BodyCard extends StatefulWidget {
-  List<DataContactParams> dataServer;
-  final Function() saveFunction;
-
-  BodyCard({required this.dataServer, required this.saveFunction,});
-
-  @override
-  _BodyCard createState() => _BodyCard();
-}
-
-class _BodyCard extends State<BodyCard> {
-  TextEditingController dateinput = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    var mainConstModel = context.watch<MainConstModel>();
-    final _data = <Widget>[];
-    _data.add(new Container(
-      height: 10,
-    ));
-
-    _data.add(
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton.icon(
-            icon: Icon(
-              Icons.save,
-              color: Colors.green[200],
-              size: 40.0,
-            ),
-            label: const Text('Сохранить'),
-            onPressed: () {
-              widget.saveFunction();
-              //mainConstModel.setCurrentPage("MainPage");
-            },
-          ),
-          Container(
-            width: 20,
-          ),
-          ElevatedButton.icon(
-            icon: Icon(
-              Icons.cancel,
-              color: Colors.red[50],
-              size: 40.0,
-            ),
-            label: const Text('Отменить'),
-            onPressed: () {
-              mainConstModel.setCurrentPage("MainPage");
-            },
-          ),
-        ],
-      ),
-    );
-
-    _data.add(ElementCardWidgetData(
-        nameElement: 'Birth date',
-        valueElement: '12-12-2020',
-        readOnlyElement: true,
-        changeFunction: (f) {
-          f;
-        }));
-
-    for (var element in widget.dataServer) {
-      //if (element.nameParam == 'First name') {
-        _data.add(ElementCardWidgetString(
-          nameElement: element.nameParam,
-          valueElement: element.valParam,
-          readOnlyElement: element.readOnly,
-          changeFunctionHandler: element.changeFunctionHandler
-        ));
-/*      } else {
-        _data.add(ElementCardContact(
-            nameElement: element.nameParam,
-            valueElement: element.valParam,
-            readOnlyElement: element.readOnly,
-            changeFunction: element.changeFunction));
-      }*/
-    }
-
-    return GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              title: Text("Contact card"),
-            ),
-            body: SingleChildScrollView(
-                child: Column(
-              children: _data,
-            ))));
-  }
-}
-
-class ElementCardWidgetData extends StatefulWidget {
-  String nameElement;
-  String valueElement;
-  bool readOnlyElement;
-  final Function(String) changeFunction;
-
-  ElementCardWidgetData(
-      {required this.nameElement,
-      required this.valueElement,
-      required this.readOnlyElement,
-      required this.changeFunction});
-
-  @override
-  _ElementCardWidgetData createState() => _ElementCardWidgetData();
-}
-
-class _ElementCardWidgetData extends State<ElementCardWidgetData> {
-  TextEditingController _valController = TextEditingController();
-
-  MaterialColor colorBord = Colors.grey;
-  Color colorFocus = Colors.white;
-
-  Widget build(BuildContext context) {
-    _valController.text = widget.valueElement;
-
-    bool _readOnly;
-    _readOnly = widget.readOnlyElement;
-
-    return Container(
-        margin: EdgeInsets.all(5.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            widget.nameElement,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: colorBord,
-            ),
-          ),
-          Container(
-              margin: const EdgeInsets.only(top: 2.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: colorFocus, width: 2.0),
-                  borderRadius: BorderRadius.circular(12.0)),
-              child: HoverContainer(
-                  //color: Colors.white,
-                  //hoverColor: Colors.grey[200],
-                  decoration: BoxDecoration(
-                      border: Border.all(color: colorBord),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  hoverDecoration: BoxDecoration(
-                      //border: Border.all(color: Colors.blueAccent, width: 1.0),
-                      border: Border.all(color: colorBord, width: 1.0),
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.grey[200]),
-                  child: Row(children: [
-                    IconButton(
-                      icon: const Icon(Icons.calendar_today),
-                      onPressed: () async {
-                        var pickedDate = await showDatePicker(
-                            context: context,
-                            //initialDate: DateTime.now(),
-                            initialDate: (widget.valueElement == '')
-                                ? DateTime.now()
-                                : DateFormat('dd-MM-yyyy')
-                                    .parse(widget.valueElement),
-                            firstDate: DateTime(1900),
-                            //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2150));
-
-                        if (pickedDate != null) {
-                          print(
-                              pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                          String formattedDate =
-                              DateFormat('dd-MM-yyyy').format(pickedDate);
-                          print(
-                              formattedDate); //formatted date output using intl package =>  2021-03-16
-//you can implement different kind of Date Format here according to your requirement
-
-                          setState(() {
-                            widget.valueElement =
-                                formattedDate; //set output date to TextField value.
-                          });
-                        } else {
-                          //print("Date is not selected");
-                        }
-                      },
-                    ),
-                    Expanded(
-                        child: Focus(
-                            onFocusChange: (f) {
-                              if (f) {
-                                //print('focus true');
-                                setState(() {
-                                  colorFocus = Colors.blue;
-                                  colorBord = Colors.blue;
-                                });
-                              } else {
-                                //print('focus false');
-                                setState(() {
-                                  colorFocus = Colors.white;
-                                  colorBord = Colors.grey;
-                                });
-                              }
-                            },
-                            child: TextFormField(
-                              readOnly: widget.readOnlyElement,
-                              controller: _valController,
-
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.blue,
-                                fontWeight: FontWeight.w200,
-                              ),
-                              decoration: new InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0.0, color: Colors.transparent),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0.0, color: Colors.transparent),
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.clear),
-                                  onPressed: () {
-                                    setState(() {
-                                      widget.valueElement = '';
-                                      //set output date to TextField value.
-                                    });
-
-                                    //_valController.text = '';
-                                    // widget.changeParentValue('');
-                                  },
-                                ),
-                              ),
-                            )))
-                  ])))
-        ]));
-  }
-}
-
-class ElementCardWidgetString extends StatefulWidget {
-  String nameElement;
-  String valueElement;
-  bool readOnlyElement;
-  void Function(String) changeFunctionHandler;
-
-  ElementCardWidgetString(
-      {required this.nameElement,
-      required this.valueElement,
-      required this.readOnlyElement,
-      required this.changeFunctionHandler
-      });
-
-  @override
-  _ElementCardWidgetString createState() => _ElementCardWidgetString();
-}
-
-class _ElementCardWidgetString extends State<ElementCardWidgetString> {
-  MaterialColor colorBord = Colors.grey;
-  Color colorFocus = Colors.white;
-
-  fun1(String vv){}
-
-  Widget build(BuildContext context) {
-    TextEditingController _valController = TextEditingController();
-    _valController.text = widget.valueElement;
-    _valController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _valController.text.length));
-
-    bool _readOnly;
-    _readOnly = widget.readOnlyElement;
-
-    return Container(
-        margin: EdgeInsets.all(5.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            widget.nameElement,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: colorBord,
-            ),
-          ),
-          Container(
-              margin: const EdgeInsets.only(top: 2.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: colorFocus, width: 2.0),
-                  borderRadius: BorderRadius.circular(12.0)),
-              child: HoverContainer(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: colorBord),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  hoverDecoration: BoxDecoration(
-                      border: Border.all(color: colorBord, width: 1.0),
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.grey[200]),
-                  child: Row(children: [
-                    Expanded(
-                        child: Focus(
-                            onFocusChange: (f) {
-                              if (f) {
-                                setState(() {
-                                  colorFocus = Colors.blue;
-                                  colorBord = Colors.blue;
-                                  widget.valueElement = _valController.text;
-                                });
-                              } else {
-                                setState(() {
-                                  colorFocus = Colors.white;
-                                  colorBord = Colors.grey;
-                                  widget.valueElement = _valController.text;
-                                });
-                              }
-                            },
-                            child: TextFormField(
-                                readOnly: widget.readOnlyElement,
-                                controller: _valController,
-                                keyboardType: TextInputType.multiline,
-                                minLines: 1,
-                                maxLines: 5,
-
-                                /*
-                                keyboardType: TextInputType.numberWithOptions(decimal:true),
-                                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),],
-                              */
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                decoration: new InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 0.0, color: Colors.transparent),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 0.0, color: Colors.transparent),
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: const Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        widget.valueElement = '';
-                                      });
-                                   },
-                                  ),
-                                ),
-                                onChanged: (text) {
-                                  widget.changeFunctionHandler(text);
-                                },
-                                )))
-                  ])))
-        ]));
-  }
-}
-
-class ElementCardWidgetNumerial extends StatefulWidget {
-  String nameElement;
-  String valueElement;
-  bool readOnlyElement;
-  int decemialElement;
-  final Function(String) changeFunction;
-
-  ElementCardWidgetNumerial(
-      {required this.nameElement,
-        required this.valueElement,
-        required this.readOnlyElement,
-        this.decemialElement = 0,
-        required this.changeFunction});
-
-  @override
-  _ElementCardWidgetNumerial createState() => _ElementCardWidgetNumerial();
-}
-
-class _ElementCardWidgetNumerial extends State<ElementCardWidgetNumerial> {
-  MaterialColor colorBord = Colors.grey;
-  Color colorFocus = Colors.white;
-
-  var _inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),];
-
-  Widget build(BuildContext context) {
-    TextEditingController _valController = TextEditingController();
-    _valController.text = widget.valueElement;
-    _valController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _valController.text.length));
-
-    bool _readOnly;
-    _readOnly = widget.readOnlyElement;
-
-    if(widget.decemialElement == 2)
-    {_inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'^\d+')),];}
-
-
-    return Container(
-        margin: EdgeInsets.all(5.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            widget.nameElement,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: colorBord,
-            ),
-          ),
-          Container(
-              margin: const EdgeInsets.only(top: 2.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: colorFocus, width: 2.0),
-                  borderRadius: BorderRadius.circular(12.0)),
-              child: HoverContainer(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: colorBord),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  hoverDecoration: BoxDecoration(
-                      border: Border.all(color: colorBord, width: 1.0),
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.grey[200]),
-                  child: Row(children: [
-                    Expanded(
-                        child: Focus(
-                            onFocusChange: (f) {
-                              if (f) {
-                                setState(() {
-                                  colorFocus = Colors.blue;
-                                  colorBord = Colors.blue;
-                                  widget.valueElement = _valController.text;
-                                });
-                              } else {
-                                setState(() {
-                                  colorFocus = Colors.white;
-                                  colorBord = Colors.grey;
-                                  widget.valueElement = _valController.text;
-                                });
-                              }
-                            },
-                            child: TextFormField(
-                                readOnly: widget.readOnlyElement,
-                                controller: _valController,
-                                keyboardType: TextInputType.numberWithOptions(decimal:true),
-                                inputFormatters: _inputFormatters,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                decoration: new InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 0.0, color: Colors.transparent),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 0.0, color: Colors.transparent),
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: const Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        widget.valueElement = '';
-                                      });
-                                    },
-                                  ),
-                                ),
-                                onChanged: (text) {
-                                  widget.changeFunction(text);
-                                })))
-                  ])))
-        ]));
-  }
-}
-
 class ElementCardWidget extends StatefulWidget {
   String nameElement;
   String valueElement;
   bool readOnlyElement;
   String typeWidget;
 
-  ElementCardWidget(
-      {required this.nameElement,
-        required this.valueElement,
-        required this.readOnlyElement,
-        this.typeWidget = 'TypeString'});
+  ElementCardWidget({required this.nameElement,
+    required this.valueElement,
+    required this.readOnlyElement,
+    this.typeWidget = 'TypeString'
+  });
 
   @override
   _ElementCardWidget createState() => _ElementCardWidget();
@@ -847,41 +235,123 @@ class _ElementCardWidget extends State<ElementCardWidget> {
   MaterialColor colorBord = Colors.grey;
   Color colorFocus = Colors.white;
 
-  String getValue(){
-    return _valController.text;
-  }
 
   Widget build(BuildContext context) {
     _valController.text = widget.valueElement;
+
+    _valController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _valController.text.length));
 
     bool _readOnly;
     _readOnly = widget.readOnlyElement;
 
 
-    var _inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'^\*+')),];
+    var _inputFormatters = [FilteringTextInputFormatter.deny(RegExp(r''))];
     var _TextType = TextInputType.multiline;
     int _minLines = 1;
     int _maxLines = 5;
 
-    if(widget.typeWidget == 'TypeDecimal')
-      {_inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),];
-       _TextType = TextInputType.numberWithOptions(decimal:true);
-       _maxLines = 1;
-      }
-    else if(widget.typeWidget == 'TypeInteger')
-      {_inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'^\d+')),];
-       _TextType = TextInputType.numberWithOptions(decimal:true);
-       _maxLines = 1;
-      }
+    if (widget.typeWidget == 'TypeDecimal') {
+      _inputFormatters =
+      [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),];
+      _TextType = TextInputType.numberWithOptions(decimal: true);
+      _maxLines = 1;
+    }
+    else if (widget.typeWidget == 'TypeInteger') {
+      _inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'^\d+')),];
+      _TextType = TextInputType.numberWithOptions(decimal: true);
+      _maxLines = 1;
+    }
+
+    List<Widget> childrenRow = [];
+    if (widget.typeWidget == 'TypeDate'){
+      childrenRow.add(ElementButtonData(
+        valueElement: _valController.text,
+        changeFunctionHandler: (String val) {
+          _valController.text = val;
+          //widget.valueElement = val;
+          /*setState(() {
+            widget.valueElement = val;
+          });*/
+        },
+      ));}
+    else if (widget.typeWidget == 'TypeCorpotarion'){
+      childrenRow.add(ElementFilterCorporation(
+        changeFunctionHandler: (String val) {
+          _valController.text = val;
+          //widget.valueElement = val;
+          /*setState(() {
+            widget.valueElement = val;
+          });*/
+        },
+
+      ));}
+
+
+    childrenRow.add(Expanded(
+        child: Focus(
+            onFocusChange: (f) {
+              if (f) {
+                setState(() {
+                  colorFocus = Colors.blue;
+                  colorBord = Colors.blue;
+                  widget.valueElement = _valController.text;
+                });
+              } else {
+                setState(() {
+                  colorFocus = Colors.white;
+                  colorBord = Colors.grey;
+                  widget.valueElement = _valController.text;
+                });
+              }
+            },
+            child: TextFormField(
+                readOnly: widget.readOnlyElement,
+                controller: _valController,
+                keyboardType: _TextType,
+                minLines: _minLines,
+                maxLines: _maxLines,
+                inputFormatters: _inputFormatters,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w400,
+                ),
+                decoration: new InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 0.0, color: Colors.transparent),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 0.0, color: Colors.transparent),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      setState(() {
+                        widget.valueElement = '';
+                      });
+                    },
+                  ),
+                ),
+                onChanged: (text) {
+                  //setState(() {
+                  widget.valueElement = text;
+                  // });
+                }
+            ))));
+
 
     return Container(
+        padding: EdgeInsets.only(top: 2.0),
         margin: EdgeInsets.all(5.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             widget.nameElement,
             style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              //fontWeight: FontWeight.w400,
               color: colorBord,
             ),
           ),
@@ -898,58 +368,7 @@ class _ElementCardWidget extends State<ElementCardWidget> {
                       border: Border.all(color: colorBord, width: 1.0),
                       borderRadius: BorderRadius.circular(10.0),
                       color: Colors.grey[200]),
-                  child: Row(children: [
-                    (widget.typeWidget == 'TypeDate') ? new ElementButtonData(valueElement: _valController.text) : new Container(),
-                    Expanded(
-                        child: Focus(
-                            onFocusChange: (f) {
-                              if (f) {
-                                setState(() {
-                                  colorFocus = Colors.blue;
-                                  colorBord = Colors.blue;
-                                  widget.valueElement = _valController.text;
-                                });
-                              } else {
-                                setState(() {
-                                  colorFocus = Colors.white;
-                                  colorBord = Colors.grey;
-                                  widget.valueElement = _valController.text;
-                                });
-                              }
-                            },
-                            child: TextFormField(
-                                readOnly: widget.readOnlyElement,
-                                controller: _valController,
-                                keyboardType: _TextType,
-                                minLines: _minLines,
-                                maxLines: _maxLines,
-                                inputFormatters: _inputFormatters,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                decoration: new InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 0.0, color: Colors.transparent),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 0.0, color: Colors.transparent),
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: const Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        widget.valueElement = '';
-                                      });
-                                    },
-                                  ),
-                                ),
-
-                            )))
-                  ])))
+                  child: Row(children: childrenRow)))
         ]));
   }
 }
@@ -957,9 +376,11 @@ class _ElementCardWidget extends State<ElementCardWidget> {
 class ElementButtonData extends StatefulWidget {
 
   String valueElement;
+  void Function(String val) changeFunctionHandler;
 
-  ElementButtonData(
-      { required this.valueElement});
+  ElementButtonData({ required this.valueElement,
+    required this.changeFunctionHandler
+  });
 
   @override
   _ElementButtonData createState() => _ElementButtonData();
@@ -968,26 +389,257 @@ class ElementButtonData extends StatefulWidget {
 class _ElementButtonData extends State<ElementButtonData> {
   Widget build(BuildContext context) {
     return IconButton(
+      padding: EdgeInsets.all(0),
       icon: const Icon(Icons.calendar_today),
       onPressed: () async {
         var pickedDate = await showDatePicker(
             context: context,
             initialDate: (widget.valueElement == '')
                 ? DateTime.now()
-                : DateFormat('dd-MM-yyyy').parse(widget.valueElement),
+                : DateFormat('dd/MM/yyyy').parse(widget.valueElement),
             firstDate: DateTime(1900),
             lastDate: DateTime(2150));
 
         if (pickedDate != null) {
-          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-          setState(() {
+          String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
+          widget.changeFunctionHandler(formattedDate);
+          /*setState(() {
             widget.valueElement =
                 formattedDate; //set output date to TextField value.
-          });
+          });*/
         } else {
           //print("Date is not selected");
         }
       },
     );
   }
+}
+
+class ElementFilterCorporation extends StatefulWidget {
+
+  void Function(String val) changeFunctionHandler;
+
+  ElementFilterCorporation({required this.changeFunctionHandler
+  });
+
+  @override
+  _ElementFilterCorporation createState() => _ElementFilterCorporation();
+}
+
+class _ElementFilterCorporation extends State<ElementFilterCorporation> {
+
+
+  //List data_list = ['123', '345'];
+  List data_list = [];
+  int typebutton = 0;
+
+  Future<List> _readCorporation() async {
+    return await Future.delayed(
+        const Duration(seconds: 2),
+            () => ['123', '345']);
+  }
+
+  Widget build(BuildContext context) {
+    //debugPrint('data_list.length:' + data_list.length.toString());
+
+    if (typebutton == 0) {
+
+      return
+        GestureDetector(
+            onTap: () {
+              setState(() {
+                typebutton = 1;
+               });},
+            child:
+            Container(
+          //padding: EdgeInsets.only(left: 7.0),
+            padding: EdgeInsets.all(8),
+            child: Icon(
+              Icons.filter_list,
+              size: 25,
+            )));
+
+    }
+
+
+    if (!data_list.isEmpty) {
+      return FilterMenuButton(data_list, widget.changeFunctionHandler);
+    }
+
+    return FutureBuilder(
+        future: _readCorporation(),
+        builder: (context, AsyncSnapshot<List> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return
+              Container(
+                  //padding: EdgeInsets.only(left: 7.0),
+                  padding: EdgeInsets.all(8),
+                  child:
+                SizedBox(
+                    width: 25, height: 25, child: CircularProgressIndicator()));
+            default:
+              if (snapshot.hasError)
+                return RefreshWidget();
+              else if (snapshot.data == null) {
+                return RefreshWidget();
+              } else {
+                if (snapshot.data == null) {
+                  return RefreshWidget();
+                } else {
+                  List? dataL = snapshot.data;
+                  if (dataL != null) {
+                    data_list = dataL;
+                    return FilterMenuButton(data_list, widget.changeFunctionHandler, resumeView:true);
+
+                  }
+                  return RefreshWidget();
+                }
+              }
+          }
+        });
+
+
+
+
+
+
+
+    return PopupMenuButton(
+      icon: Icon(
+        Icons.filter_list,
+      ),
+      itemBuilder: (BuildContext context) {
+
+        if (data_list.isEmpty)
+        {
+        return <PopupMenuEntry>[
+        const PopupMenuItem(
+        value: '',
+        child: SizedBox(
+        width: 30, height: 30, child: CircularProgressIndicator()),
+        )];
+        }
+
+        return data_list
+            .map((day) => PopupMenuItem(
+                  child: Text(day),
+                  value: day,
+                ))
+            .toList();
+      },
+      onSelected: (value) {
+        if (value == "All") {
+        } else {}
+      },
+    );
+  }
+}
+
+class FilterMenuButton extends StatelessWidget {
+  final GlobalKey _menuKey = GlobalKey();
+
+  List data_list = [];
+  void Function(String val) changeFunctionHandler;
+
+  bool resumeView = false;
+
+  FilterMenuButton(this.data_list, this.changeFunctionHandler, {this.resumeView = false});
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    final PB =  PopupMenuButton(
+      key: _menuKey,
+      //enabled: true,
+      //padding: EdgeInsets.only(left: 5.0),
+      //padding: EdgeInsets.all(0),
+      icon: Icon(
+        Icons.filter_list,
+        size: 25,
+      ),
+      offset: Offset(5, 0),
+      itemBuilder: (BuildContext context) {
+        return data_list.map((day) => PopupMenuItem(
+          child: Text(day),
+          value: day,
+        )).toList();
+      },
+      onSelected: (value) {
+        if (value == "All") {
+           changeFunctionHandler('');
+        } else {
+           changeFunctionHandler(value.toString());
+        }
+      },
+
+    );
+
+    if (resumeView) {
+      dynamic state = _menuKey.currentState;
+      print(state);
+      state.showButtonMenu();
+      //PB.showButtonMenu();
+
+
+    }
+    return PB;
+
+
+     return MaterialApp(
+      title: 'My Dog App',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Yellow Lab'),
+        ),
+        body: Center(
+          child: DecoratedBox( // here is where I added my DecoratedBox
+            decoration: BoxDecoration(color: Colors.lightBlueAccent),
+            child: Text('Rocky'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class MyPopupMenuButton<T> extends PopupMenuButton<T> {
+
+
+  const MyPopupMenuButton({
+    Key? key,
+    required this.itemBuilder,
+    this.initialValue,
+    this.onSelected,
+    this.onCanceled,
+    this.tooltip,
+    this.elevation,
+    this.padding = const EdgeInsets.all(8.0),
+    this.child,
+    this.splashRadius,
+    this.icon,
+    this.iconSize,
+    this.offset = Offset.zero,
+    this.enabled = true,
+    this.shape,
+    this.color,
+    this.enableFeedback,
+  })
+
+  @override
+  PopupMenuButtonState<T> createState() {
+    State = createState();
+    Return State;
+  } PopupMenuButtonState<T>();
+
+  late PopupMenuButtonState<T> State;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+
 }
