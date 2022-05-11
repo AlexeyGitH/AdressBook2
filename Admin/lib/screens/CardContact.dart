@@ -441,7 +441,7 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
 
   Widget build(BuildContext context) {
     //debugPrint('data_list.length:' + data_list.length.toString());
-
+/*
     if (typebutton == 0) {
 
       return
@@ -460,7 +460,7 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
             )));
 
     }
-
+*/
 
     if (!data_list.isEmpty) {
       return FilterMenuButton(data_list, widget.changeFunctionHandler);
@@ -490,7 +490,13 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
                   List? dataL = snapshot.data;
                   if (dataL != null) {
                     data_list = dataL;
-                    return FilterMenuButton(data_list, widget.changeFunctionHandler, resumeView:true);
+                    FilterMenuButton PB = FilterMenuButton(data_list, widget.changeFunctionHandler, resumeView:false);
+                    //dynamic state = PB._menuKey.currentState;
+                    //print('ff '+state.toString());
+                    //state.showButtonMenu();
+                    return PB;
+
+                    //return FilterMenuButton(data_list, widget.changeFunctionHandler, resumeView:true);
 
                   }
                   return RefreshWidget();
@@ -534,6 +540,10 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
       },
     );
   }
+
+
+
+
 }
 
 class FilterMenuButton extends StatelessWidget {
@@ -561,6 +571,8 @@ class FilterMenuButton extends StatelessWidget {
       ),
       offset: Offset(5, 0),
       itemBuilder: (BuildContext context) {
+        //print('item builder');
+
         return data_list.map((day) => PopupMenuItem(
           child: Text(day),
           value: day,
@@ -577,10 +589,10 @@ class FilterMenuButton extends StatelessWidget {
     );
 
     if (resumeView) {
-      dynamic state = _menuKey.currentState;
-      print(state);
-      state.showButtonMenu();
-      //PB.showButtonMenu();
+      //dynamic state = _menuKey.currentState;
+      //print(state);
+      //state.showButtonMenu();
+
 
 
     }
@@ -602,44 +614,8 @@ class FilterMenuButton extends StatelessWidget {
       ),
     );
   }
+
+
 }
 
 
-
-class MyPopupMenuButton<T> extends PopupMenuButton<T> {
-
-
-  const MyPopupMenuButton({
-    Key? key,
-    required this.itemBuilder,
-    this.initialValue,
-    this.onSelected,
-    this.onCanceled,
-    this.tooltip,
-    this.elevation,
-    this.padding = const EdgeInsets.all(8.0),
-    this.child,
-    this.splashRadius,
-    this.icon,
-    this.iconSize,
-    this.offset = Offset.zero,
-    this.enabled = true,
-    this.shape,
-    this.color,
-    this.enableFeedback,
-  })
-
-  @override
-  PopupMenuButtonState<T> createState() {
-    State = createState();
-    Return State;
-  } PopupMenuButtonState<T>();
-
-  late PopupMenuButtonState<T> State;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-
-}
