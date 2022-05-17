@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:hovering/hovering.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:admin/screens/my_popup_menu.dart';
+
 
 class DataContactParams {
   String nameParam;
@@ -442,7 +442,7 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
 
   Widget build(BuildContext context) {
     //debugPrint('data_list.length:' + data_list.length.toString());
-/*
+
     if (typebutton == 0) {
 
       return
@@ -461,7 +461,6 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
             )));
 
     }
-*/
 
     if (!data_list.isEmpty) {
       return FilterMenuButton(data_list, widget.changeFunctionHandler);
@@ -491,14 +490,7 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
                   List? dataL = snapshot.data;
                   if (dataL != null) {
                     data_list = dataL;
-                    FilterMenuButton PB = FilterMenuButton(data_list, widget.changeFunctionHandler, resumeView:false);
-                    //dynamic state = PB._menuKey.currentState;
-                    //print('ff '+state.toString());
-                    //state.showButtonMenu();
-                    return PB;
-
-                    //return FilterMenuButton(data_list, widget.changeFunctionHandler, resumeView:true);
-
+                    return FilterMenuButton(data_list, widget.changeFunctionHandler, resumeView:true);
                   }
                   return RefreshWidget();
                 }
