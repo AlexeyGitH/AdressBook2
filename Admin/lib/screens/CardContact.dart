@@ -430,7 +430,7 @@ class ElementFilterCorporation extends StatefulWidget {
 class _ElementFilterCorporation extends State<ElementFilterCorporation> {
 
 
-  //List data_list = ['123', '345'];
+  //List data_list = ['111', '222'];
   List data_list = [];
   int typebutton = 0;
 
@@ -442,6 +442,48 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
 
   Widget build(BuildContext context) {
     //debugPrint('data_list.length:' + data_list.length.toString());
+
+
+    return
+      GestureDetector(
+          onTap: () {
+
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                barrierDismissible: true,
+                opaque: false,
+                pageBuilder: (_, anim1, anim2) => ListPopupPage(data_list: data_list,
+                   changeFunctionHandler: (List val) {
+                      data_list = val;
+              },
+
+
+
+
+                ),
+
+              ),
+            );
+
+
+            },
+          child:
+          Container(
+            //padding: EdgeInsets.only(left: 7.0),
+              padding: EdgeInsets.all(8),
+              child: Icon(
+                Icons.filter_list,
+                size: 25,
+              )));
+
+
+
+
+
+
+
+/*
 
     if (typebutton == 0) {
 
@@ -532,6 +574,9 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
         } else {}
       },
     );
+
+  */
+
   }
 
 
@@ -539,76 +584,119 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
 
 }
 
-class FilterMenuButton extends StatelessWidget {
-  final GlobalKey _menuKey = GlobalKey();
 
-  List data_list = [];
-  void Function(String val) changeFunctionHandler;
+class ListPopupPage extends StatefulWidget {
 
-  bool resumeView = false;
+  List data_list;
+  void Function(List val) changeFunctionHandler;
 
-  FilterMenuButton(this.data_list, this.changeFunctionHandler, {this.resumeView = false});
+  ListPopupPage({required this.data_list, required this.changeFunctionHandler});
 
+  @override
+  _ListPopupPage createState() => _ListPopupPage();
+}
+
+class _ListPopupPage extends State<ListPopupPage> {
+
+
+  Future<List> _readCorporation() async {
+    return await Future.delayed(
+        const Duration(seconds: 2),
+            () => ['123', '345']);
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    final PB =  AD_PopupMenuButton(
-      key: _menuKey,
-      //enabled: true,
-      //padding: EdgeInsets.only(left: 5.0),
-      //padding: EdgeInsets.all(0),
-      icon: Icon(
-        Icons.filter_list,
-        size: 25,
-      ),
-      offset: Offset(5, 0),
-      itemBuilder: (BuildContext context) {
-        //print('item builder');
 
-        return data_list.map((day) => PopupMenuItem(
-          child: Text(day),
-          value: day,
-        )).toList();
-      },
-      onSelected: (value) {
-        if (value == "All") {
-           changeFunctionHandler('');
-        } else {
-           changeFunctionHandler(value.toString());
-        }
-      },
-
-    );
-
-    if (resumeView) {
-      //dynamic state = _menuKey.currentState;
-      //print(state);
-      //state.showButtonMenu();
-
+    if (!widget.data_list.isEmpty) {
+      return AlertDialog(
+        content: SizedBox(
+          //HERE THE SIZE YOU WANT
+            height: MediaQuery.of(context).size.height *2/3,
+            width: MediaQuery.of(context).size.width *1/5,
+            //your content
+            child: ListPopup(widget.data_list, '345')));
 
 
     }
-    return PB;
 
 
-     return MaterialApp(
-      title: 'My Dog App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Yellow Lab'),
-        ),
-        body: Center(
-          child: DecoratedBox( // here is where I added my DecoratedBox
-            decoration: BoxDecoration(color: Colors.lightBlueAccent),
-            child: Text('Rocky'),
-          ),
-        ),
+    return AlertDialog(
+      content: SizedBox(
+        //HERE THE SIZE YOU WANT
+        height: MediaQuery.of(context).size.height *2/3,
+        width: MediaQuery.of(context).size.width *1/5,
+        //your content
+        child:
+
+
+
+           FutureBuilder(
+          future: _readCorporation(),
+        builder: (context, AsyncSnapshot<List> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                Container(
+                    child:
+                    SizedBox(
+                        width: 25, height: 25, child: CircularProgressIndicator()))
+              ],)
+          ;
+            default:
+              if (snapshot.hasError)
+                return RefreshWidget();
+              else if (snapshot.data == null) {
+                return RefreshWidget();
+              } else {
+                if (snapshot.data == null) {
+                  return RefreshWidget();
+                } else {
+                  List? dataL = snapshot.data;
+                  if (dataL != null) {
+                    widget.changeFunctionHandler(dataL);
+                    return ListPopup(dataL, '345');
+                  }
+                  return RefreshWidget();
+                }
+              }
+          }
+        }),
+
+
       ),
     );
   }
-
-
 }
 
+class ListPopup extends StatelessWidget {
+  ListPopup(this.dataL, this.chooseValue);
+
+  List dataL;
+  String chooseValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: dataL.length,
+        itemBuilder: (context, index) {
+          String list_value = dataL[index];
+          return ListTile(
+            title: Text(list_value),
+            tileColor: chooseValue == dataL[index] ? Colors.blue : null,
+            onTap: () {
+              print(list_value);
+              Navigator.of(context).pop();
+
+            },
+          );
+        });
+
+  }
+
+}
 
