@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:admin/models/mainStatesModel.dart';
@@ -474,129 +476,73 @@ class ListPopupPage extends StatefulWidget {
 class _ListPopupPage extends State<ListPopupPage> {
   Future<List> _readCorporation() async {
     return await Future.delayed(
-        const Duration(seconds: 2), () => ['123', '345']);
+        const Duration(seconds: 1), () => ['123', '345', '22 папа папа папапапа папа папапаппапапапа папа папапапапа папа', '33', '44', '55', '66', '77', '88', '99', '12', '13', '14', '15', '16', '22', '23', '24', '25', '26', '32', '33', '34', '35', '36']);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.data_list.isEmpty) {
-      return AlertDialog(
-          content: SizedBox(
+
+    Widget LP_const = ListPopup(
+        widget.data_list, widget.chooseValueHandler, widget.changeFunctionHandler);
+
+    Widget _FB() {
+      return FutureBuilder(
+        future: _readCorporation(),
+        builder: (context, AsyncSnapshot<List> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                      child: SizedBox(
+                          width: 25,
+                          height: 25,
+                          child: CircularProgressIndicator()))
+                ],
+              );
+            default:
+              if (snapshot.hasError)
+                return RefreshWidget();
+              else if (snapshot.data == null) {
+                return RefreshWidget();
+              } else {
+                if (snapshot.data == null) {
+                  return RefreshWidget();
+                } else {
+                  List? dataL = snapshot.data;
+                  if (dataL != null) {
+                    widget.changeFunctionHandlerList(dataL);
+                    return ListPopup(
+                        dataL, widget.chooseValueHandler, widget.changeFunctionHandler);
+                  }
+                  return RefreshWidget();
+                }
+              }
+          }
+        });}
+
+    Widget _ADialog(Widget LP){
+      return
+        AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32)),
+            content: SizedBox(
               //HERE THE SIZE YOU WANT
-              height: MediaQuery.of(context).size.height * 2 / 3,
-              width: MediaQuery.of(context).size.width * 1 / 5,
-              //your content
-              child: ListPopup(
-                  widget.data_list, widget.chooseValueHandler, widget.changeFunctionHandler)));
+                height: MediaQuery.of(context).size.height * 2 / 3,
+                width: MediaQuery.of(context).size.width * 1 / 5,
+                //your content
+                child: LP ));
+    } ;
+
+
+
+    if (!widget.data_list.isEmpty) {
+      return _ADialog(LP_const);
     }
 
-    return AlertDialog(
-        //backgroundColor: Colors.grey,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32)),
-/*
-        content:
-
-      Container(
-        height: MediaQuery.of(context).size.height * 2 / 3,
-        width: MediaQuery.of(context).size.width * 1 / 5,
-          decoration: new BoxDecoration(
-            shape: BoxShape.rectangle,
-            //color: const Color(0xFFFFFF),
-            //color: Colors.blue,
-            borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-          ),
-
-            child:
-
-            FutureBuilder(
-                future: _readCorporation(),
-                builder: (context, AsyncSnapshot<List> snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                              child: SizedBox(
-                                  width: 25,
-                                  height: 25,
-                                  child: CircularProgressIndicator()))
-                        ],
-                      );
-                    default:
-                      if (snapshot.hasError)
-                        return RefreshWidget();
-                      else if (snapshot.data == null) {
-                        return RefreshWidget();
-                      } else {
-                        if (snapshot.data == null) {
-                          return RefreshWidget();
-                        } else {
-                          List? dataL = snapshot.data;
-                          if (dataL != null) {
-                            widget.changeFunctionHandlerList(dataL);
-                            return ListPopup(
-                                dataL, widget.chooseValueHandler, widget.changeFunctionHandler);
-                          }
-                          return RefreshWidget();
-                        }
-                      }
-                  }
-                }),
-
-        ));
-
- */
-
-
-      content: SizedBox(
-        //HERE THE SIZE YOU WANT
-        height: MediaQuery.of(context).size.height * 2 / 3,
-        width: MediaQuery.of(context).size.width * 1 / 5,
-        //your content
-        child: FutureBuilder(
-            future: _readCorporation(),
-            builder: (context, AsyncSnapshot<List> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                          child: SizedBox(
-                              width: 25,
-                              height: 25,
-                              child: CircularProgressIndicator()))
-                    ],
-                  );
-                default:
-                  if (snapshot.hasError)
-                    return RefreshWidget();
-                  else if (snapshot.data == null) {
-                    return RefreshWidget();
-                  } else {
-                    if (snapshot.data == null) {
-                      return RefreshWidget();
-                    } else {
-                      List? dataL = snapshot.data;
-                      if (dataL != null) {
-                        widget.changeFunctionHandlerList(dataL);
-                        return ListPopup(
-                            dataL, widget.chooseValueHandler, widget.changeFunctionHandler);
-                      }
-                      return RefreshWidget();
-                    }
-                  }
-              }
-            }),
-      ),
-
-
-
-    );
+    return _ADialog(_FB());
   }
 }
 
@@ -614,9 +560,37 @@ class ListPopup extends StatelessWidget {
         itemCount: dataL.length,
         itemBuilder: (context, index) {
           String list_value = dataL[index];
+
+
+          return GestureDetector(
+              onTap: () {
+                changeFunctionHandler(list_value);
+                Navigator.of(context).pop();
+              },
+              child:
+
+              HoverContainer(
+                  padding: EdgeInsets.all(8),
+                  margin: EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Color.fromARGB(255, 220, 220, 220), width: 0.5),
+                      color: chooseValueHandler() == dataL[index] ? Color.fromARGB(255, 240, 250, 240) : Colors.white,
+                      borderRadius: BorderRadius.circular(8.0)),
+                  hoverDecoration: BoxDecoration(
+                      border: Border.all(color: Color.fromARGB(255, 220, 220, 220), width: 0.5),
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Colors.grey[200]),
+                  child: Text(list_value)));
+
+
+
+
+
+
           return ListTile(
             title: Text(list_value),
-            tileColor: chooseValueHandler() == dataL[index] ? Colors.blue[100] : null,
+            //tileColor: chooseValueHandler() == dataL[index] ? Colors.blue[100] : null,
+            selected: chooseValueHandler() == dataL[index],
             onTap: () {
               changeFunctionHandler(list_value);
               //print(list_value);
