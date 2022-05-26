@@ -275,7 +275,9 @@ class _ElementCardWidget extends State<ElementCardWidget> {
             widget.valueElement = val;
           });*/
         },
-        chooseValue: _valController.text,
+        chooseValueHandler:() {
+          return _valController.text;
+        },
       ));
     }
 
@@ -404,8 +406,8 @@ class _ElementButtonData extends State<ElementButtonData> {
 
 class ElementFilterCorporation extends StatefulWidget {
   void Function(String val) changeFunctionHandler;
-  String chooseValue;
-  ElementFilterCorporation({required this.changeFunctionHandler, required this.chooseValue});
+  String Function() chooseValueHandler;
+  ElementFilterCorporation({required this.changeFunctionHandler, required this.chooseValueHandler});
 
   @override
   _ElementFilterCorporation createState() => _ElementFilterCorporation();
@@ -437,7 +439,7 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
                   data_list = val;
                 },
                 changeFunctionHandler: widget.changeFunctionHandler,
-                chooseValue: widget.chooseValue,
+                chooseValueHandler: widget.chooseValueHandler,
               ),
             ),
           );
@@ -456,13 +458,13 @@ class ListPopupPage extends StatefulWidget {
   List data_list;
   void Function(List val) changeFunctionHandlerList;
   void Function(String val) changeFunctionHandler;
-  String chooseValue;
+  String Function() chooseValueHandler;
 
   ListPopupPage(
       {required this.data_list,
       required this.changeFunctionHandlerList,
       required this.changeFunctionHandler,
-      required this.chooseValue
+      required this.chooseValueHandler
       });
 
   @override
@@ -485,10 +487,70 @@ class _ListPopupPage extends State<ListPopupPage> {
               width: MediaQuery.of(context).size.width * 1 / 5,
               //your content
               child: ListPopup(
-                  widget.data_list, widget.chooseValue, widget.changeFunctionHandler)));
+                  widget.data_list, widget.chooseValueHandler, widget.changeFunctionHandler)));
     }
 
     return AlertDialog(
+        //backgroundColor: Colors.grey,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(32)),
+/*
+        content:
+
+      Container(
+        height: MediaQuery.of(context).size.height * 2 / 3,
+        width: MediaQuery.of(context).size.width * 1 / 5,
+          decoration: new BoxDecoration(
+            shape: BoxShape.rectangle,
+            //color: const Color(0xFFFFFF),
+            //color: Colors.blue,
+            borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+          ),
+
+            child:
+
+            FutureBuilder(
+                future: _readCorporation(),
+                builder: (context, AsyncSnapshot<List> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              child: SizedBox(
+                                  width: 25,
+                                  height: 25,
+                                  child: CircularProgressIndicator()))
+                        ],
+                      );
+                    default:
+                      if (snapshot.hasError)
+                        return RefreshWidget();
+                      else if (snapshot.data == null) {
+                        return RefreshWidget();
+                      } else {
+                        if (snapshot.data == null) {
+                          return RefreshWidget();
+                        } else {
+                          List? dataL = snapshot.data;
+                          if (dataL != null) {
+                            widget.changeFunctionHandlerList(dataL);
+                            return ListPopup(
+                                dataL, widget.chooseValueHandler, widget.changeFunctionHandler);
+                          }
+                          return RefreshWidget();
+                        }
+                      }
+                  }
+                }),
+
+        ));
+
+ */
+
+
       content: SizedBox(
         //HERE THE SIZE YOU WANT
         height: MediaQuery.of(context).size.height * 2 / 3,
@@ -523,7 +585,7 @@ class _ListPopupPage extends State<ListPopupPage> {
                       if (dataL != null) {
                         widget.changeFunctionHandlerList(dataL);
                         return ListPopup(
-                            dataL, widget.chooseValue, widget.changeFunctionHandler);
+                            dataL, widget.chooseValueHandler, widget.changeFunctionHandler);
                       }
                       return RefreshWidget();
                     }
@@ -531,27 +593,30 @@ class _ListPopupPage extends State<ListPopupPage> {
               }
             }),
       ),
+
+
+
     );
   }
 }
 
 class ListPopup extends StatelessWidget {
-  ListPopup(this.dataL, this.chooseValue, this.changeFunctionHandler);
+  ListPopup(this.dataL, this.chooseValueHandler, this.changeFunctionHandler);
 
   List dataL;
-  String chooseValue;
+  String Function() chooseValueHandler;
   void Function(String val) changeFunctionHandler;
 
   @override
   Widget build(BuildContext context) {
-    print('chooseValue '+ chooseValue);
+    //print('chooseValue '+ chooseValue);
     return ListView.builder(
         itemCount: dataL.length,
         itemBuilder: (context, index) {
           String list_value = dataL[index];
           return ListTile(
             title: Text(list_value),
-            tileColor: chooseValue == dataL[index] ? Colors.blue : null,
+            tileColor: chooseValueHandler() == dataL[index] ? Colors.blue[100] : null,
             onTap: () {
               changeFunctionHandler(list_value);
               //print(list_value);
