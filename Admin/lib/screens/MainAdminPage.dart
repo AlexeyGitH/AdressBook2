@@ -174,6 +174,7 @@ class _MainAdminPage extends State<MainAdminPage> {
 }
 
 class TableHeader extends StatefulWidget {
+  double height = 35;
   @override
   _TableHeader createState() => _TableHeader();
 }
@@ -184,7 +185,7 @@ class _TableHeader extends State<TableHeader> {
     var mainConstModel = context.watch<MainConstModel>();
     return
       Container(
-          height: 35,
+          height: widget.height,
           alignment: Alignment.center,
           child:
 
@@ -298,16 +299,20 @@ class _TableHeader extends State<TableHeader> {
 }
 
 class TableFooter extends StatefulWidget {
+  double height = 35;
+
   @override
   _TableFooter createState() => _TableFooter();
 }
 
 class _TableFooter extends State<TableFooter> {
+
+
   @override
   Widget build(BuildContext context) {
     return
       Container(
-          height: 35,
+          height: widget.height,
           alignment: Alignment.center,
           child:
 
@@ -446,7 +451,7 @@ class _TableBody extends State<TableBody> {
                               //color: themeData.primaryColor,
                               icon: new Icon(Icons.create),
                               onPressed: () {
-                                //debugPrint('Crate button. ID:' + _idRow.toString());
+                                //debugPrint('Offset: '+ widget.firstControllerV.toString());
                                 mainConstModel.setCurrentIdContact(_idRow.toString());
                                 mainConstModel.setCurrentPage("CardContact");
 
@@ -542,11 +547,18 @@ class _TableMainArea extends State<TableMainArea> {
   final ScrollController _firstController = ScrollController();
   final ScrollController _firstControllerV = ScrollController();
 
+  final dataKey = new GlobalKey();
+
   @override
   Widget build(BuildContext context) {
 
     var screenSize = MediaQuery.of(context).size;
     var postPone = widget.dataServer;
+
+    var aa = dataKey.currentContext;
+    if (aa != null){
+      Scrollable.ensureVisible(aa);}
+
 
     final _appBar = AppBar(
       title: Text("Contact list"),
@@ -554,6 +566,10 @@ class _TableMainArea extends State<TableMainArea> {
     final _TableHeader = TableHeader();
     final _TableBody = TableBody(dataServer: postPone);
     final _TableFooter = TableFooter();
+
+    //print(MediaQuery.of(context).size.height);
+    //print(_appBar.preferredSize.height.round());
+
 
 
     return Scaffold(
@@ -563,7 +579,8 @@ class _TableMainArea extends State<TableMainArea> {
         Column(children: [
           Container(
             //width: 1400,
-              height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-35,
+              height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-MediaQuery.of(context).viewPadding.top-_TableFooter.height,
+              //height: 136,
               child:
               Scrollbar(
                 //thumbVisibility: screenSize.width <= 600 ? true:false,
@@ -578,7 +595,8 @@ class _TableMainArea extends State<TableMainArea> {
                       Column(children: [
                         _TableHeader,
                         Container(
-                            height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-70,
+                            height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-MediaQuery.of(context).viewPadding.top-_TableFooter.height-_TableFooter.height,
+                            //height: 100,
                             child:
                             Scrollbar(
                               //thumbVisibility: true,

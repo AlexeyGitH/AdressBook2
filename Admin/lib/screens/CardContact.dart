@@ -1,4 +1,4 @@
-import 'dart:html';
+//import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -228,6 +228,13 @@ class _ElementCardWidget extends State<ElementCardWidget> {
   MaterialColor colorBord = Colors.grey;
   Color colorFocus = Colors.white;
 
+  late FocusNode adFocusNode;
+  @override
+  void initState() {
+    adFocusNode = FocusNode();
+  }
+
+
   Widget build(BuildContext context) {
     _valController.text = widget.valueElement;
 
@@ -272,6 +279,7 @@ class _ElementCardWidget extends State<ElementCardWidget> {
       childrenRow.add(ElementFilterCorporation(
         changeFunctionHandler: (String val) {
           _valController.text = val;
+          adFocusNode.requestFocus();
           //widget.valueElement = val;
           /*setState(() {
             widget.valueElement = val;
@@ -285,6 +293,7 @@ class _ElementCardWidget extends State<ElementCardWidget> {
 
     childrenRow.add(Expanded(
         child: Focus(
+            focusNode: adFocusNode,
             onFocusChange: (f) {
               if (f) {
                 setState(() {
@@ -430,6 +439,27 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
 
     return GestureDetector(
         onTap: () {
+
+
+          showDialog(
+            //barrierColor: Colors.transparent,
+            context: context,
+            builder: (BuildContext context) {
+              return
+
+              ListPopupPage(
+                data_list: data_list,
+                changeFunctionHandlerList: (List val) {
+                  data_list = val;
+                },
+                changeFunctionHandler: widget.changeFunctionHandler,
+                chooseValueHandler: widget.chooseValueHandler,
+              );
+
+            },
+          );
+
+/*
           Navigator.push(
             context,
             PageRouteBuilder(
@@ -445,6 +475,7 @@ class _ElementFilterCorporation extends State<ElementFilterCorporation> {
               ),
             ),
           );
+*/
         },
         child: Container(
             //padding: EdgeInsets.only(left: 7.0),
@@ -530,8 +561,9 @@ class _ListPopupPage extends State<ListPopupPage> {
                 borderRadius: BorderRadius.circular(32)),
             content: SizedBox(
               //HERE THE SIZE YOU WANT
-                height: MediaQuery.of(context).size.height * 2 / 3,
-                width: MediaQuery.of(context).size.width * 1 / 5,
+                height: MediaQuery.of(context).size.height * 2 / 10,
+                width: MediaQuery.of(context).size.width * 1 / 10,
+                //width: 500,
                 //your content
                 child: LP ));
     } ;
