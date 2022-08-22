@@ -137,9 +137,14 @@ class PC_List extends StatefulWidget {
 
 class _PC_List extends State<PC_List> {
 
-
   @override
   Widget build(BuildContext context) {
+    var widthTelephone = (widget.MainWidth*(1-1.2/5)-80)/4;
+    if (widthTelephone > 170) {widthTelephone = 170;}
+    var widthFIO = (widget.MainWidth-widthTelephone-80)/4*1.2;
+    var widthElement = (widget.MainWidth-widthFIO-widthTelephone-80)/3;
+
+    print('00:' + widget.MainWidth.toString() + ' 1:' + widthTelephone.toString() + ' 3:' + widthElement.toString()+ ' 1:' + widthFIO.toString());
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -157,29 +162,22 @@ class _PC_List extends State<PC_List> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children:[
-                    Row(children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
 
 
-                      new ConstrainedBox(
-                          constraints: new BoxConstraints(
-                            //minHeight: 100.0,
-                            maxHeight: 100.0,
-                            //maxWidth: 60,
-                          ),
-                          child:
+
 
                           Padding(
                               padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                               child:
-                              ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child:
 
                                   CircleAvatar(
-                                    backgroundColor: Colors.brown.shade800,
+                                    radius: 30,
+
+                                    //backgroundColor: Colors.brown.shade800,
                                     child:
-
-
                                   Image.network(
                                     'http://'+ipLocalhost + '/static/img/default/male.png',
                                     //'http://'+ipLocalhost,
@@ -194,11 +192,11 @@ class _PC_List extends State<PC_List> {
                                     },
                                   )
 
-                                  ))
+                                  )
 
 
 
-                          )),
+                          ),
 
 
 
@@ -207,10 +205,12 @@ class _PC_List extends State<PC_List> {
 
 
                       Container(
+                        width: widthFIO,
                 padding: const EdgeInsets.all(5),
           child:  Center(child:Text('ФИО',style: TextStyle(fontWeight: FontWeight.bold),)),
         ),
                       Container(
+                        width: widthElement,
                         decoration: BoxDecoration(
                             border: Border(
                               right: BorderSide(
@@ -224,6 +224,7 @@ class _PC_List extends State<PC_List> {
                         child:  Center(child:Text('Организация',style: TextStyle(fontWeight: FontWeight.bold),)),
                       ),
                       Container(
+                        width: widthElement,
                         decoration: BoxDecoration(
                             border: Border(
                               right: BorderSide(
@@ -237,6 +238,7 @@ class _PC_List extends State<PC_List> {
                         child:  Center(child:Text('Подразделение',style: TextStyle(fontWeight: FontWeight.bold),)),
                       ),
                       Container(
+                        width: widthElement,
                         decoration: BoxDecoration(
                             border: Border(
                               right: BorderSide(
@@ -250,6 +252,7 @@ class _PC_List extends State<PC_List> {
                         child:  Center(child:Text('Должность',style: TextStyle(fontWeight: FontWeight.bold),)),
                       ),
                       Container(
+                        width: widthTelephone,
                         decoration: BoxDecoration(
                             border: Border(
                               right: BorderSide(
