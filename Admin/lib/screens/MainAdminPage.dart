@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -81,45 +83,201 @@ class _TableMainArea extends State<TableMainArea> {
   Widget build(BuildContext context) {
 
     var screenSize = MediaQuery.of(context).size;
-    var postPone = widget.dataServer;
+    double MainWidth = MediaQuery.of(context).size.width*0.95;
 
-    var aa = dataKey.currentContext;
-    if (aa != null){
-      Scrollable.ensureVisible(aa);}
-
-
-    final _appBar = AppBar(
+    AppBar _appBar = AppBar(
       title: Text("Contact list"),
     );
+
+
+
+    if (screenSize.width > 1000) {
+      return PC_List(appBar: _appBar, MainWidth: MainWidth) ;
+    }else
+    {return Text('Mobile view');}
+
 
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: _appBar,
         body:
-        Column(children: [
-          Container(
-            //width: 1400,
-              height: MediaQuery.of(context).size.height-_appBar.preferredSize.height.round()-MediaQuery.of(context).viewPadding.top,
-              //height: 136,
-              child:
-              Scrollbar(
-                //thumbVisibility: screenSize.width <= 600 ? true:false,
-                  trackVisibility: screenSize.width <= 600 ? true:false,
-                  controller: _firstController,
-                  child:
 
-                  SingleChildScrollView(
-                      scrollDirection: Axis. horizontal,
-                      controller: _firstController,
-                      child:
-                      Column(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+            children:[
+        Container(
+        color: Colors.lightBlueAccent,
+        width: MainWidth,
+        child:
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children:[
 
-                        Text('privet'),
+            Text('privet'),
 
-                      ],)
-                  ))),
-        ],)
+          ],
+        ))],
+        )
+
+
     );
   }
 }
 
+class PC_List extends StatefulWidget {
+  AppBar appBar;
+  double MainWidth;
+
+  PC_List({required this.appBar, required this.MainWidth});
+
+  @override
+  _PC_List createState() => _PC_List();
+}
+
+class _PC_List extends State<PC_List> {
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: widget.appBar,
+        body:
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:[
+            Container(
+                color: Colors.lightBlueAccent,
+                width: widget.MainWidth,
+                child:
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children:[
+                    Row(children: [
+
+
+                      new ConstrainedBox(
+                          constraints: new BoxConstraints(
+                            //minHeight: 100.0,
+                            maxHeight: 100.0,
+                            //maxWidth: 60,
+                          ),
+                          child:
+
+                          Padding(
+                              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                              child:
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child:
+
+                                  CircleAvatar(
+                                    backgroundColor: Colors.brown.shade800,
+                                    child:
+
+
+                                  Image.network(
+                                    'http://'+ipLocalhost + '/static/img/default/male.png',
+                                    //'http://'+ipLocalhost,
+                                    //'',
+                                    //fit: BoxFit.fitHeight,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      //print(error);
+                                      return Image.asset(
+                                        'assets/NoPhoto.png',
+                                        //fit: BoxFit.fitHeight,
+                                      );
+                                    },
+                                  )
+
+                                  ))
+
+
+
+                          )),
+
+
+
+
+
+
+
+                      Container(
+                padding: const EdgeInsets.all(5),
+          child:  Center(child:Text('ФИО',style: TextStyle(fontWeight: FontWeight.bold),)),
+        ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                              left: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                            )
+                        ),
+
+                        padding: const EdgeInsets.all(5),
+                        child:  Center(child:Text('Организация',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                              left: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                            )
+                        ),
+
+                        padding: const EdgeInsets.all(5),
+                        child:  Center(child:Text('Подразделение',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                              left: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                            )
+                        ),
+
+                        padding: const EdgeInsets.all(5),
+                        child:  Center(child:Text('Должность',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                              left: BorderSide(
+                                  width: 1.0, color: Colors.grey),
+                            )
+                        ),
+
+                        padding: const EdgeInsets.all(5),
+                        child:  Center(child:Text('Телефон',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      ),
+
+
+                    ]),
+
+
+
+
+
+                    //listview
+                    Text('privet'),
+
+                  ],
+                ))],
+        )
+
+
+    );
+  }
+}
