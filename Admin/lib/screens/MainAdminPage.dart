@@ -92,7 +92,7 @@ class _TableMainArea extends State<TableMainArea> {
 
 
     if (screenSize.width > 1000) {
-      return PC_List(appBar: _appBar, MainWidth: MainWidth) ;
+      return PC_List(appBar: _appBar, MainWidth: MainWidth, dataServer: widget.dataServer,) ;
     }else
     {return Text('Mobile view');}
 
@@ -128,8 +128,9 @@ class _TableMainArea extends State<TableMainArea> {
 class PC_List extends StatefulWidget {
   AppBar appBar;
   double MainWidth;
+  ContactServer dataServer;
 
-  PC_List({required this.appBar, required this.MainWidth});
+  PC_List({required this.appBar, required this.MainWidth, required this.dataServer});
 
   @override
   _PC_List createState() => _PC_List();
@@ -144,12 +145,15 @@ class _PC_List extends State<PC_List> {
     var widthFIO = (widget.MainWidth-widthTelephone-80)/4*1.2;
     var widthElement = (widget.MainWidth-widthFIO-widthTelephone-80)/3;
 
-    print('00:' + widget.MainWidth.toString() + ' 1:' + widthTelephone.toString() + ' 3:' + widthElement.toString()+ ' 1:' + widthFIO.toString());
+    //print('00:' + widget.MainWidth.toString() + ' 1:' + widthTelephone.toString() + ' 3:' + widthElement.toString()+ ' 1:' + widthFIO.toString());
+
 
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: widget.appBar,
         body:
+
+        //listW(widget.dataServer.contacts),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -159,23 +163,109 @@ class _PC_List extends State<PC_List> {
                 width: widget.MainWidth,
                 child:
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children:[
+                  Container(
+                  //color: Colors.lightBlueAccent[900],
+                  color: Colors.grey,
+                  width: widget.MainWidth,
+                  child:
                     Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Container(
+                            width: widthFIO+80,
+                            padding: const EdgeInsets.all(5),
+                            child:  Center(child:Text('ФИО',style: TextStyle(fontWeight: FontWeight.bold),)),
+                          ),
+                          Container(
+                            width: widthElement,
+                            decoration: BoxDecoration(
+                                border: Border(
+                                  right: BorderSide(
+                                      width: 1.0, color: Colors.grey),
+                                  left: BorderSide(
+                                      width: 1.0, color: Colors.grey),
+                                )
+                            ),
+
+                            padding: const EdgeInsets.all(5),
+                            child:  Center(child:Text('Организация',style: TextStyle(fontWeight: FontWeight.bold),)),
+                          ),
+                          Container(
+                            width: widthElement,
+                            decoration: BoxDecoration(
+                                border: Border(
+                                  right: BorderSide(
+                                      width: 1.0, color: Colors.grey),
+                                  left: BorderSide(
+                                      width: 1.0, color: Colors.grey),
+                                )
+                            ),
+
+                            padding: const EdgeInsets.all(5),
+                            child:  Center(child:Text('Подразделение',style: TextStyle(fontWeight: FontWeight.bold),)),
+                          ),
+                          Container(
+                            width: widthElement,
+                            decoration: BoxDecoration(
+                                border: Border(
+                                  right: BorderSide(
+                                      width: 1.0, color: Colors.grey),
+                                  left: BorderSide(
+                                      width: 1.0, color: Colors.grey),
+                                )
+                            ),
+
+                            padding: const EdgeInsets.all(5),
+                            child:  Center(child:Text('Должность',style: TextStyle(fontWeight: FontWeight.bold),)),
+                          ),
+                          Container(
+                            width: widthTelephone,
+                            decoration: BoxDecoration(
+                                border: Border(
+                                  right: BorderSide(
+                                      width: 1.0, color: Colors.grey),
+                                  left: BorderSide(
+                                      width: 1.0, color: Colors.grey),
+                                )
+                            ),
+
+                            padding: const EdgeInsets.all(5),
+                            child:  Center(child:Text('Телефон',style: TextStyle(fontWeight: FontWeight.bold),)),
+                          ),
+
+
+                        ])),
+
+
+
+                    SingleChildScrollView(
+                      physics: ScrollPhysics(),
+                      child: Column(
+                        children: <Widget>[
+                          Text('Hey'),
+                          listW(widget.dataServer.contacts)
+                        ],
+                      ),
+                    ),
 
 
 
 
-                          Padding(
+
+
+
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              width: 80,
                               padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                               child:
-
                                   CircleAvatar(
                                     radius: 30,
-
                                     //backgroundColor: Colors.brown.shade800,
                                     child:
                                   Image.network(
@@ -193,17 +283,7 @@ class _PC_List extends State<PC_List> {
                                   )
 
                                   )
-
-
-
                           ),
-
-
-
-
-
-
-
                       Container(
                         width: widthFIO,
                 padding: const EdgeInsets.all(5),
@@ -281,6 +361,20 @@ class _PC_List extends State<PC_List> {
         )
 
 
+
     );
   }
+}
+
+Widget listW (List<ContactItem> contacts) {
+  return ListView.builder(
+      padding: const EdgeInsets.all(8),
+      itemCount: contacts.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          height: 50,
+          child: Center(child: Text('Entry ${contacts[index].firstname}')),
+        );
+      }
+  );
 }
