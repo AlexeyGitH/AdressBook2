@@ -106,6 +106,9 @@ class PC_List extends StatefulWidget {
 class _PC_List extends State<PC_List> {
   @override
   Widget build(BuildContext context) {
+
+    var mainConstModel = context.watch<MainConstModel>();
+
     double MainWidth = widget.MainSize.width * 0.95;
     double MainHeight = widget.MainSize.height;
     int height_app = widget.appBar.preferredSize.height.round();
@@ -227,8 +230,7 @@ class _PC_List extends State<PC_List> {
                             ])),
                     Container(
                       height: MainHeight - height_app - height_header_table,
-                      child: listW(widget.dataServer.contacts, widthTelephone,
-                          widthFIO, widthElement),
+                      child: listW(contacts: widget.dataServer.contacts, widthElement: widthElement, widthFIO: widthFIO, widthTelephone: widthTelephone,),
                     ),
                   ],
                 ))
@@ -237,8 +239,280 @@ class _PC_List extends State<PC_List> {
   }
 }
 
-Widget listW(List<ContactItem> contacts, var widthTelephone, var widthFIO,
+
+
+
+class listW extends StatefulWidget {
+  List<ContactItem> contacts;
+  var widthTelephone;
+  var widthFIO;
+  var widthElement;
+
+  listW({required this.contacts, required this.widthTelephone, required this.widthFIO, required this.widthElement});
+
+  @override
+  _listW createState() => _listW();
+}
+
+
+class _listW extends State<listW> {
+
+  final ScrollController _firstControllerV = ScrollController(
+    initialScrollOffset: 200.0,
+    keepScrollOffset: true,
+
+  );
+
+  @override
+  Widget build(BuildContext context) {
+
+    final rows = <TableRow>[];
+    var color = Colors.transparent;
+    var getData = widget.dataServer;
+
+
+    bool scan = true;
+    int i = 0;
+
+    while (scan) {
+
+
+      i++;
+      if (i >= getData.contacts.length) {
+        scan = false;
+      }
+    }
+
+
+    return
+    //  Scrollbar(
+        ////thumbVisibility: true,
+        // // trackVisibility: true,
+         // controller: _firstControllerV,
+        //  child:
+          SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              controller: _firstControllerV,
+              child:
+              Column(
+                  children: [
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('111'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('222'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+                    Text('333'),
+
+                  ])
+       //   )
+      );
+
+
+
+  }
+}
+
+
+/*
+Widget listW(mainConstModel, List<ContactItem> contacts, var widthTelephone, var widthFIO,
     var widthElement) {
+  final ScrollController _firstControllerV = ScrollController();
+  return
+    Scrollbar(
+      //thumbVisibility: true,
+        trackVisibility: true,
+        controller: _firstControllerV,
+        child:
+        SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            controller: _firstControllerV,
+            child:
+            Column(
+                children: [
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('111'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('222'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+
+                ])
+        )
+    );
+
+
 
   return ListView.builder(
       //scrollDirection: Axis.vertical,
@@ -246,6 +520,9 @@ Widget listW(List<ContactItem> contacts, var widthTelephone, var widthFIO,
       //padding: const EdgeInsets.all(8),
       itemCount: contacts.length,
       itemBuilder: (BuildContext context, int index) {
+
+        int _idRow = contacts[index].id;
+
         String FIO = contacts[index].firstname.toString() +
             " " +
             contacts[index].middlename.toString() +
@@ -434,8 +711,8 @@ Widget listW(List<ContactItem> contacts, var widthTelephone, var widthFIO,
                   icon: new Icon(Icons.more_vert),
                   onPressed: () {
                     //debugPrint('Offset: '+ widget.firstControllerV.toString());
-                    //mainConstModel.setCurrentIdContact(_idRow.toString());
-                    //mainConstModel.setCurrentPage("CardContact");
+                    mainConstModel.setCurrentIdContact(_idRow.toString());
+                    mainConstModel.setCurrentPage("CardContact");
 
                   },
                 ))),
@@ -455,3 +732,4 @@ Widget listW(List<ContactItem> contacts, var widthTelephone, var widthFIO,
         );
       });
 }
+*/
