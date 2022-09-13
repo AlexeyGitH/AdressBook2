@@ -3,16 +3,17 @@ package main
 import (
 	"crypto/rand"
 	"database/sql"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
-
 	_ "github.com/mattn/go-sqlite3"
 
 	"html/template"
@@ -139,6 +140,7 @@ func main() {
 	r.HandleFunc("/auth/", getToken)
 	r.HandleFunc("/checkToken/", checkToken)
 	r.HandleFunc("/getAllContacts/", getAllContacts)
+	r.HandleFunc("/uploadPhotoFile/", uploadPhoto)
 
 	staticDir := "/static/"
 	r.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
@@ -791,5 +793,59 @@ func getAllContacts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusOK, data)
+
+}
+
+func uploadPhoto(w http.ResponseWriter, r *http.Request) {
+
+	//fmt.Println("File Upload Endpoint Hit")
+
+	type return_data struct {
+		Path_img string
+		Result   bool
+	}
+
+	data := return_data{
+		Path_img: "",
+		Result:   false,
+	}
+
+	type Token_data struct {
+		Photo string
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	var t Token_data
+	err := decoder.Decode(&t)
+
+	if err == nil && !(t.Photo == "") {
+		//dec := base64.NewDecoder(base64.StdEncoding, t.Photo)
+		//fmt.Println(t.Photo)
+
+		path, err := os.Getwd()
+		if err != nil {
+			log.Println(err)
+		}
+		//fmt.Println(path)
+
+		dec, err := base64.StdEncoding.DecodeString(t.Photo)
+		if err != nil {
+			panic(err)
+		}
+
+		err = ioutil.WriteFile(path+"\\static\\img\\photo\\test1.png", dec, 0777)
+		// handle this error
+		if err != nil {
+			// print it out
+			fmt.Println(err)
+		}
+
+		data.Path_img = "test1.png"
+		data.Result = true
+
+		respondWithJSON(w, http.StatusOK, data)
+	}
+
+	//fmt.Println(r)
 
 }

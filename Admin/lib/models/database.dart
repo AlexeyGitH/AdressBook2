@@ -245,7 +245,7 @@ Future<bool> checkTokenAuth(String token) async {
     print('Error general: $e');
     rethrow;
   }
-  debugPrint('Step 6, build base:');
+  //debugPrint('Step 6, build base:');
   return result;
 }
 

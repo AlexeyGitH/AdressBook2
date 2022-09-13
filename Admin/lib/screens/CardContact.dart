@@ -11,7 +11,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:hovering/hovering.dart';
 import 'package:flutter/services.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
+//import 'package:keyboard_actions/keyboard_actions.dart';
+import 'dart:convert';
+import 'dart:io';
+//import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+
 
 class DataContactParams {
   String nameParam;
@@ -50,6 +56,10 @@ class _CardContact extends State<CardContact> {
       mail: '',
       additionalphone: '');
 
+
+  XFile? image;
+  String sImage = '';
+
   Widget build(BuildContext context) {
     var mainConstModel = context.watch<MainConstModel>();
 
@@ -62,6 +72,8 @@ class _CardContact extends State<CardContact> {
           await getContacts(t_s, id_contact: mainConstModel.currentIdContact);
       return _resp;
     }
+
+
 
     return FutureBuilder(
         future: _readContactsData(),
@@ -194,6 +206,116 @@ class _CardContact extends State<CardContact> {
                                 _mobilephoneW,
                                 _mailW,
                                 _birthDateW,
+
+
+
+
+                                if (image != null)
+                                  Text(image!.path.toString())
+                                else
+                                  //const SizedBox(),
+                                Text('fff'),
+
+                                Container(
+                                  child:
+                                  ElevatedButton.icon(
+                                    onPressed: () async {
+                                      final ImagePicker _picker = ImagePicker();
+                                      final img =
+                                      await _picker.pickImage(source: ImageSource.gallery);
+                                      setState(() {
+                                        image = img;
+                                      });
+                                    },
+                                    label: const Text('Choose Image'),
+                                    icon: const Icon(Icons.image),
+                                  ),
+                                ),
+                                Container(
+                                  child:
+                                  ElevatedButton.icon(
+                                    onPressed: () async {
+
+
+                                      await image!.readAsBytes().then((value) {
+                                        Uint8List imageBytes;
+                                        imageBytes = Uint8List.fromList(value);
+                                        print('reading of bytes is completed');
+                                        String baseimage = base64Encode(imageBytes);
+                                        //debugPrint('baseimage: ' + baseimage);
+
+                                          var resBody = {};
+                                          resBody["Photo"] = baseimage;
+                                          resBody["id_user"] = '';
+
+                                          /*
+                                          final response = http.post(
+                                            Uri.http(ipLocalhost, '/uploadPhotoFile/'),
+                                            body: jsonEncode(resBody),).timeout(const Duration(seconds: 3));*/
+
+                                        http.post(
+                                          Uri.http(ipLocalhost, '/uploadPhotoFile/'),
+                                          body: jsonEncode(resBody),).timeout(const Duration(seconds: 3)).then((value) {
+                                          if (value.statusCode == 200) {
+                                            //setState(() {
+                                            //  image = value.data.;
+                                            //});
+                                            //debugPrint('upload file xxx ');
+                                            //debugPrint(value.body.toString());
+                                            var jBody = jsonDecode(value.body);
+
+                                            //debugPrint(jBody.toString());
+                                            //debugPrint(jBody.Path_img);
+
+                                            var img = jBody['Path_img'];
+
+                                            debugPrint('upload file xxx ');
+
+
+                                            setState(() {
+                                              sImage = img;
+                                            });
+
+                                          }
+
+
+                                        });
+
+
+
+                                      //debugPrint('upload file xxx ');
+
+                                      /*setState(() {
+                                       // image = img;
+                                      });*/
+                                    });
+          },
+                                    label: const Text('Upload Image'),
+                                    icon: const Icon(Icons.send_and_archive),
+                                  ),
+                                ),
+
+                                CircleAvatar(
+                                    radius: 28,
+                                    backgroundColor: Colors.white,
+                                    child:
+                                    Image.network(
+                                      'http://' +
+                                          ipLocalhost +
+                                          '/static/img/photo/'+sImage,
+                                      //'http://'+ipLocalhost,
+                                      //'',
+                                      //fit: BoxFit.fitHeight,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        //print(error);
+                                        return Container(
+                                            width: 54,
+                                            //height: 120,
+                                            child: Image.asset('assets/NoPhoto.png'));
+                                      },
+                                    )),
+
+
                               ],
                             ))));
                   } else {
